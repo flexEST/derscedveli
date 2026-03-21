@@ -14,6 +14,36 @@
             --text:#f1f5f9; --text2:#94a3b8; --text3:#475569;
             --r:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
         }
+        body.light {
+            --bg:#f0f4f8; --surface:#ffffff; --card:#f8fafc;
+            --border:rgba(0,0,0,0.08);
+            --text:#0f172a; --text2:#475569; --text3:#94a3b8;
+        }
+        body.light::before { background:radial-gradient(circle,rgba(59,130,246,0.10) 0%,transparent 70%); }
+        body.light::after  { background:radial-gradient(circle,rgba(245,166,35,0.08) 0%,transparent 70%); }
+        body.light .exam-card, body.light .popup-box, body.light .quiz-overlay { box-shadow:0 4px 24px rgba(0,0,0,0.08); }
+        body.light .subject-row:hover { background:rgba(59,130,246,0.06); }
+        body.light .qtab { background:rgba(0,0,0,0.04); }
+        body.light .q-card { background:#f8fafc; }
+        body.light .option  { background:#f1f5f9; }
+        body.light .popup-overlay { background:rgba(180,190,210,0.7); }
+        body.light .quiz-overlay  { background:rgba(240,244,248,0.97); }
+
+        /* THEME TOGGLE */
+        .theme-toggle {
+            width:42px; height:42px;
+            background:rgba(255,255,255,0.05);
+            border:1px solid var(--border);
+            border-radius:13px;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; font-size:18px;
+            transition:background .2s, transform .2s;
+            flex-shrink:0;
+        }
+        .theme-toggle:hover { background:rgba(255,255,255,0.1); }
+        .theme-toggle:active { transform:scale(0.92); }
+        body.light .theme-toggle { background:rgba(0,0,0,0.05); }
+        body.light .theme-toggle:hover { background:rgba(0,0,0,0.1); }
         body { font-family:var(--r); background:var(--bg); min-height:100vh; padding:16px 12px 60px; position:relative; overflow-x:hidden; }
         body::before { content:''; position:fixed; top:-140px; left:-100px; width:450px; height:450px; background:radial-gradient(circle,rgba(59,130,246,0.14) 0%,transparent 70%); border-radius:50%; pointer-events:none; animation:blob 14s ease-in-out infinite alternate; }
         body::after  { content:''; position:fixed; bottom:-100px; right:-80px; width:400px; height:400px; background:radial-gradient(circle,rgba(245,166,35,0.10) 0%,transparent 70%); border-radius:50%; pointer-events:none; animation:blob 18s ease-in-out infinite alternate-reverse; }
@@ -144,11 +174,16 @@
             <h1>İmtahan Mövzuları</h1>
             <p>Fənn üzrə suallar və materiallar</p>
         </div>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Tema dəyiş">🌙</button>
     </div>
 
     <div class="date-strip">
         <span id="dateNow">—</span>
         <span class="pill">2025–2026 / II Semestr</span>
+    </div>
+
+    <div style="margin:-8px 0 18px;background:rgba(245,166,35,0.10);border:1px solid rgba(245,166,35,0.25);border-radius:14px;padding:10px 14px;text-align:center;font-size:0.74rem;color:#f5a623;letter-spacing:0.2px;font-weight:600;">
+        🔄 Dəyişiklikləri görmək üçün yuxarıdakı yenilə düyməsini bas
     </div>
 
     <!-- KOLLOKVIUM I -->
@@ -414,6 +449,21 @@ function closeQuiz(){
     document.getElementById('subjectPopup').classList.add('show');
     document.body.style.overflow='hidden';
 }
+
+// THEME TOGGLE
+function toggleTheme(){
+    const isLight = document.body.classList.toggle('light');
+    document.getElementById('themeToggle').textContent = isLight ? '🌑' : '🌙';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+// Restore saved theme
+(function(){
+    const saved = localStorage.getItem('theme');
+    if(saved === 'light'){
+        document.body.classList.add('light');
+        document.getElementById('themeToggle').textContent = '🌑';
+    }
+})();
 </script>
 </body>
 </html>
