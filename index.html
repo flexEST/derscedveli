@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="az" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Dərs Cədvəli</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <style>
+        :root {
+            --bg1:#0d1117; --bg2:#161b27;
+            --glass:rgba(255,255,255,0.045); --glass-border:rgba(255,255,255,0.08); --glass-hover:rgba(255,255,255,0.07);
+            --amber:#f5a623; --amber-dim:rgba(245,166,35,0.15);
+            --blue:#3b82f6; --blue-dim:rgba(59,130,246,0.15);
+            --green:#22c55e; --red:#ef4444;
+            --text:#f1f5f9; --text-2:#94a3b8; --text-3:#475569;
+            --surface:rgba(255,255,255,0.04);
+            --radius-xl:28px; --radius-lg:20px; --radius-md:14px; --radius-sm:10px;
+            --shadow-card:0 32px 64px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04) inset;
+        }
+        [data-theme="light"] {
+            --bg1:#f0f4ff; --bg2:#ffffff;
+            --glass:rgba(0,0,0,0.04); --glass-border:rgba(0,0,0,0.09); --glass-hover:rgba(0,0,0,0.06);
+            --amber:#d97706; --amber-dim:rgba(217,119,6,0.1);
+            --blue:#2563eb; --blue-dim:rgba(37,99,235,0.1);
+            --green:#16a34a; --red:#dc2626;
+            --text:#0f172a; --text-2:#475569; --text-3:#94a3b8;
+            --surface:rgba(0,0,0,0.03);
+            --shadow-card:0 16px 48px rgba(0,0,0,0.12),0 0 0 1px rgba(0,0,0,0.06);
+        }
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+            background:var(--bg1); min-height:100vh;
+            display:flex; justify-content:center; align-items:flex-start;
+            padding:16px 12px 40px; position:relative; overflow-x:hidden;
+            transition:background 0.3s;
+        }
+        body::before{content:'';position:fixed;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(59,130,246,0.18) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:blobDrift 12s ease-in-out infinite alternate;}
+        body::after{content:'';position:fixed;bottom:-100px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(245,166,35,0.13) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:blobDrift 15s ease-in-out infinite alternate-reverse;}
+        @keyframes blobDrift{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,40px) scale(1.08);}}
+        .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+        .main-card{position:relative;z-index:1;width:100%;max-width:420px;background:var(--bg2);border:1px solid var(--glass-border);border-radius:36px;padding:24px 20px 20px;box-shadow:var(--shadow-card);animation:cardIn 0.5s cubic-bezier(0.16,1,0.3,1);transition:background 0.3s,border-color 0.3s;}
+        @keyframes cardIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+        /* HEADER */
+        .app-header{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+        .header-logo{width:50px;height:50px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 24px -4px rgba(59,130,246,0.5);flex-shrink:0;overflow:hidden;}
+        .header-logo img{width:50px;height:50px;border-radius:18px;object-fit:cover;}
+        .header-right{display:flex;flex-direction:column;gap:2px;flex:1;}
+        .header-top-row{display:flex;align-items:center;justify-content:space-between;}
+        .header-title{font-size:1.6rem;font-weight:800;color:var(--text);line-height:1;letter-spacing:-0.5px;}
+        .header-title span{color:var(--blue);}
+        .header-sub{display:flex;align-items:center;gap:6px;}
+        .est-badge{background:linear-gradient(135deg,#eab308,#f5a623);color:#0d1117;font-size:0.7rem;font-weight:800;padding:3px 10px;border-radius:30px;letter-spacing:1.5px;}
+        .theme-toggle{
+            background:var(--glass);border:1px solid var(--glass-border);
+            height:34px;border-radius:30px;padding:0 12px;
+            cursor:pointer;display:flex;align-items:center;gap:6px;
+            font-family:inherit;font-size:0.72rem;font-weight:700;
+            color:var(--text);letter-spacing:0.3px;
+            transition:background 0.2s,transform 0.2s,box-shadow 0.2s;
+            flex-shrink:0;white-space:nowrap;
+        }
+        .theme-toggle:active{transform:scale(0.95);}
+        .theme-toggle:hover{background:var(--glass-hover);box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+        .theme-toggle .t-dot{
+            width:8px;height:8px;border-radius:50%;flex-shrink:0;
+            transition:background 0.3s;
+        }
+        [data-theme="dark"]  .theme-toggle .t-dot{background:#94a3b8;}
+        [data-theme="light"] .theme-toggle .t-dot{background:#f59e0b;}
+
+        /* DATE BAR */
+        .date-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:20px;cursor:pointer;user-select:none;transition:background 0.2s,border-color 0.2s,border-radius 0.2s;}
+        .date-bar:hover{background:var(--glass-hover);}
+        .date-bar.active{border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.07);border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom-color:transparent;margin-bottom:0;}
+        #todayDate{color:var(--text);font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:6px;}
+        .date-caret{font-size:0.6rem;color:var(--text-3);transition:transform 0.3s;display:inline-block;}
+        .date-caret.open{transform:rotate(180deg);}
+        .week-pill{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;padding:4px 14px;border-radius:40px;font-size:0.8rem;box-shadow:0 4px 12px -2px rgba(59,130,246,0.4);}
+        .clock-pill{font-weight:600;font-size:0.9rem;color:var(--text);background:var(--surface);border:1px solid var(--glass-border);padding:4px 12px;border-radius:40px;font-variant-numeric:tabular-nums;letter-spacing:0.5px;}
+
+        /* DATE PANEL */
+        .date-panel{display:none;background:var(--glass);border:1px solid rgba(59,130,246,0.4);border-top:none;border-bottom-left-radius:var(--radius-lg);border-bottom-right-radius:var(--radius-lg);padding:16px 16px 18px;margin-bottom:20px;}
+        .date-panel.open{display:block;animation:panelSlide 0.22s cubic-bezier(0.16,1,0.3,1);}
+        @keyframes panelSlide{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+        /* MINI CALENDAR */
+        .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+        .cal-month-label{font-size:0.95rem;font-weight:700;color:var(--text);}
+        .cal-nav{background:var(--surface);border:1px solid var(--glass-border);color:var(--text-2);width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background 0.2s;}
+        .cal-nav:hover{background:var(--glass-hover);color:var(--text);}
+        .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;}
+        .cal-dow{text-align:center;font-size:0.58rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.4px;padding:3px 0 5px;}
+        .cal-day{text-align:center;font-size:0.78rem;font-weight:500;color:var(--text-2);padding:6px 2px;border-radius:8px;position:relative;}
+        .cal-day.has-lessons{color:var(--text);font-weight:700;background:var(--blue-dim);border:1px solid rgba(59,130,246,0.2);}
+        .cal-day.is-today{background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;color:white!important;border:none!important;box-shadow:0 4px 12px -2px rgba(59,130,246,0.5);}
+        .cal-day.other-month{color:var(--text-3);opacity:0.35;}
+        .cal-day.weekend{color:var(--text-3);}
+        .cal-day-dot{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--amber);}
+        .cal-day.is-holiday{color:var(--text-3);}
+        .cal-day.is-today.is-holiday{background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;color:white!important;}
+        .cal-day.clickable{cursor:pointer;}
+        .cal-day.clickable:active{opacity:0.7;}
+
+        /* CAL DAY LESSONS PANEL */
+        .cal-lessons-panel{margin-top:12px;border-top:1px solid var(--glass-border);padding-top:12px;display:none;}
+        .cal-lessons-panel.open{display:block;animation:fadeSlide 0.2s ease;}
+        .cal-lessons-date{font-size:0.72rem;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+        .cal-lesson-row{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:var(--radius-sm);margin-bottom:3px;background:var(--surface);border:1px solid var(--glass-border);}
+        .cal-lesson-row.is-current{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2);}
+        .cal-lesson-row.is-done{opacity:0.45;}
+        .cal-l-time{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:40px;}
+        .cal-l-time-s{font-size:0.72rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;}
+        .cal-l-time-e{font-size:0.6rem;color:var(--text-3);font-variant-numeric:tabular-nums;}
+        .cal-l-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);flex-shrink:0;}
+        .cal-lesson-row.is-current .cal-l-dot{background:var(--green);}
+        .cal-lesson-row.is-done .cal-l-dot{background:var(--text-3);}
+        .cal-l-info{flex:1;min-width:0;}
+        .cal-l-name{font-size:0.8rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .cal-l-sub{font-size:0.67rem;color:var(--text-2);margin-top:1px;}
+        .cal-no-lesson{font-size:0.82rem;color:var(--text-3);padding:6px 4px;}
+        .panel-divider{height:1px;background:var(--glass-border);margin:0 0 14px;}
+
+        /* WEEK SUMMARY */
+        .summary-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-3);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+        .s-badge{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-size:0.6rem;padding:2px 8px;border-radius:20px;letter-spacing:0.3px;text-transform:none;}
+        .summary-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+        .stat-box{background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:10px 6px;text-align:center;}
+        .stat-value{font-size:1.5rem;font-weight:800;color:var(--text);line-height:1;}
+        .stat-label{font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px;font-weight:600;}
+        .next-day-box{background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:11px 13px;}
+        .next-day-label{font-size:0.62rem;color:var(--text-3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:8px;}
+        .next-day-item{display:flex;align-items:center;gap:8px;}
+        .next-day-item+.next-day-item{margin-top:5px;}
+        .next-day-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;}
+        .next-day-name{font-size:0.8rem;color:var(--text);font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .next-day-time{font-size:0.72rem;color:var(--text-3);flex-shrink:0;}
+
+        /* SECTION LABEL */
+        .section-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-3);margin-top:4px;margin-bottom:8px;margin-left:4px;font-weight:600;}
+
+        /* LESSON CARD */
+        .lesson-container{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:20px 18px;min-height:190px;position:relative;overflow:hidden;}
+        .lesson-container::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(59,130,246,0.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+        .lesson-name{font-size:1.3rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px;}
+        .lesson-type-chip{display:inline-block;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.25);color:#93c5fd;padding:2px 10px;border-radius:20px;font-size:0.72rem;font-weight:600;margin-left:8px;vertical-align:middle;}
+        [data-theme="light"] .lesson-type-chip{color:#1d4ed8;background:rgba(37,99,235,0.1);border-color:rgba(37,99,235,0.2);}
+        .teacher-name{font-size:0.88rem;color:var(--text-2);margin-bottom:10px;}
+        .meta-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+        .meta-chip{background:var(--surface);border:1px solid var(--glass-border);padding:5px 14px;border-radius:40px;font-size:0.88rem;font-weight:600;color:var(--text);white-space:nowrap;}
+        .meta-chip.room{color:#fcd34d;border-color:rgba(252,211,77,0.2);background:rgba(252,211,77,0.06);}
+        [data-theme="light"] .meta-chip.room{color:#b45309;background:rgba(180,83,9,0.06);border-color:rgba(180,83,9,0.2);}
+        .countdown-block{background:var(--amber-dim);border:1px solid rgba(245,166,35,0.25);border-radius:var(--radius-md);padding:12px 14px;margin-top:12px;}
+        .countdown-block.ongoing{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.25);}
+        .countdown-text{font-size:1.15rem;font-weight:700;color:var(--text);line-height:1.2;}
+        .countdown-sub{font-size:0.82rem;color:var(--text-2);margin-top:3px;}
+        .no-lesson{text-align:center;padding:32px 20px;color:var(--text-2);}
+        .no-lesson-emoji{font-size:2.5rem;margin-bottom:10px;}
+        .no-lesson-text{font-size:1.1rem;font-weight:600;}
+
+        /* PROGRESS BAR */
+        .progress-wrap{margin-top:14px;}
+        .progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+        .progress-label{font-size:0.7rem;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;}
+        .progress-pct{font-size:0.78rem;font-weight:700;color:var(--text-2);}
+        .progress-track{width:100%;height:6px;background:var(--surface);border:1px solid var(--glass-border);border-radius:99px;overflow:hidden;}
+        .progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1d4ed8,#3b82f6,#60a5fa);transition:width 1s linear;box-shadow:0 0 8px rgba(59,130,246,0.6);}
+        .progress-fill.near-end{background:linear-gradient(90deg,#b45309,#f59e0b,#fcd34d);box-shadow:0 0 8px rgba(245,158,11,0.6);}
+
+        /* TODAY'S BAR */
+        .todays-bar{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);margin-top:10px;margin-bottom:20px;overflow:hidden;}
+        .todays-bar-header{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;cursor:pointer;user-select:none;transition:background 0.2s;}
+        .todays-bar-header:hover{background:var(--glass-hover);}
+        .todays-bar-title{font-size:0.85rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+        .todays-count{background:var(--blue-dim);border:1px solid rgba(59,130,246,0.2);color:var(--blue);font-size:0.68rem;font-weight:800;padding:2px 9px;border-radius:20px;}
+        .todays-bar-chevron{color:var(--text-3);font-size:0.75rem;transition:transform 0.3s;}
+        .todays-bar-chevron.open{transform:rotate(180deg);}
+        .todays-bar-body{display:none;border-top:1px solid var(--glass-border);padding:10px 12px 14px;}
+        .todays-bar-body.open{display:block;animation:fadeSlide 0.22s ease;}
+        @keyframes fadeSlide{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:translateY(0);}}
+        .today-lesson-row{display:flex;align-items:center;gap:12px;padding:8px 8px;border-radius:var(--radius-sm);margin-top:2px;transition:background 0.15s;}
+        .today-lesson-row:hover{background:var(--glass-hover);}
+        .today-lesson-row.is-current{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);}
+        .today-lesson-row.is-done{opacity:0.45;}
+        .tl-time-col{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:42px;}
+        .tl-time{font-size:0.75rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;}
+        .tl-time-end{font-size:0.62rem;color:var(--text-3);font-variant-numeric:tabular-nums;}
+        .tl-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;}
+        .today-lesson-row.is-current .tl-dot{background:var(--green);}
+        .today-lesson-row.is-done .tl-dot{background:var(--text-3);}
+        .tl-info{flex:1;min-width:0;}
+        .tl-name{font-size:0.83rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+        .tl-sub{font-size:0.7rem;color:var(--text-2);margin-top:2px;}
+        .tl-status{font-size:0.63rem;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;}
+        .tl-status.live{background:rgba(34,197,94,0.15);color:var(--green);border:1px solid rgba(34,197,94,0.3);}
+        .tl-status.done{background:var(--surface);color:var(--text-3);border:1px solid var(--glass-border);}
+        .tl-status.soon{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,0.25);}
+
+        /* BUTTONS */
+        .button-row{display:flex;gap:10px;margin-bottom:14px;}
+        .action-btn{flex:1;padding:14px 12px;border:none;border-radius:var(--radius-lg);font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;color:white;transition:transform 0.15s,filter 0.15s;letter-spacing:0.2px;display:flex;align-items:center;justify-content:center;gap:6px;}
+        .action-btn:active{transform:scale(0.97);filter:brightness(0.9);}
+        .action-btn.schedule{background:linear-gradient(135deg,#1d4ed8,#3b82f6);box-shadow:0 8px 20px -4px rgba(59,130,246,0.45);}
+        .action-btn.weeks{background:linear-gradient(135deg,#7c3aed,#a855f7);box-shadow:0 8px 20px -4px rgba(168,85,247,0.4);}
+
+        /* FOOTER */
+        .footer-area{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+        .building-code{text-align:center;font-size:0.78rem;}
+        .building-code span{background:var(--glass);border:1px solid var(--glass-border);padding:4px 14px;border-radius:20px;color:var(--text-3);}
+        .footer-note{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;}
+        .footer-note span{background:var(--glass);border:1px solid var(--glass-border);padding:4px 12px;border-radius:30px;font-size:0.72rem;color:var(--text-3);letter-spacing:0.3px;}
+
+        /* MODALS */
+        .modal{display:none;position:fixed;inset:0;background:rgba(10,13,20,0.95);z-index:1000;overflow-y:auto;backdrop-filter:blur(8px);}
+        [data-theme="light"] .modal{background:rgba(240,244,255,0.92);}
+        .modal-content{min-height:100%;padding:20px 16px 40px;max-width:480px;margin:0 auto;}
+        .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--glass-border);}
+        .modal-header h2{font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
+        .close-btn{background:var(--glass);border:1px solid var(--glass-border);width:44px;height:44px;border-radius:50%;font-size:20px;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+        .close-btn:hover{background:rgba(255,255,255,0.1);color:var(--text);}
+        .this-week-badge{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:14px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px;}
+        .this-week-badge>span{font-size:0.85rem;color:var(--text-2);}
+        #thisWeekType{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;padding:4px 16px;border-radius:30px;font-size:0.9rem;font-weight:700;}
+        .week-selector{display:flex;gap:10px;margin-bottom:20px;}
+        .week-btn{flex:1;background:var(--glass);border:1px solid var(--glass-border);color:var(--text-2);padding:12px 0;border-radius:40px;font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;}
+        .week-btn.upper.active{background:linear-gradient(135deg,#ca8a04,#eab308);border-color:transparent;color:#0d1117;box-shadow:0 6px 16px -3px rgba(234,179,8,0.4);}
+        .week-btn.lower.active{background:linear-gradient(135deg,#15803d,#22c55e);border-color:transparent;color:white;box-shadow:0 6px 16px -3px rgba(34,197,94,0.4);}
+        .schedule-col{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:18px 16px;margin-bottom:14px;}
+        .col-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+        .col-title span{font-size:0.75rem;font-weight:400;color:var(--text-3);background:var(--surface);padding:2px 10px;border-radius:20px;}
+        .lesson-block{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;border-left:4px solid var(--blue);}
+        .lesson-block:last-child{margin-bottom:0;}
+        .block-title{font-weight:600;font-size:0.95rem;color:var(--text);margin-bottom:4px;line-height:1.3;}
+        .lesson-type-badge{display:inline-block;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.2);color:#93c5fd;padding:1px 8px;border-radius:16px;font-size:0.68rem;font-weight:600;margin-left:6px;vertical-align:middle;}
+        .block-teacher{font-size:0.8rem;color:var(--text-2);margin-bottom:8px;}
+        .block-meta{display:flex;flex-wrap:wrap;gap:6px;}
+        .block-meta span{background:var(--glass);border:1px solid var(--glass-border);padding:3px 10px;border-radius:30px;font-size:0.78rem;color:var(--text-2);}
+        .exam-section{margin-top:20px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:20px;}
+        .exam-title{font-size:1.2rem;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+        .exam-title span{background:linear-gradient(135deg,#dc2626,#ef4444);padding:3px 12px;border-radius:30px;font-size:0.72rem;font-weight:700;color:white;}
+        .exam-grid{display:flex;flex-direction:column;gap:10px;}
+        .exam-row{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+        .exam-name{font-weight:600;color:var(--text);font-size:0.95rem;margin-bottom:4px;}
+        .exam-type{font-size:0.72rem;color:var(--text-2);background:var(--glass);padding:2px 10px;border-radius:30px;border:1px solid var(--glass-border);display:inline-block;}
+        .exam-date{font-weight:700;color:var(--amber);font-size:0.95rem;text-align:right;}
+        .exam-time{font-size:0.82rem;color:var(--text-2);margin-top:3px;text-align:right;}
+        .limits-container{display:flex;flex-direction:column;gap:14px;}
+        .subject-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:18px;border-left:5px solid;}
+        .subject-card.high{border-left-color:var(--red);}
+        .subject-card.medium{border-left-color:var(--amber);}
+        .subject-card.low{border-left-color:var(--green);}
+        .subject-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+        .subject-name{font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.3;flex:1;}
+        .limits-box{display:flex;gap:14px;background:var(--surface);border:1px solid var(--glass-border);padding:8px 16px;border-radius:var(--radius-lg);flex-shrink:0;}
+        .limit-item{text-align:center;}
+        .limit-label{font-size:0.62rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;}
+        .limit-value{font-size:1.8rem;font-weight:800;line-height:1.1;}
+        .limit-value.high{color:var(--red);}
+        .limit-value.medium{color:var(--amber);}
+        .limit-value.low{color:var(--green);}
+        .subject-teachers{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px;margin-bottom:10px;}
+        .teacher-row{display:flex;justify-content:space-between;align-items:center;color:var(--text-2);font-size:0.88rem;padding:5px 0;}
+        .teacher-row:not(:last-child){border-bottom:1px solid var(--glass-border);margin-bottom:6px;padding-bottom:8px;}
+        .teacher-type{font-size:0.72rem;background:var(--glass);border:1px solid var(--glass-border);padding:2px 10px;border-radius:30px;color:var(--text-3);}
+        .subject-rule-row{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--glass-border);}
+        .subject-rule{font-size:0.82rem;color:var(--text-2);}
+        .subject-rule strong{color:var(--amber);font-weight:700;}
+        .subject-kesr{font-size:0.82rem;color:var(--red);font-weight:700;}
+        /* SUBJECT POPUP */
+        .subj-modal{display:none;position:fixed;inset:0;background:rgba(10,13,20,0.92);z-index:2000;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);}
+        .subj-modal.open{display:flex;animation:smFade 0.18s ease;}
+        @keyframes smFade{from{opacity:0;}to{opacity:1;}}
+        .subj-sheet{background:var(--bg2);border:1px solid var(--glass-border);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 36px;animation:sheetUp 0.28s cubic-bezier(0.16,1,0.3,1);}
+        @keyframes sheetUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+        .subj-sheet-handle{width:36px;height:4px;background:var(--glass-border);border-radius:99px;margin:0 auto 18px;}
+        .subj-sheet-name{font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:4px;line-height:1.3;}
+        .subj-sheet-teacher{font-size:0.85rem;color:var(--text-2);margin-bottom:16px;}
+        .subj-progress-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+        .subj-progress-track{flex:1;height:8px;background:var(--surface);border:1px solid var(--glass-border);border-radius:99px;overflow:hidden;}
+        .subj-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);transition:width 0.6s cubic-bezier(0.16,1,0.3,1);}
+        .subj-progress-fill.warn{background:linear-gradient(90deg,#b45309,#f59e0b);}
+        .subj-progress-fill.done{background:linear-gradient(90deg,#15803d,#22c55e);}
+        .subj-pct{font-size:0.8rem;font-weight:700;color:var(--text-2);min-width:34px;text-align:right;}
+        .subj-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;}
+        .subj-stat{background:var(--surface);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:12px 8px;text-align:center;}
+        .subj-stat-val{font-size:1.5rem;font-weight:800;color:var(--text);line-height:1;}
+        .subj-stat-val.green{color:var(--green);}
+        .subj-stat-val.amber{color:var(--amber);}
+        .subj-stat-val.red{color:var(--red);}
+        .subj-stat-lbl{font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px;font-weight:600;}
+        .subj-close{display:block;width:100%;margin-top:16px;padding:13px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);color:var(--text-2);font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;text-align:center;}
+        .subj-close:active{filter:brightness(0.9);}
+        /* clickable lesson blocks */
+        .lesson-block{cursor:pointer;}
+        .lesson-block:active{filter:brightness(1.1);}
+        .subject-card{cursor:pointer;}
+        .subject-card:active{opacity:0.85;}
+
+        ::-webkit-scrollbar{width:4px;}
+        ::-webkit-scrollbar-track{background:transparent;}
+        ::-webkit-scrollbar-thumb{background:var(--glass-border);border-radius:4px;}
+    </style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="main-card">
+    <div class="app-header">
+        <div class="header-logo">
+            <img src="logo.png" alt="logo" onerror="this.style.display='none';this.parentElement.innerHTML='📘';">
+        </div>
+        <div class="header-right">
+            <div class="header-top-row">
+                <div class="header-title">Dərs<span> Cədvəli</span></div>
+                <button class="theme-toggle" id="themeToggle"><span class="t-dot"></span><span id="themeLabel">Tünd tema</span></button>
+            </div>
+            <div class="header-sub"><span class="est-badge">AZMIU</span></div>
+        </div>
+    </div>
+
+    <div class="date-bar" id="dateBar">
+        <span id="todayDate">— <span class="date-caret" id="dateCaret">▼</span></span>
+        <span class="week-pill" id="weekType">Üst həftə</span>
+        <span class="clock-pill" id="liveClock">00:00</span>
+    </div>
+
+    <div class="date-panel" id="datePanel">
+        <div class="cal-header">
+            <button class="cal-nav" id="calPrev">‹</button>
+            <span class="cal-month-label" id="calMonthLabel">—</span>
+            <button class="cal-nav" id="calNext">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-lessons-panel" id="calLessonsPanel">
+            <div class="cal-lessons-date" id="calLessonsDate"></div>
+            <div id="calLessonsList"></div>
+        </div>
+        <div class="panel-divider"></div>
+        <div class="summary-title">Bu həftənin xülasəsi <span class="s-badge" id="summaryWeekBadge">Üst</span></div>
+        <div class="summary-stats">
+            <div class="stat-box"><div class="stat-value" id="statTotalLessons">—</div><div class="stat-label">Dərs</div></div>
+            <div class="stat-box"><div class="stat-value" id="statTotalHours">—</div><div class="stat-label">Saat</div></div>
+            <div class="stat-box"><div class="stat-value" id="statSubjects">—</div><div class="stat-label">Fənn</div></div>
+        </div>
+        <div class="next-day-box">
+            <div class="next-day-label" id="nextDayLabel">Sabahkı dərslər</div>
+            <div id="nextDayLessons"></div>
+        </div>
+    </div>
+
+    <div class="section-label">Cari / Növbəti dərs</div>
+    <div id="lessonCard" class="lesson-container"></div>
+
+    <div class="todays-bar">
+        <div class="todays-bar-header" id="todaysBarToggle">
+            <div class="todays-bar-title">📋 Bugünkü dərslər <span class="todays-count" id="todaysCount">0</span></div>
+            <span class="todays-bar-chevron" id="todaysBarChevron">▼</span>
+        </div>
+        <div class="todays-bar-body" id="todaysBarBody"></div>
+    </div>
+
+    <div class="button-row">
+        <button class="action-btn schedule" id="showScheduleBtn">📅 Cədvəl</button>
+        <button class="action-btn weeks" id="showWeeksBtn">📊 Qayıb limitləri</button>
+    </div>
+    <div class="button-row" style="margin-top:-6px;">
+        <a href="imtahan.html" class="action-btn" style="background:linear-gradient(135deg,#b45309,#f59e0b);box-shadow:0 8px 20px -4px rgba(245,158,11,0.4);text-decoration:none;">📝 İmtahan sualları - pdf</a>
+    </div>
+    <div class="button-row" style="margin-top:-6px;">
+        <a href="serbestisler.html" class="action-btn" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.4);text-decoration:none;">📋 Sərbəst işlər</a>
+    </div>
+
+    <div class="footer-area">
+        <div class="building-code"><span>🏛️ 845A5</span></div>
+        <div class="footer-note"><span>09:00–10:20</span><span>10:30–11:50</span><span>12:00–13:20</span></div>
+    </div>
+</div>
+
+<!-- MODAL: CƏDVƏL -->
+<div id="scheduleModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📅 Həftəlik cədvəl</h2>
+            <button class="close-btn" id="closeScheduleModal">✕</button>
+        </div>
+        <div class="this-week-badge"><span>Bu Həftə</span><strong id="thisWeekType">(Üst)</strong></div>
+        <div class="week-selector">
+            <button class="week-btn upper" id="upperWeekBtn">🔺 Üst həftə</button>
+            <button class="week-btn lower" id="lowerWeekBtn">🔻 Alt həftə</button>
+        </div>
+        <div id="scheduleContainer"></div>
+        <div class="exam-section">
+            <div class="exam-title">📝 İmtahan cədvəli <span>2026</span></div>
+            <div class="exam-grid">
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">Kollokvium (Mart)</div><div class="exam-type">Test · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">10-04-2026</div><div class="exam-time">09:30</div></div>
+                </div>
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">Kollokvium (Aprel)</div><div class="exam-type">Test · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">08-05-2026</div><div class="exam-time">09:30</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: QAYIBlar -->
+<div id="weeksModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📊 Qayıb limitləri</h2>
+            <button class="close-btn" id="closeWeeksModal">✕</button>
+        </div>
+        <div class="limits-container">
+            <div class="subject-card high">
+                <div class="subject-header">
+                    <div class="subject-name">İnformasiya texnologiyalarının əsasları</div>
+                    <div class="limits-box">
+                        <div class="limit-item"><div class="limit-label">Limit</div><div class="limit-value high">13</div></div>
+                        <div class="limit-item"><div class="limit-label">Saat</div><div class="limit-value high">90</div></div>
+                    </div>
+                </div>
+                <div class="subject-teachers">
+                    <div class="teacher-row"><span>👨‍🏫 Yunis Bədəlov</span><span class="teacher-type">Mühazirə</span></div>
+                    <div class="teacher-row"><span>👩‍🏫 Rəna Hüseynova</span><span class="teacher-type">Laboratoriya</span></div>
+                </div>
+                <div class="subject-rule-row"><div class="subject-rule"><strong>6-8 qayıb 1 bal</strong> · <strong>9-12 qayıb 2 bal</strong> aparır</div><div class="subject-kesr">⚠️ 13-cü qayıbda kəsr</div></div>
+            </div>
+            <div class="subject-card medium">
+                <div class="subject-header">
+                    <div class="subject-name">XDIAK</div>
+                    <div class="limits-box">
+                        <div class="limit-item"><div class="limit-label">Limit</div><div class="limit-value medium">11</div></div>
+                        <div class="limit-item"><div class="limit-label">Saat</div><div class="limit-value medium">75</div></div>
+                    </div>
+                </div>
+                <div class="subject-teachers">
+                    <div class="teacher-row"><span>👩‍🏫 Fərzəliyeva Ədilə</span><span class="teacher-type">Seminar</span></div>
+                </div>
+                <div class="subject-rule-row"><div class="subject-rule"><strong>5-7 qayıb 1 bal</strong> · <strong>8-10 qayıb 2 bal</strong> aparır</div><div class="subject-kesr">⚠️ 11-ci qayıbda kəsr</div></div>
+            </div>
+            <div class="subject-card medium">
+                <div class="subject-header">
+                    <div class="subject-name">Proqramlaşdırmanın əsasları</div>
+                    <div class="limits-box">
+                        <div class="limit-item"><div class="limit-label">Limit</div><div class="limit-value medium">11</div></div>
+                        <div class="limit-item"><div class="limit-label">Saat</div><div class="limit-value medium">75</div></div>
+                    </div>
+                </div>
+                <div class="subject-teachers">
+                    <div class="teacher-row"><span>👨‍🏫 Talıbzadə Sərxan</span><span class="teacher-type">Mühazirə</span></div>
+                    <div class="teacher-row"><span>👩‍🏫 Talıbzadə Sərxan</span><span class="teacher-type">Laboratoriya</span></div>
+                </div>
+                <div class="subject-rule-row"><div class="subject-rule"><strong>5-7 qayıb 1 bal</strong> · <strong>8-10 qayıb 2 bal</strong> aparır</div><div class="subject-kesr">⚠️ 11-ci qayıbda kəsr</div></div>
+            </div>
+            <div class="subject-card low">
+                <div class="subject-header">
+                    <div class="subject-name">Diskret riyaziyyat</div>
+                    <div class="limits-box">
+                        <div class="limit-item"><div class="limit-label">Limit</div><div class="limit-value low">5</div></div>
+                        <div class="limit-item"><div class="limit-label">Saat</div><div class="limit-value low">30</div></div>
+                    </div>
+                </div>
+                <div class="subject-teachers">
+                    <div class="teacher-row"><span>👨‍🏫 Bəndəliyev Rövşən</span><span class="teacher-type">Mühazirə</span></div>
+                    <div class="teacher-row"><span>👨‍🏫 Bəndəliyev Rövşən</span><span class="teacher-type">Seminar</span></div>
+                </div>
+                <div class="subject-rule-row"><div class="subject-rule"><strong>3 qayıb 1 bal</strong> · <strong>4 qayıb 2 bal</strong> aparır</div><div class="subject-kesr">⚠️ 5-ci qayıbda kəsr</div></div>
+            </div>
+            <div class="subject-card low">
+                <div class="subject-header">
+                    <div class="subject-name">Diferensial tənliklər</div>
+                    <div class="limits-box">
+                        <div class="limit-item"><div class="limit-label">Limit</div><div class="limit-value low">5</div></div>
+                        <div class="limit-item"><div class="limit-label">Saat</div><div class="limit-value low">30</div></div>
+                    </div>
+                </div>
+                <div class="subject-teachers">
+                    <div class="teacher-row"><span>👨‍🏫 Bəndəliyev Rövşən</span><span class="teacher-type">Mühazirə</span></div>
+                    <div class="teacher-row"><span>👩‍🏫 Dərişova Aynur</span><span class="teacher-type">Seminar</span></div>
+                </div>
+                <div class="subject-rule-row"><div class="subject-rule"><strong>3 qayıb 1 bal</strong> · <strong>4 qayıb 2 bal</strong> aparır</div><div class="subject-kesr">⚠️ 5-ci qayıbda kəsr</div></div>
+            </div>
+            <div class="subject-card low">
+                <div class="subject-header">
+                    <div class="subject-name">Sahibkarlığın əsasları və biznesə giriş</div>
+                    <div class="limits-box">
+                        <div class="limit-item"><div class="limit-label">Limit</div><div class="limit-value low">5</div></div>
+                        <div class="limit-item"><div class="limit-label">Saat</div><div class="limit-value low">30</div></div>
+                    </div>
+                </div>
+                <div class="subject-teachers">
+                    <div class="teacher-row"><span>👩‍🏫 Əliyeva Günay</span><span class="teacher-type">Mühazirə</span></div>
+                    <div class="teacher-row"><span>👩‍🏫 Mirzai Pərvin</span><span class="teacher-type">Seminar</span></div>
+                </div>
+                <div class="subject-rule-row"><div class="subject-rule"><strong>3 qayıb 1 bal</strong> · <strong>4 qayıb 2 bal</strong> aparır</div><div class="subject-kesr">⚠️ 5-ci qayıbda kəsr</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SUBJECT POPUP -->
+<div id="subjModal" class="subj-modal">
+    <div class="subj-sheet" id="subjSheet">
+        <div class="subj-sheet-handle"></div>
+        <div class="subj-sheet-name" id="subjName">—</div>
+        <div class="subj-sheet-teacher" id="subjTeacher">—</div>
+        <div class="subj-progress-row">
+            <div class="subj-progress-track"><div class="subj-progress-fill" id="subjFill" style="width:0%"></div></div>
+            <span class="subj-pct" id="subjPct">0%</span>
+        </div>
+        <div class="subj-stats">
+            <div class="subj-stat"><div class="subj-stat-val green" id="subjDone">—</div><div class="subj-stat-lbl">Keçilib</div></div>
+            <div class="subj-stat"><div class="subj-stat-val amber" id="subjLeft">—</div><div class="subj-stat-lbl">Qalıb</div></div>
+            <div class="subj-stat"><div class="subj-stat-val" id="subjTotal">—</div><div class="subj-stat-lbl">Cəmi</div></div>
+        </div>
+        <div id="subjLimitBox" style="margin-top:12px;background:var(--surface);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;">
+            <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);font-weight:700;margin-bottom:8px;">Qayıb limiti</div>
+            <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;">
+                <div style="text-align:center;">
+                    <div style="font-size:1.5rem;font-weight:800;" id="subjLimitCount">—</div>
+                    <div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Limit</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.5rem;font-weight:800;" id="subjLimitHours">—</div>
+                    <div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Saat</div>
+                </div>
+                <div style="flex:1;font-size:0.78rem;color:var(--amber);font-weight:600;line-height:1.4;" id="subjLimitRule">—</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:8px 10px;">
+                <span style="font-size:1rem;">⚠️</span>
+                <span style="font-size:0.82rem;color:var(--red);font-weight:700;" id="subjKesrText">—</span>
+            </div>
+        </div>
+        <button class="subj-close" id="subjClose">Bağla</button>
+    </div>
+</div>
+
+<script>
+    const LESSONS = [
+        {name:'Proqramlaşdırmanın əsasları',type:'Mühazirə',teacher:'Talıbzadə Sərxan',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'both',room:'1315',day:1},
+        {name:'İnformasiya texnologiyalarının əsasları',type:'Mühazirə',teacher:'Yunis Bədəlov',teacherEmoji:'👨‍🏫',start:630,end:710,weeks:'both',room:'1321',day:1},
+        {name:'İnformasiya texnologiyaları əsasları Laboratoriya',type:'',teacher:'Rəna Hüseynova',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'both',room:'1301',day:1},
+        {name:'XDIAK',type:'Seminar',teacher:'Fərzəliyeva Ədilə',teacherEmoji:'👩‍🏫',start:540,end:620,weeks:'both',room:'827',day:2},
+        {name:'Proqramlaşdırma Laboratoriya',type:'',teacher:'Talıbzadə Sərxan',teacherEmoji:'👩‍🏫',start:630,end:710,weeks:'both',room:'1317',day:2},
+        {name:'Sahibkarlığın əsasları və biznesə giriş',type:'Mühazirə',teacher:'Əliyeva Günay',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'upper',room:'1215',day:2},
+        {name:'Diferensial tənliklər',type:'Mühazirə',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:720,end:800,weeks:'lower',room:'1215',day:2},
+        {name:'Diskret riyaziyyat',type:'Mühazirə',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'upper',room:'1319',day:3},
+        {name:'XDIAK',type:'Seminar',teacher:'Fərzəliyeva Ədilə',teacherEmoji:'👩‍🏫',start:540,end:620,weeks:'lower',room:'827',day:3},
+        {name:'XDIAK',type:'Seminar',teacher:'Fərzəliyeva Ədilə',teacherEmoji:'👩‍🏫',start:630,end:710,weeks:'both',room:'827',day:3},
+        {name:'Diskret riyaziyyat',type:'Seminar',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'upper',room:'907 (II Korpus)',day:4},
+        {name:'Diferensial tənliklər',type:'Seminar',teacher:'Dərişova Aynur',teacherEmoji:'👩‍🏫',start:540,end:620,weeks:'lower',room:'907 (II Korpus)',day:4},
+        {name:'İnformasiya texnologiyalarının əsasları',type:'Mühazirə',teacher:'Yunis Bədəlov',teacherEmoji:'👨‍🏫',start:630,end:710,weeks:'both',room:'1321',day:4},
+        {name:'Sahibkarlığın əsasları və biznesə giriş',type:'Seminar',teacher:'Mirzai Pərvin',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'upper',room:'1319',day:4},
+        {name:'Proqramlaşdırmanın əsasları',type:'Mühazirə',teacher:'Talıbzadə Sərxan',teacherEmoji:'👨‍🏫',start:720,end:800,weeks:'lower',room:'1319',day:4}
+    ];
+
+    // Kollokvium virtual entries — shown as special lesson on their exact dates
+    // Apr 10 = Friday (day 5 in JS) → we use exact-date matching, not day-of-week
+    // We treat them as special; findCurrentLesson checks these first
+    var KOLLOKVIУМLAR = [
+        {name:'Kollokvium (Mart)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,3,10)},
+        {name:'Kollokvium (Aprel)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,4,8)}
+    ];
+
+    const MONTHS   = ['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
+    const DOWS     = ['B.e','Ç.a','Çər','C.a','Cüm','Şnb','Bzr'];
+    const DAYNAMES = ['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı'];
+
+    let currentWeekType = 'upper';
+    let calViewYear, calViewMonth;
+    let datePanelOpen = false;
+
+    function getWeekTypeForDate(d) {
+        const year = d.getFullYear();
+        const upper = [[16,2,20,2],[2,3,6,3],[16,3,20,3],[30,3,3,4],[13,4,17,4],[27,4,1,5],[11,5,15,5],[25,5,26,5]];
+        const lower = [[23,2,27,2],[9,3,13,3],[23,3,27,3],[6,4,10,4],[20,4,24,4],[4,5,8,5],[18,5,22,5]];
+        // Individual holiday dates — no lessons these days
+        var holidays = [
+            '2026-03-09',
+            '2026-03-20',
+            '2026-03-23',
+            '2026-03-24',
+            '2026-03-25',
+            '2026-03-26',
+            '2026-03-27',
+            '2026-03-30',
+            '2026-05-11',
+            '2026-05-27'
+        ];
+        var ds = d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+        if(holidays.indexOf(ds) >= 0) return null;
+        function inRange(ranges) {
+            for (var i=0;i<ranges.length;i++){
+                var r=ranges[i], s=new Date(year,r[1]-1,r[0]), e=new Date(year,r[3]-1,r[2]);
+                if(d>=s&&d<=e) return true;
+            }
+            return false;
+        }
+        if(inRange(upper)) return 'upper';
+        if(inRange(lower)) return 'lower';
+        return null;
+    }
+    function getWeekType(){
+        var wt = getWeekTypeForDate(new Date());
+        return wt ? wt : 'upper';
+    }
+
+    function hasLessonsOnDate(date){
+        var dow=date.getDay(), dayMap={1:1,2:2,3:3,4:4}, ld=dayMap[dow];
+        if(!ld) return false;
+        var wt=getWeekTypeForDate(date);
+        return LESSONS.some(function(l){ return l.day===ld&&(l.weeks==='both'||l.weeks===wt); });
+    }
+
+    function getToday(){ var d=new Date().getDay(); return d===0?7:d; }
+
+    function getLessonsForDay(day,wt){
+        return LESSONS.filter(function(l){ return l.day===day&&(l.weeks==='both'||l.weeks===wt); });
+    }
+
+    function getTodaysLessons(){
+        var t=getToday(); if(t>4) return [];
+        return getLessonsForDay(t,getWeekType()).sort(function(a,b){return a.start-b.start;});
+    }
+
+    function findCurrentLesson(){
+        var now=new Date();
+        var nowMin=now.getHours()*60+now.getMinutes();
+        var today=now.toDateString();
+
+        // Check kollokvium days first
+        for(var k=0;k<KOLLOKVIУМLAR.length;k++){
+            var kl=KOLLOKVIУМLAR[k];
+            if(kl.date.toDateString()===today){
+                if(nowMin<kl.start) return Object.assign({},kl,{status:'upcoming',isKollokvium:true});
+                if(nowMin>=kl.start&&nowMin<=kl.end) return Object.assign({},kl,{status:'ongoing',isKollokvium:true});
+            }
+        }
+
+        var list=getTodaysLessons();
+        for(var i=0;i<list.length;i++){
+            var l=list[i];
+            if(nowMin<l.start) return Object.assign({},l,{status:'upcoming'});
+            if(nowMin>=l.start&&nowMin<=l.end) return Object.assign({},l,{status:'ongoing'});
+        }
+        return null;
+    }
+
+    function fmt(m){ return Math.floor(m/60)+':'+(m%60<10?'0':'')+(m%60); }
+
+    // THEME
+    var themeToggle=document.getElementById('themeToggle');
+    var isDark=true;
+    function applyTheme(dark){
+        isDark=dark;
+        document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+        document.getElementById('themeLabel').textContent=dark?'Tünd tema':'Ağ tema';
+        try{localStorage.setItem('theme',dark?'dark':'light');}catch(e){}
+    }
+    themeToggle.onclick=function(){applyTheme(!isDark);};
+    try{applyTheme((localStorage.getItem('theme')||'dark')==='dark');}catch(e){applyTheme(true);}
+
+    // DATE PANEL
+    var dateBar=document.getElementById('dateBar');
+    var datePanel=document.getElementById('datePanel');
+
+    dateBar.onclick=function(e){
+        if(e.target.id==='calPrev'||e.target.id==='calNext') return;
+        datePanelOpen=!datePanelOpen;
+        dateBar.classList.toggle('active',datePanelOpen);
+        datePanel.classList.toggle('open',datePanelOpen);
+        var c=document.getElementById('dateCaret');
+        if(c) c.classList.toggle('open',datePanelOpen);
+        if(datePanelOpen){
+            var n=new Date();
+            renderCalendar(n.getFullYear(),n.getMonth());
+            renderWeekSummary();
+        }
+    };
+
+    document.getElementById('calPrev').addEventListener('click',function(e){
+        e.stopPropagation();
+        calViewMonth--; if(calViewMonth<0){calViewMonth=11;calViewYear--;}
+        document.getElementById('calLessonsPanel').classList.remove('open');
+        renderCalendar(calViewYear,calViewMonth);
+    });
+    document.getElementById('calNext').addEventListener('click',function(e){
+        e.stopPropagation();
+        calViewMonth++; if(calViewMonth>11){calViewMonth=0;calViewYear++;}
+        document.getElementById('calLessonsPanel').classList.remove('open');
+        renderCalendar(calViewYear,calViewMonth);
+    });
+
+    var HOLIDAYS = [
+        '2026-03-09','2026-03-20','2026-03-23','2026-03-24',
+        '2026-03-25','2026-03-26','2026-03-27','2026-03-30',
+        '2026-05-11','2026-05-27'
+    ];
+
+    function dateStr(d){
+        return d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+    }
+
+    // CALENDAR
+    function renderCalendar(year,month){
+        calViewYear=year; calViewMonth=month;
+        document.getElementById('calMonthLabel').textContent=MONTHS[month]+' '+year;
+        var grid=document.getElementById('calGrid');
+        grid.innerHTML='';
+        DOWS.forEach(function(d){var el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);});
+        var firstDay=new Date(year,month,1);
+        var startOffset=firstDay.getDay()-1; if(startOffset<0) startOffset=6;
+        var daysInMonth=new Date(year,month+1,0).getDate();
+        var daysInPrev=new Date(year,month,0).getDate();
+        var today=new Date();
+        for(var i=0;i<startOffset;i++){var el=document.createElement('div');el.className='cal-day other-month';el.textContent=daysInPrev-startOffset+1+i;grid.appendChild(el);}
+        for(var d=1;d<=daysInMonth;d++){
+            var date=new Date(year,month,d);
+            var dow=date.getDay();
+            var isToday=d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear();
+            var isWknd=(dow===0||dow===6);
+            var isHoliday=HOLIDAYS.indexOf(dateStr(date))>=0;
+            var beforeSemester=date<new Date(2026,1,16);
+            var afterSemester=date>=new Date(2026,4,27);
+            var outOfSemester=beforeSemester||afterSemester;
+            var hasL=!isWknd&&!isHoliday&&!outOfSemester&&hasLessonsOnDate(date);
+            var el=document.createElement('div');
+            var cls='cal-day';
+            if(isWknd||outOfSemester) cls+=' other-month';
+            if(hasL)                  cls+=' has-lessons';
+            if(isToday)               cls+=' is-today';
+            if(isHoliday&&!outOfSemester) cls+=' is-holiday';
+            if(!isWknd&&!outOfSemester) cls+=' clickable';
+            el.className=cls; el.textContent=d;
+            if(hasL){var dot=document.createElement('div');dot.className='cal-day-dot';el.appendChild(dot);}
+            (function(clickDate){ el.addEventListener('click',function(){ showCalDayLessons(clickDate); }); })(new Date(date));
+            grid.appendChild(el);
+        }
+        var rem=(startOffset+daysInMonth)%7;
+        if(rem!==0){for(var i=1;i<=7-rem;i++){var el=document.createElement('div');el.className='cal-day other-month';el.textContent=i;grid.appendChild(el);}}
+    }
+
+    function showCalDayLessons(date) {
+        var panel = document.getElementById('calLessonsPanel');
+        var dateEl = document.getElementById('calLessonsDate');
+        var listEl = document.getElementById('calLessonsList');
+
+        var dow = date.getDay();
+        var dayMap = {1:1,2:2,3:3,4:4};
+        var lessonDay = dayMap[dow];
+        var wt = getWeekTypeForDate(date);
+        var isHoliday = HOLIDAYS.indexOf(dateStr(date)) >= 0;
+        var dayNames = ['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə','Bazar'];
+
+        dateEl.textContent = date.getDate()+' '+MONTHS[date.getMonth()]+' — '+(dayNames[dow]||'');
+
+        var now = new Date();
+        var nowMin = now.getHours()*60 + now.getMinutes();
+        var isToday = date.toDateString() === now.toDateString();
+
+        if(isHoliday || !lessonDay || !wt) {
+            listEl.innerHTML = '<div class="cal-no-lesson">🎉 Tətil günüdür</div>';
+        } else {
+            var lessons = getLessonsForDay(lessonDay, wt).sort(function(a,b){return a.start-b.start;});
+            if(!lessons.length) {
+                listEl.innerHTML = '<div class="cal-no-lesson">Bu gün dərs yoxdur</div>';
+            } else {
+                var isPastDay = date < now && !isToday;
+                listEl.innerHTML = lessons.map(function(l) {
+                    var rowCls = 'cal-lesson-row';
+                    if(isPastDay) {
+                        rowCls += ' is-done';
+                    } else if(isToday) {
+                        if(nowMin >= l.start && nowMin <= l.end) rowCls += ' is-current';
+                        else if(nowMin > l.end)                  rowCls += ' is-done';
+                    }
+                    var typeStr = l.type ? ' · '+l.type : '';
+                    return '<div class="'+rowCls+'">'
+                        +'<div class="cal-l-time"><span class="cal-l-time-s">'+fmt(l.start)+'</span><span class="cal-l-time-e">'+fmt(l.end)+'</span></div>'
+                        +'<div class="cal-l-dot"></div>'
+                        +'<div class="cal-l-info"><div class="cal-l-name">'+l.name+'</div><div class="cal-l-sub">🚪 '+l.room+typeStr+'</div></div>'
+                        +'</div>';
+                }).join('');
+            }
+        }
+
+        panel.classList.add('open');
+    }
+
+    // WEEK SUMMARY
+    function renderWeekSummary(){
+        var wt=getWeekType();
+        document.getElementById('summaryWeekBadge').textContent=wt==='upper'?'Üst':'Alt';
+        var total=0,mins=0;
+        for(var day=1;day<=4;day++){
+            var dl=getLessonsForDay(day,wt);
+            total+=dl.length;
+            dl.forEach(function(l){mins+=l.end-l.start;});
+        }
+        var subjectGroups=[
+            ['Proqramlaşdırmanın əsasları','Proqramlaşdırma Laboratoriya'],
+            ['İnformasiya texnologiyalarının əsasları','İnformasiya texnologiyaları əsasları Laboratoriya']
+        ];
+        var allNames=LESSONS.filter(function(l){return l.weeks==='both'||l.weeks===wt;}).map(function(l){return l.name;});
+        var normalized=allNames.map(function(name){
+            for(var i=0;i<subjectGroups.length;i++){if(subjectGroups[i].indexOf(name)>=0) return subjectGroups[i][0];}
+            return name;
+        });
+        var uniq=new Set(normalized).size;
+        document.getElementById('statTotalLessons').textContent=total;
+        document.getElementById('statTotalHours').textContent=(mins/60).toFixed(1);
+        document.getElementById('statSubjects').textContent=uniq;
+        var todayDow=getToday();
+        var nextDay=todayDow>=1&&todayDow<=3?todayDow+1:1;
+        document.getElementById('nextDayLabel').textContent=DAYNAMES[nextDay]+' — dərslər';
+        var nLessons=getLessonsForDay(nextDay,wt).sort(function(a,b){return a.start-b.start;});
+        document.getElementById('nextDayLessons').innerHTML=nLessons.length
+            ?nLessons.map(function(l){return '<div class="next-day-item"><div class="next-day-dot"></div><div class="next-day-name">'+l.name+'</div><div class="next-day-time">'+fmt(l.start)+'</div></div>';}).join('')
+            :'<div style="color:var(--text-3);font-size:0.82rem;">Dərs yoxdur</div>';
+    }
+
+    // TODAY'S BAR
+    document.getElementById('todaysBarToggle').onclick=function(){
+        var body=document.getElementById('todaysBarBody');
+        var chev=document.getElementById('todaysBarChevron');
+        var open=body.classList.toggle('open');
+        chev.classList.toggle('open',open);
+    };
+
+    function renderTodaysBar(){
+        var nowMin=new Date().getHours()*60+new Date().getMinutes();
+        var lessons=getTodaysLessons();
+        var today=getToday();
+        document.getElementById('todaysCount').textContent=lessons.length;
+        var body=document.getElementById('todaysBarBody');
+        if(today>4||!lessons.length){body.innerHTML='<div style="color:var(--text-3);font-size:0.85rem;padding:8px 4px;">Bu gün dərs yoxdur</div>';return;}
+        body.innerHTML=lessons.map(function(l){
+            var isOngoing=nowMin>=l.start&&nowMin<=l.end;
+            var isDone=nowMin>l.end;
+            var isSoon=!isOngoing&&!isDone&&(l.start-nowMin)<=30;
+            var rowCls='today-lesson-row';
+            if(isOngoing) rowCls+=' is-current';
+            if(isDone) rowCls+=' is-done';
+            var status='';
+            if(isOngoing) status='<span class="tl-status live">Davam edir</span>';
+            else if(isDone) status='<span class="tl-status done">Bitdi</span>';
+            else if(isSoon) status='<span class="tl-status soon">Tezliklə</span>';
+            return '<div class="'+rowCls+'"><div class="tl-time-col"><span class="tl-time">'+fmt(l.start)+'</span><span class="tl-time-end">'+fmt(l.end)+'</span></div><div class="tl-dot"></div><div class="tl-info"><div class="tl-name">'+l.name+'</div><div class="tl-sub">🚪 '+l.room+(l.type?' · '+l.type:'')+'</div></div>'+status+'</div>';
+        }).join('');
+    }
+
+    // MAIN LESSON CARD
+    function renderMain(){
+        var container=document.getElementById('lessonCard');
+        var today=getToday();
+        var lesson=findCurrentLesson();
+        if(!lesson){
+            container.innerHTML=today>4
+                ?'<div class="no-lesson"><div class="no-lesson-emoji">📭</div><div class="no-lesson-text">Bu gün dərs yoxdur</div></div>'
+                :'<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Bugünki dərslər bitdi</div></div>';
+            return;
+        }
+        var nowMin=new Date().getHours()*60+new Date().getMinutes();
+        var cdText,cdSub,statusCls='',progressHTML='';
+        if(lesson.status==='upcoming'){
+            var diff=lesson.start-nowMin;
+            cdText='Başlamasına '+(Math.floor(diff/60)>0?Math.floor(diff/60)+' saat ':'')+diff%60+' dəqiqə';
+            cdSub=fmt(lesson.start)+'-da başlayır';
+        } else {
+            var pct=Math.min(100,Math.round(((nowMin-lesson.start)/(lesson.end-lesson.start))*100));
+            var nearEnd=pct>=75;
+            var diff=lesson.end-nowMin;
+            cdText='Bitməsinə '+(Math.floor(diff/60)>0?Math.floor(diff/60)+' saat ':'')+diff%60+' dəqiqə';
+            cdSub=fmt(lesson.end)+'-da bitir';
+            statusCls='ongoing';
+            progressHTML='<div class="progress-wrap"><div class="progress-header"><span class="progress-label">İrəliləyiş</span><span class="progress-pct">'+pct+'%</span></div><div class="progress-track"><div class="progress-fill'+(nearEnd?' near-end':'')+'" style="width:'+pct+'%"></div></div></div>';
+        }
+
+        if(lesson.isKollokvium){
+            // Special kollokvium card
+            container.innerHTML=
+                '<div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#f59e0b;font-weight:700;margin-bottom:8px;">📝 KOLLOKVİUM GÜN</div>'+
+                '<div class="lesson-name">'+lesson.name+'</div>'+
+                '<div class="teacher-name">'+lesson.teacherEmoji+' '+lesson.teacher+'</div>'+
+                '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(lesson.start)+'–'+fmt(lesson.end)+'</span><span class="meta-chip room">🏛️ '+lesson.room+'</span></div>'+
+                '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
+                progressHTML+
+                '<a href="imtahan.html" style="display:block;margin-top:12px;padding:11px;background:linear-gradient(135deg,#b45309,#f59e0b);border-radius:12px;color:white;font-weight:700;font-size:0.9rem;text-align:center;text-decoration:none;">📄 İmtahan suallarını aç</a>';
+        } else {
+            var typeHTML=lesson.type?'<span class="lesson-type-chip">'+lesson.type+'</span>':'';
+            container.innerHTML=
+                '<div class="lesson-name">'+lesson.name+typeHTML+'</div>'+
+                '<div class="teacher-name">'+lesson.teacherEmoji+' '+lesson.teacher+'</div>'+
+                '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(lesson.start)+'–'+fmt(lesson.end)+'</span><span class="meta-chip room">🚪 '+lesson.room+'</span></div>'+
+                '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
+                progressHTML;
+        }
+    }
+
+    // DATE BAR
+    function updateDateTime(){
+        var n=new Date();
+        document.getElementById('todayDate').innerHTML=n.getDate()+' '+MONTHS[n.getMonth()]+' '+n.getFullYear()+' <span class="date-caret'+(datePanelOpen?' open':'')+'" id="dateCaret">▼</span>';
+        document.getElementById('liveClock').textContent=n.toLocaleTimeString('az-AZ',{hour:'2-digit',minute:'2-digit'});
+        document.getElementById('weekType').textContent=getWeekType()==='upper'?'Üst həftə':'Alt həftə';
+    }
+
+    // SCHEDULE MODAL
+    function renderSchedule(wt){
+        var c=document.getElementById('scheduleContainer'); c.innerHTML='';
+        document.getElementById('thisWeekType').textContent=getWeekType()==='upper'?'(Üst)':'(Alt)';
+        document.getElementById('upperWeekBtn').classList.toggle('active',wt==='upper');
+        document.getElementById('lowerWeekBtn').classList.toggle('active',wt==='lower');
+        [{ad:'I GÜN',saat:'09:00–13:20',day:1},{ad:'II GÜN',saat:'09:00–13:20',day:2},{ad:'III GÜN',saat:'09:00–11:50',day:3},{ad:'IV GÜN',saat:'09:00–13:20',day:4}]
+        .forEach(function(g){
+            var dersler=getLessonsForDay(g.day,wt).sort(function(a,b){return a.start-b.start;});
+            var html='<div class="schedule-col"><div class="col-title">'+g.ad+' <span>'+g.saat+'</span></div>';
+            if(!dersler.length){html+='<div style="color:var(--text-3);padding:16px 0;text-align:center;font-size:0.9rem;">Dərs yoxdur</div>';}
+            else{dersler.forEach(function(d){var badge=d.type?'<span class="lesson-type-badge">'+d.type+'</span>':'';html+='<div class="lesson-block"><div class="block-title">'+d.name+badge+'</div><div class="block-teacher">'+d.teacherEmoji+' '+d.teacher+'</div><div class="block-meta"><span>🕒 '+fmt(d.start)+'–'+fmt(d.end)+'</span><span>🚪 '+d.room+'</span></div></div>';});}
+            html+='</div>'; c.innerHTML+=html;
+        });
+        addScheduleClickHandlers();
+    }
+
+    var scheduleModal=document.getElementById('scheduleModal');
+    var weeksModal=document.getElementById('weeksModal');
+    document.getElementById('showScheduleBtn').onclick=function(){renderSchedule(getWeekType());scheduleModal.style.display='block';};
+    document.getElementById('showWeeksBtn').onclick=function(){weeksModal.style.display='block';};
+    document.getElementById('upperWeekBtn').onclick=function(){renderSchedule('upper');};
+    document.getElementById('lowerWeekBtn').onclick=function(){renderSchedule('lower');};
+    document.getElementById('closeScheduleModal').onclick=function(){scheduleModal.style.display='none';};
+    document.getElementById('closeWeeksModal').onclick=function(){weeksModal.style.display='none';};
+    window.onclick=function(e){
+        if(e.target===scheduleModal) scheduleModal.style.display='none';
+        if(e.target===weeksModal) weeksModal.style.display='none';
+    };
+
+    // SUBJECT POPUP — fully dynamic, recalculated in real time
+    var SEMESTER_START = new Date(2026,1,16); // Feb 16
+    var SEMESTER_END   = new Date(2026,4,26); // May 26 — last actual lesson day (May 27 is holiday, semester ends)
+
+    // Map lesson name → canonical subject key
+    function normaliseSubject(name) {
+        name = name.trim();
+        if(name.indexOf('Proqramlaşdırma') >= 0) return 'Proqramlaşdırmanın əsasları';
+        if(name.indexOf('İnformasiya')     >= 0) return 'İnformasiya texnologiyalarının əsasları';
+        if(name.indexOf('XDIAK')           >= 0) return 'XDIAK';
+        if(name.indexOf('Diskret')         >= 0) return 'Diskret riyaziyyat';
+        if(name.indexOf('Diferensial')     >= 0) return 'Diferensial tənliklər';
+        if(name.indexOf('Sahibkar')        >= 0) return 'Sahibkarlığın əsasları və biznesə giriş';
+        return name;
+    }
+
+    var SUBJECT_META = {
+        'Proqramlaşdırmanın əsasları': {
+            teachers: '👨‍🏫 Talıbzadə Sərxan (Mühazirə + Laboratoriya)',
+            limitCount: 11, limitHours: 75, limitRule: '5-7 qayıb 1 bal, 8-10 qayıb 2 bal aparır',
+            kesrText: "11-ci qayıbda kəsr"
+        },
+        'İnformasiya texnologiyalarının əsasları': {
+            teachers: '👨‍🏫 Yunis Bədəlov · 👩‍🏫 Rəna Hüseynova',
+            limitCount: 13, limitHours: 90, limitRule: '6-8 qayıb 1 bal, 9-12 qayıb 2 bal aparır',
+            kesrText: "13-cü qayıbda kəsr"
+        },
+        'XDIAK': {
+            teachers: '👩‍🏫 Fərzəliyeva Ədilə (Seminar)',
+            limitCount: 11, limitHours: 75, limitRule: '5-7 qayıb 1 bal, 8-10 qayıb 2 bal aparır',
+            kesrText: "11-ci qayıbda kəsr"
+        },
+        'Diskret riyaziyyat': {
+            teachers: '👨‍🏫 Bəndəliyev Rövşən (Mühazirə + Seminar)',
+            limitCount: 5, limitHours: 30, limitRule: '3 qayıb 1 bal, 4 qayıb 2 bal aparır',
+            kesrText: "5-ci qayıbda kəsr"
+        },
+        'Diferensial tənliklər': {
+            teachers: '👨‍🏫 Bəndəliyev Rövşən · 👩‍🏫 Dərişova Aynur',
+            limitCount: 5, limitHours: 30, limitRule: '3 qayıb 1 bal, 4 qayıb 2 bal aparır',
+            kesrText: "5-ci qayıbda kəsr"
+        },
+        'Sahibkarlığın əsasları və biznesə giriş': {
+            teachers: '👩‍🏫 Əliyeva Günay · 👩‍🏫 Mirzai Pərvin',
+            limitCount: 5, limitHours: 30, limitRule: '3 qayıb 1 bal, 4 qayıb 2 bal aparır',
+            kesrText: "5-ci qayıbda kəsr"
+        }
+    };
+
+    function countLessonsInRange(subjKey, fromDate, toDate, onlyEnded) {
+        var count = 0;
+        var now = new Date();
+        var nowMin = now.getHours()*60 + now.getMinutes();
+        var todayStr = now.toDateString();
+
+        for(var d = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate()); d <= toDate; d.setDate(d.getDate()+1)) {
+            var dow = d.getDay();
+            var dayMap = {1:1,2:2,3:3,4:4};
+            var lessonDay = dayMap[dow];
+            if(!lessonDay) continue;
+            var wt = getWeekTypeForDate(d);
+            if(!wt) continue;
+
+            var dStr = d.toDateString();
+            var isPast   = d < now && dStr !== todayStr;
+            var isToday  = dStr === todayStr;
+
+            LESSONS.forEach(function(l) {
+                if(l.day !== lessonDay) return;
+                if(l.weeks !== 'both' && l.weeks !== wt) return;
+                if(normaliseSubject(l.name) !== subjKey) return;
+
+                if(onlyEnded) {
+                    if(isPast) { count++; }
+                    else if(isToday && nowMin > l.end) { count++; }
+                } else {
+                    count++;
+                }
+            });
+        }
+        return count;
+    }
+
+    function getSubjectCounts(subjKey) {
+        var total  = countLessonsInRange(subjKey, SEMESTER_START, SEMESTER_END, false);
+        var done   = countLessonsInRange(subjKey, SEMESTER_START, SEMESTER_END, true);
+        var remaining = total - done;
+        return { total: total, done: done, remaining: remaining };
+    }
+
+    var subjModal = document.getElementById('subjModal');
+
+    function openSubjectPopup(rawName) {
+        var key  = normaliseSubject(rawName);
+        var meta = SUBJECT_META[key];
+        if(!meta) return;
+
+        var c    = getSubjectCounts(key);
+        var pct  = c.total > 0 ? Math.round((c.done / c.total) * 100) : 0;
+
+        document.getElementById('subjName').textContent    = key;
+        document.getElementById('subjTeacher').textContent = meta.teachers;
+        document.getElementById('subjDone').textContent    = c.done;
+        document.getElementById('subjLeft').textContent    = c.remaining;
+        document.getElementById('subjTotal').textContent   = c.total;
+        document.getElementById('subjPct').textContent     = pct + '%';
+
+        // limit box
+        var lc = document.getElementById('subjLimitCount');
+        var lh = document.getElementById('subjLimitHours');
+        lc.textContent = meta.limitCount;
+        lh.textContent = meta.limitHours;
+        document.getElementById('subjLimitRule').textContent = meta.limitRule;
+        document.getElementById('subjKesrText').textContent = meta.kesrText;
+        var limitColor = meta.limitCount >= 13 ? 'var(--red)' : meta.limitCount >= 11 ? 'var(--amber)' : 'var(--green)';
+        lc.style.color = limitColor;
+        lh.style.color = limitColor;
+
+        var fill = document.getElementById('subjFill');
+        fill.style.width = '0%';
+        fill.className   = 'subj-progress-fill';
+        if(pct >= 75)      fill.className += ' done';
+        else if(pct >= 40) fill.className += ' warn';
+        setTimeout(function(){ fill.style.width = pct + '%'; }, 30);
+
+        var leftEl = document.getElementById('subjLeft');
+        leftEl.className = 'subj-stat-val';
+        if(c.remaining <= 3)       leftEl.className += ' red';
+        else if(c.remaining <= 7)  leftEl.className += ' amber';
+        else                       leftEl.className += ' green';
+
+        subjModal.classList.add('open');
+    }
+
+    document.getElementById('subjClose').onclick = function(){ subjModal.classList.remove('open'); };
+    subjModal.addEventListener('click', function(e){
+        if(e.target === subjModal) subjModal.classList.remove('open');
+    });
+
+    function addScheduleClickHandlers() {
+        document.querySelectorAll('.lesson-block').forEach(function(el){
+            el.onclick = function(e){
+                e.stopPropagation();
+                var title = el.querySelector('.block-title');
+                if(title) openSubjectPopup(title.textContent.trim());
+            };
+        });
+    }
+
+    document.querySelectorAll('.subject-card').forEach(function(el){
+        el.addEventListener('click', function(){
+            var nameEl = el.querySelector('.subject-name');
+            if(nameEl) openSubjectPopup(nameEl.textContent.trim());
+        });
+    });
+
+    function refresh(){updateDateTime();renderMain();renderTodaysBar();}
+    var now=new Date();
+    calViewYear=now.getFullYear(); calViewMonth=now.getMonth();
+    refresh();
+    setInterval(refresh,1000);
+</script>
+</body>
+</html>
