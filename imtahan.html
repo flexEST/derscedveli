@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İmtahan Mövzuları</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        :root {
+            --bg:#0d1117; --surface:#161b27; --card:#1c2333;
+            --border:rgba(255,255,255,0.07);
+            --blue:#3b82f6; --amber:#f5a623; --green:#22c55e; --red:#ef4444;
+            --text:#f1f5f9; --text2:#94a3b8; --text3:#475569;
+            --r:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+        }
+        body { font-family:var(--r); background:var(--bg); min-height:100vh; padding:16px 12px 60px; position:relative; overflow-x:hidden; }
+        body::before { content:''; position:fixed; top:-140px; left:-100px; width:450px; height:450px; background:radial-gradient(circle,rgba(59,130,246,0.14) 0%,transparent 70%); border-radius:50%; pointer-events:none; animation:blob 14s ease-in-out infinite alternate; }
+        body::after  { content:''; position:fixed; bottom:-100px; right:-80px; width:400px; height:400px; background:radial-gradient(circle,rgba(245,166,35,0.10) 0%,transparent 70%); border-radius:50%; pointer-events:none; animation:blob 18s ease-in-out infinite alternate-reverse; }
+        @keyframes blob { from{transform:translate(0,0)scale(1)} to{transform:translate(24px,32px)scale(1.06)} }
+        .wrap { max-width:480px; margin:0 auto; position:relative; z-index:1; }
+
+        /* HEADER */
+        .header { display:flex; align-items:center; gap:14px; margin-bottom:20px; animation:fadeUp .4s ease both; }
+        .back-btn { width:42px; height:42px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:13px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:18px; color:var(--text2); transition:background .2s,color .2s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,0.09); color:var(--text); }
+        .header-text h1 { font-size:1.4rem; font-weight:700; color:var(--text); line-height:1.1; }
+        .header-text p  { font-size:0.78rem; color:var(--text3); margin-top:3px; }
+
+        /* DATE STRIP */
+        .date-strip { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:18px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; animation:fadeUp .45s ease .05s both; }
+        .date-strip span { font-size:0.85rem; color:var(--text2); }
+        .date-strip .pill { background:linear-gradient(135deg,#1d4ed8,#3b82f6); color:white; font-weight:700; padding:4px 14px; border-radius:40px; font-size:0.78rem; }
+
+        /* EXAM CARD */
+        .exam-card { background:var(--surface); border:1px solid var(--border); border-radius:24px; margin-bottom:14px; overflow:hidden; animation:fadeUp .4s ease both; }
+        .exam-header { display:flex; align-items:center; gap:14px; padding:18px; cursor:pointer; transition:background .2s; user-select:none; }
+        .exam-header:active { background:rgba(255,255,255,0.04); }
+        .exam-icon { width:48px; height:48px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+        .exam-meta { flex:1; min-width:0; }
+        .exam-name { font-size:1rem; font-weight:700; color:var(--text); margin-bottom:4px; }
+        .exam-date-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+        .exam-date { font-size:0.78rem; font-weight:600; color:var(--amber); background:rgba(245,166,35,0.12); padding:2px 10px; border-radius:20px; }
+        .exam-type { font-size:0.75rem; color:var(--text3); background:rgba(255,255,255,0.05); border:1px solid var(--border); padding:2px 10px; border-radius:20px; }
+        .chevron { font-size:18px; color:var(--text3); transition:transform .3s cubic-bezier(.16,1,.3,1); flex-shrink:0; }
+        .exam-card.open .chevron { transform:rotate(180deg); }
+
+        /* SUBJECTS PANEL */
+        .subjects-panel { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.16,1,.3,1); }
+        .exam-card.open .subjects-panel { max-height:2000px; border-top:1px solid var(--border); }
+        .subjects-inner { padding:14px 14px 16px; display:flex; flex-direction:column; gap:8px; }
+        .subject-row { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:background .18s,border-color .18s,transform .15s; }
+        .subject-row:hover { background:rgba(59,130,246,0.08); border-color:rgba(59,130,246,0.25); }
+        .subject-row:active { transform:scale(0.985); }
+        .subject-num { width:30px; height:30px; border-radius:10px; background:rgba(255,255,255,0.06); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:var(--text3); flex-shrink:0; }
+        .subject-info { flex:1; min-width:0; }
+        .subject-name { font-size:0.92rem; font-weight:600; color:var(--text); line-height:1.3; }
+        .subject-hint { font-size:0.75rem; color:var(--text3); margin-top:2px; }
+        .pdf-badge { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
+
+        /* FOOTER */
+        .footer-back { text-align:center; margin-top:30px; }
+        .footer-back a { color:var(--text3); text-decoration:none; font-size:0.85rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:10px 22px; border-radius:40px; display:inline-block; transition:color .2s,background .2s; }
+        .footer-back a:hover { color:var(--text); background:rgba(255,255,255,0.08); }
+
+        /* ══ SUBJECT POPUP ══ */
+        .popup-overlay { display:none; position:fixed; inset:0; background:rgba(5,8,15,0.85); z-index:500; backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:20px; }
+        .popup-overlay.show { display:flex; }
+        .popup-box { background:var(--surface); border:1px solid var(--border); border-radius:32px; padding:32px 24px 28px; max-width:380px; width:100%; position:relative; box-shadow:0 32px 64px rgba(0,0,0,0.6); animation:popIn .35s cubic-bezier(.16,1,.3,1) both; }
+        @keyframes popIn { from{opacity:0;transform:scale(0.93)translateY(16px)} to{opacity:1;transform:scale(1)translateY(0)} }
+        .popup-close { position:absolute; top:16px; right:16px; width:36px; height:36px; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; color:var(--text2); transition:background .2s,color .2s; }
+        .popup-close:hover { background:rgba(255,255,255,0.12); color:var(--text); }
+        .popup-icon { width:60px; height:60px; border-radius:18px; background:rgba(59,130,246,0.15); border:1px solid rgba(59,130,246,0.2); display:flex; align-items:center; justify-content:center; font-size:26px; margin-bottom:16px; }
+        .popup-kbadge { display:inline-block; background:rgba(245,166,35,0.13); border:1px solid rgba(245,166,35,0.22); color:var(--amber); font-size:0.72rem; font-weight:700; padding:3px 12px; border-radius:20px; letter-spacing:.5px; margin-bottom:10px; }
+        .popup-title { font-size:1.2rem; font-weight:700; color:var(--text); line-height:1.3; margin-bottom:6px; }
+        .popup-sub { font-size:0.82rem; color:var(--text3); margin-bottom:22px; }
+        .popup-divider { height:1px; background:var(--border); margin-bottom:18px; }
+        .popup-btn { display:flex; align-items:center; gap:14px; width:100%; padding:15px 18px; border:none; border-radius:16px; cursor:pointer; text-decoration:none; margin-bottom:10px; transition:filter .15s,transform .15s; font-family:var(--r); }
+        .popup-btn:last-child { margin-bottom:0; }
+        .popup-btn:active { transform:scale(0.98); }
+        .popup-btn:hover { filter:brightness(1.08); }
+        .popup-btn.pdf  { background:linear-gradient(135deg,#dc2626,#ef4444); box-shadow:0 8px 20px -4px rgba(239,68,68,0.35); }
+        .popup-btn.test { background:linear-gradient(135deg,#0f766e,#14b8a6); box-shadow:0 8px 20px -4px rgba(20,184,166,0.35); }
+        .pb-icon { width:38px; height:38px; border-radius:11px; background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+        .pb-text { flex:1; text-align:left; }
+        .pb-title { font-size:0.95rem; font-weight:700; color:white; display:block; margin-bottom:2px; }
+        .pb-sub   { font-size:0.75rem; color:rgba(255,255,255,0.6); }
+        .pb-arr   { font-size:18px; color:rgba(255,255,255,0.45); }
+
+        /* ══ QUIZ POPUP ══ */
+        .quiz-overlay { display:none; position:fixed; inset:0; background:rgba(5,8,15,0.95); z-index:600; backdrop-filter:blur(12px); overflow-y:auto; }
+        .quiz-overlay.show { display:block; }
+        .quiz-wrap { max-width:480px; margin:0 auto; padding:20px 14px 60px; }
+        .quiz-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+        .quiz-back { width:40px; height:40px; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; color:var(--text2); flex-shrink:0; transition:background .2s; }
+        .quiz-back:hover { background:rgba(255,255,255,0.1); }
+        .quiz-htitle { font-size:1.1rem; font-weight:700; color:var(--text); }
+        .quiz-hsub   { font-size:0.75rem; color:var(--text3); margin-top:2px; }
+        .qtabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:18px; scrollbar-width:none; }
+        .qtabs::-webkit-scrollbar { display:none; }
+        .qtab { flex-shrink:0; padding:8px 16px; border-radius:30px; border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text2); font-size:0.8rem; font-weight:600; cursor:pointer; transition:all .2s; font-family:var(--r); }
+        .qtab.active { background:linear-gradient(135deg,#1d4ed8,#3b82f6); border-color:transparent; color:white; box-shadow:0 4px 12px -2px rgba(59,130,246,0.4); }
+        .qpanel { display:none; animation:fadeUp .3s ease both; }
+        .qpanel.active { display:block; }
+        .q-card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:18px; margin-bottom:10px; }
+        .q-num  { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:600; margin-bottom:7px; }
+        .q-text { font-size:1rem; font-weight:700; color:var(--text); margin-bottom:14px; line-height:1.35; }
+        .options { display:flex; flex-direction:column; gap:7px; }
+        .option  { display:flex; align-items:center; gap:11px; padding:11px 13px; background:var(--card); border:1.5px solid var(--border); border-radius:13px; cursor:pointer; transition:all .18s; user-select:none; }
+        .option:hover { background:rgba(59,130,246,0.07); border-color:rgba(59,130,246,0.2); }
+        .option.selected { background:rgba(59,130,246,0.12); border-color:rgba(59,130,246,0.4); }
+        .option.correct  { background:rgba(34,197,94,0.12);  border-color:rgba(34,197,94,0.4); }
+        .option.wrong    { background:rgba(239,68,68,0.10);   border-color:rgba(239,68,68,0.3); }
+        .opt-letter { width:28px; height:28px; border-radius:8px; background:rgba(255,255,255,0.06); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700; color:var(--text3); flex-shrink:0; transition:all .18s; }
+        .option.selected .opt-letter { background:rgba(59,130,246,0.2); border-color:rgba(59,130,246,0.4); color:#93c5fd; }
+        .option.correct  .opt-letter { background:rgba(34,197,94,0.2);  border-color:rgba(34,197,94,0.4);  color:#86efac; }
+        .option.wrong    .opt-letter { background:rgba(239,68,68,0.15);  border-color:rgba(239,68,68,0.3);  color:#fca5a5; }
+        .opt-text { font-size:0.88rem; color:var(--text); font-weight:500; flex:1; }
+        .btn-submit { width:100%; padding:14px; background:linear-gradient(135deg,#0f766e,#14b8a6); border:none; border-radius:15px; color:white; font-family:var(--r); font-size:0.95rem; font-weight:700; cursor:pointer; box-shadow:0 8px 20px -4px rgba(20,184,166,0.35); transition:filter .15s,transform .15s; margin-top:16px; }
+        .btn-submit:hover { filter:brightness(1.08); }
+        .btn-submit:active { transform:scale(0.98); }
+        .btn-submit:disabled { background:#1e293b; color:var(--text3); box-shadow:none; cursor:not-allowed; }
+        .result-box { display:none; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; margin-top:14px; text-align:center; }
+        .result-box.show { display:block; animation:fadeUp .4s ease both; }
+        .result-score { font-size:3rem; font-weight:800; line-height:1; margin-bottom:6px; }
+        .result-score.pass { color:var(--green); }
+        .result-score.fail { color:var(--red); }
+        .result-label { font-size:0.85rem; color:var(--text2); margin-bottom:14px; }
+        .result-bars  { display:flex; gap:6px; justify-content:center; margin-bottom:14px; }
+        .result-bar   { width:34px; height:7px; border-radius:4px; }
+        .result-bar.g { background:var(--green); }
+        .result-bar.r { background:var(--red); }
+        .btn-retry { padding:9px 26px; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:30px; color:var(--text2); font-family:var(--r); font-size:0.85rem; font-weight:600; cursor:pointer; transition:background .2s,color .2s; }
+        .btn-retry:hover { background:rgba(255,255,255,0.1); color:var(--text); }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="header">
+        <a class="back-btn" href="index.html">←</a>
+        <div class="header-text">
+            <h1>İmtahan Mövzuları</h1>
+            <p>Fənn üzrə suallar və materiallar</p>
+        </div>
+    </div>
+
+    <div class="date-strip">
+        <span id="dateNow">—</span>
+        <span class="pill">2025–2026 / II Semestr</span>
+    </div>
+
+    <!-- KOLLOKVIUM I -->
+    <div class="exam-card" data-index="0" style="animation-delay:.08s">
+        <div class="exam-header" onclick="toggle(0)">
+            <div class="exam-icon" style="background:rgba(59,130,246,0.15);">📝</div>
+            <div class="exam-meta">
+                <div class="exam-name">Kollokvium — I</div>
+                <div class="exam-date-row">
+                    <span class="exam-date">10 Aprel 2026</span>
+                    <span class="exam-type">Test · 09:30</span>
+                </div>
+            </div>
+            <span class="chevron">⌄</span>
+        </div>
+        <div class="subjects-panel"><div class="subjects-inner">
+            <div class="subject-row" onclick="openSubject('Diskret riyaziyyat','I','diskret_riyaziyyat.pdf','diskret_riyaziyyat')">
+                <div class="subject-num">1</div><div class="subject-info"><div class="subject-name">Diskret riyaziyyat</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('Proqramlaşdırmanın əsasları','I','proqramlasdirma.pdf','proqramlasdirma')">
+                <div class="subject-num">2</div><div class="subject-info"><div class="subject-name">Proqramlaşdırmanın əsasları</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('İnformasiya texnologiyalarının əsasları','I','informasiya_texnologiyalari.pdf','informasiya_texnologiyalari')">
+                <div class="subject-num">3</div><div class="subject-info"><div class="subject-name">İnformasiya texnologiyalarının əsasları</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('XDIAK','I','xdiak.pdf','xdiak')">
+                <div class="subject-num">4</div><div class="subject-info"><div class="subject-name">XDIAK</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('Diferensial tənliklər','I','diferensial_tenlikler.pdf','diferensial_tenlikler')">
+                <div class="subject-num">5</div><div class="subject-info"><div class="subject-name">Diferensial tənliklər</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('Sahibkarlığın əsasları və biznesə giriş','I','sahibkarlik.pdf','sahibkarlik')">
+                <div class="subject-num">6</div><div class="subject-info"><div class="subject-name">Sahibkarlığın əsasları və biznesə giriş</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+        </div></div>
+    </div>
+
+    <!-- KOLLOKVIUM II -->
+    <div class="exam-card" data-index="1" style="animation-delay:.14s">
+        <div class="exam-header" onclick="toggle(1)">
+            <div class="exam-icon" style="background:rgba(245,166,35,0.15);">📋</div>
+            <div class="exam-meta">
+                <div class="exam-name">Kollokvium — II</div>
+                <div class="exam-date-row">
+                    <span class="exam-date">08 May 2026</span>
+                    <span class="exam-type">Test · 09:30</span>
+                </div>
+            </div>
+            <span class="chevron">⌄</span>
+        </div>
+        <div class="subjects-panel"><div class="subjects-inner">
+            <div class="subject-row" onclick="openSubject('Diskret riyaziyyat','II','diskret_riyaziyyat_2.pdf','diskret_riyaziyyat_2')">
+                <div class="subject-num">1</div><div class="subject-info"><div class="subject-name">Diskret riyaziyyat</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('Proqramlaşdırmanın əsasları','II','proqramlasdirma_2.pdf','proqramlasdirma_2')">
+                <div class="subject-num">2</div><div class="subject-info"><div class="subject-name">Proqramlaşdırmanın əsasları</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('İnformasiya texnologiyalarının əsasları','II','informasiya_texnologiyalari_2.pdf','informasiya_texnologiyalari_2')">
+                <div class="subject-num">3</div><div class="subject-info"><div class="subject-name">İnformasiya texnologiyalarının əsasları</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('XDIAK','II','xdiak_2.pdf','xdiak_2')">
+                <div class="subject-num">4</div><div class="subject-info"><div class="subject-name">XDIAK</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('Diferensial tənliklər','II','diferensial_tenlikler_2.pdf','diferensial_tenlikler_2')">
+                <div class="subject-num">5</div><div class="subject-info"><div class="subject-name">Diferensial tənliklər</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+            <div class="subject-row" onclick="openSubject('Sahibkarlığın əsasları və biznesə giriş','II','sahibkarlik_2.pdf','sahibkarlik_2')">
+                <div class="subject-num">6</div><div class="subject-info"><div class="subject-name">Sahibkarlığın əsasları və biznesə giriş</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
+            </div>
+        </div></div>
+    </div>
+
+    <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
+</div>
+
+<!-- ══ SUBJECT POPUP ══ -->
+<div class="popup-overlay" id="subjectPopup" onclick="overlayClick(event)">
+    <div class="popup-box">
+        <div class="popup-close" onclick="closeSubject()">✕</div>
+        <div class="popup-icon">📖</div>
+        <div class="popup-kbadge" id="popKbadge">Kollokvium I</div>
+        <div class="popup-title" id="popTitle">—</div>
+        <p class="popup-sub">Mövzu materiallarını aşağıdan seçin</p>
+        <div class="popup-divider"></div>
+        <button class="popup-btn pdf" id="popPdfBtn" onclick="openPDF()">
+            <div class="pb-icon">📄</div>
+            <div class="pb-text"><span class="pb-title">İmtahan sualları</span><span class="pb-sub">PDF faylını aç</span></div>
+            <span class="pb-arr">›</span>
+        </button>
+        <button class="popup-btn test" onclick="openQuiz()">
+            <div class="pb-icon">✏️</div>
+            <div class="pb-text"><span class="pb-title">Özünü yoxla</span><span class="pb-sub">İnteraktiv test</span></div>
+            <span class="pb-arr">›</span>
+        </button>
+    </div>
+</div>
+
+<!-- ══ QUIZ POPUP ══ -->
+<div class="quiz-overlay" id="quizOverlay">
+    <div class="quiz-wrap">
+        <div class="quiz-header">
+            <div class="quiz-back" onclick="closeQuiz()">←</div>
+            <div>
+                <div class="quiz-htitle" id="quizTitle">Test</div>
+                <div class="quiz-hsub">5 imtahan · hər biri 5 sual</div>
+            </div>
+        </div>
+        <div class="qtabs" id="qtabs"></div>
+        <div id="qpanels"></div>
+    </div>
+</div>
+
+<script>
+// DATE
+const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
+const nd=new Date();
+document.getElementById('dateNow').textContent=nd.getDate()+' '+months[nd.getMonth()]+' '+nd.getFullYear();
+
+// ACCORDION
+function toggle(idx){
+    document.querySelectorAll('.exam-card').forEach((c,i)=>{
+        i===idx ? c.classList.toggle('open') : c.classList.remove('open');
+    });
+}
+document.querySelectorAll('.exam-card')[0].classList.add('open');
+
+// QUIZ DATA — 12 subject keys, each has 5 exams x 5 questions
+// Correct answers pre-assigned; questions/options are placeholders
+const KEYS=['diskret_riyaziyyat','diskret_riyaziyyat_2','proqramlasdirma','proqramlasdirma_2',
+            'informasiya_texnologiyalari','informasiya_texnologiyalari_2',
+            'xdiak','xdiak_2','diferensial_tenlikler','diferensial_tenlikler_2',
+            'sahibkarlik','sahibkarlik_2'];
+const CANS=[2,0,4,1,3, 1,3,0,4,2, 0,2,3,1,4, 3,1,4,0,2, 4,0,2,3,1,
+            2,4,1,0,3, 1,2,0,3,4, 3,0,4,2,1, 0,3,1,4,2, 4,1,3,0,2,
+            2,3,0,4,1, 1,4,2,3,0];
+const QUIZ_DATA={};
+let ci=0;
+KEYS.forEach(key=>{
+    QUIZ_DATA[key]=Array.from({length:5},(_,ei)=>({
+        title:'İmtahan '+(ei+1),
+        questions:Array.from({length:5},(_,qi)=>({
+            text:'Sual '+(qi+1),
+            options:['Variant A','Variant B','Variant C','Variant D','Variant E'],
+            correct:CANS[ci++%CANS.length]
+        }))
+    }));
+});
+
+// STATE
+let curPdf='', curKey='';
+let quizAnswers=[];
+
+// SUBJECT POPUP
+function openSubject(name,knum,pdf,key){
+    document.getElementById('popTitle').textContent=name;
+    document.getElementById('popKbadge').textContent='Kollokvium '+knum;
+    curPdf=pdf; curKey=key;
+    document.getElementById('subjectPopup').classList.add('show');
+    document.body.style.overflow='hidden';
+}
+function closeSubject(){
+    document.getElementById('subjectPopup').classList.remove('show');
+    document.body.style.overflow='';
+}
+function overlayClick(e){
+    if(e.target===document.getElementById('subjectPopup')) closeSubject();
+}
+function openPDF(){
+    fetch(curPdf,{method:'HEAD'})
+        .then(r=>{ window.open(r.ok ? curPdf : 'error404.html','_blank'); })
+        .catch(()=>{ window.open('error404.html','_blank'); });
+}
+
+// QUIZ POPUP
+function openQuiz(){
+    const data=QUIZ_DATA[curKey];
+    document.getElementById('quizTitle').textContent=document.getElementById('popTitle').textContent+' — Test';
+    closeSubject();
+
+    const tabsEl=document.getElementById('qtabs');
+    const panelsEl=document.getElementById('qpanels');
+    tabsEl.innerHTML=''; panelsEl.innerHTML='';
+    quizAnswers=data.map(e=>new Array(e.questions.length).fill(-1));
+
+    data.forEach((exam,ei)=>{
+        const tab=document.createElement('button');
+        tab.className='qtab'+(ei===0?' active':'');
+        tab.textContent=exam.title;
+        tab.onclick=()=>switchTab(ei);
+        tabsEl.appendChild(tab);
+        const panel=document.createElement('div');
+        panel.className='qpanel'+(ei===0?' active':'');
+        panel.id='qp-'+ei;
+        panel.innerHTML=buildPanel(ei);
+        panelsEl.appendChild(panel);
+    });
+
+    document.getElementById('quizOverlay').classList.add('show');
+    document.body.style.overflow='hidden';
+}
+
+function buildPanel(ei){
+    const exam=QUIZ_DATA[curKey][ei];
+    const L=['A','B','C','D','E'];
+    let h='';
+    exam.questions.forEach((q,qi)=>{
+        h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-text">${q.text}</div><div class="options">`;
+        q.options.forEach((opt,oi)=>{
+            h+=`<div class="option" id="opt-${ei}-${qi}-${oi}" onclick="pick('${curKey}',${ei},${qi},${oi})"><div class="opt-letter">${L[oi]}</div><div class="opt-text">${opt}</div></div>`;
+        });
+        h+=`</div></div>`;
+    });
+    h+=`<button class="btn-submit" id="sub-${ei}" onclick="submitExam('${curKey}',${ei})">Nəticəni gör</button>`;
+    h+=`<div class="result-box" id="res-${ei}"></div>`;
+    return h;
+}
+
+function switchTab(ei){
+    document.querySelectorAll('.qtab').forEach((t,i)=>t.classList.toggle('active',i===ei));
+    document.querySelectorAll('.qpanel').forEach((p,i)=>p.classList.toggle('active',i===ei));
+}
+
+function pick(key,ei,qi,oi){
+    if(document.getElementById('sub-'+ei).disabled) return;
+    quizAnswers[ei][qi]=oi;
+    QUIZ_DATA[key][ei].questions[qi].options.forEach((_,o)=>{
+        document.getElementById(`opt-${ei}-${qi}-${o}`).classList.toggle('selected',o===oi);
+    });
+}
+
+function submitExam(key,ei){
+    const exam=QUIZ_DATA[key][ei];
+    let score=0;
+    exam.questions.forEach((q,qi)=>{
+        const chosen=quizAnswers[ei][qi];
+        q.options.forEach((_,oi)=>{
+            const el=document.getElementById(`opt-${ei}-${qi}-${oi}`);
+            el.classList.remove('selected');
+            if(oi===q.correct) el.classList.add('correct');
+            else if(oi===chosen&&chosen!==q.correct) el.classList.add('wrong');
+        });
+        if(chosen===q.correct) score++;
+    });
+    document.getElementById('sub-'+ei).disabled=true;
+    const res=document.getElementById('res-'+ei);
+    const pass=score>=3;
+    const bars=exam.questions.map((_,qi)=>`<div class="result-bar ${quizAnswers[ei][qi]===exam.questions[qi].correct?'g':'r'}"></div>`).join('');
+    res.innerHTML=`<div class="result-score ${pass?'pass':'fail'}">${score}/${exam.questions.length}</div>
+        <div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div>
+        <div class="result-bars">${bars}</div>
+        <button class="btn-retry" onclick="retryExam('${key}',${ei})">🔄 Yenidən cəhd et</button>`;
+    res.classList.add('show');
+    res.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function retryExam(key,ei){
+    quizAnswers[ei]=new Array(QUIZ_DATA[key][ei].questions.length).fill(-1);
+    document.getElementById('qp-'+ei).innerHTML=buildPanel(ei);
+}
+
+function closeQuiz(){
+    document.getElementById('quizOverlay').classList.remove('show');
+    document.getElementById('subjectPopup').classList.add('show');
+    document.body.style.overflow='hidden';
+}
+</script>
+</body>
+</html>
