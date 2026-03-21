@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sərbəst İşlər</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        :root {
+            --bg:#0d1117; --surface:#161b27; --card:#1c2333;
+            --border:rgba(255,255,255,0.07);
+            --blue:#3b82f6; --amber:#f5a623; --green:#22c55e; --red:#ef4444; --purple:#a855f7; --teal:#14b8a6;
+            --text:#f1f5f9; --text2:#94a3b8; --text3:#475569;
+            --r:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+        }
+        body.light {
+            --bg:#f0f4f8; --surface:#ffffff; --card:#f1f5f9;
+            --border:rgba(0,0,0,0.08);
+            --text:#0f172a; --text2:#475569; --text3:#94a3b8;
+        }
+        body { font-family:var(--r); background:var(--bg); min-height:100vh; padding:16px 12px 60px; position:relative; overflow-x:hidden; transition:background .3s; }
+        body::before { content:''; position:fixed; top:-140px; left:-100px; width:450px; height:450px; background:radial-gradient(circle,rgba(59,130,246,0.12) 0%,transparent 70%); border-radius:50%; pointer-events:none; animation:blob 14s ease-in-out infinite alternate; }
+        body::after  { content:''; position:fixed; bottom:-100px; right:-80px; width:400px; height:400px; background:radial-gradient(circle,rgba(168,85,247,0.09) 0%,transparent 70%); border-radius:50%; pointer-events:none; animation:blob 18s ease-in-out infinite alternate-reverse; }
+        @keyframes blob { from{transform:translate(0,0)scale(1)} to{transform:translate(24px,32px)scale(1.06)} }
+        .wrap { max-width:480px; margin:0 auto; position:relative; z-index:1; }
+
+        /* HEADER */
+        .header { display:flex; align-items:center; gap:12px; margin-bottom:20px; animation:fadeUp .4s ease both; }
+        .back-btn { width:42px; height:42px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:13px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:18px; color:var(--text2); transition:background .2s; flex-shrink:0; }
+        .back-btn:hover { background:rgba(255,255,255,0.09); color:var(--text); }
+        body.light .back-btn { background:rgba(0,0,0,0.04); }
+        .header-text { flex:1; }
+        .header-text h1 { font-size:1.4rem; font-weight:700; color:var(--text); line-height:1.1; }
+        .header-text p  { font-size:0.78rem; color:var(--text3); margin-top:3px; }
+        .theme-toggle { width:42px; height:42px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:13px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:17px; transition:background .2s,transform .15s; flex-shrink:0; }
+        .theme-toggle:hover { background:rgba(255,255,255,0.1); }
+        .theme-toggle:active { transform:scale(0.92); }
+        body.light .theme-toggle { background:rgba(0,0,0,0.04); }
+
+        /* DATE STRIP */
+        .date-strip { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:18px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; animation:fadeUp .45s ease .05s both; }
+        body.light .date-strip { background:rgba(0,0,0,0.03); }
+        .date-strip span { font-size:0.85rem; color:var(--text2); }
+        .date-strip .pill { background:linear-gradient(135deg,#6d28d9,#a855f7); color:white; font-weight:700; padding:4px 14px; border-radius:40px; font-size:0.78rem; }
+
+        /* ── SUBJECT CARD (main card, no accordion) ── */
+        .subj-card {
+            background:var(--surface);
+            border:1px solid var(--border);
+            border-radius:26px;
+            margin-bottom:14px;
+            overflow:hidden;
+            animation:fadeUp .4s ease both;
+        }
+        body.light .subj-card { box-shadow:0 2px 14px rgba(0,0,0,0.07); }
+
+        /* top summary row — always visible */
+        .subj-top {
+            display:flex; align-items:center; gap:14px;
+            padding:18px 18px 16px;
+        }
+        .subj-icon { width:48px; height:48px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+        .subj-meta { flex:1; min-width:0; }
+        .subj-name { font-size:1rem; font-weight:700; color:var(--text); line-height:1.25; margin-bottom:5px; }
+        .badge-row { display:flex; gap:6px; flex-wrap:wrap; }
+        .badge { font-size:0.68rem; font-weight:700; padding:2px 10px; border-radius:20px; letter-spacing:.3px; }
+        .badge.purple { background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.2); color:#c084fc; }
+        .badge.amber  { background:rgba(245,166,35,0.12);  border:1px solid rgba(245,166,35,0.2);  color:var(--amber); }
+        .badge.blue   { background:rgba(59,130,246,0.10);  border:1px solid rgba(59,130,246,0.18); color:#93c5fd; }
+        .badge.green  { background:rgba(34,197,94,0.10);   border:1px solid rgba(34,197,94,0.18);  color:#86efac; }
+        .badge.teal   { background:rgba(20,184,166,0.10);  border:1px solid rgba(20,184,166,0.18); color:#5eead4; }
+
+        /* TASK GOAL — main visible description */
+        .task-goal {
+            margin:0 14px 14px;
+            background:rgba(255,255,255,0.03);
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:14px 16px;
+        }
+        body.light .task-goal { background:rgba(0,0,0,0.03); }
+        .goal-label { font-size:0.68rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:8px; }
+        .goal-text  { font-size:0.92rem; font-weight:600; color:var(--text); line-height:1.5; }
+
+        /* DETAILS TOGGLE */
+        .details-toggle {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 18px;
+            cursor:pointer; user-select:none;
+            border-top:1px solid var(--border);
+            transition:background .2s;
+        }
+        .details-toggle:hover { background:rgba(255,255,255,0.03); }
+        body.light .details-toggle:hover { background:rgba(0,0,0,0.03); }
+        .dt-label { font-size:0.8rem; font-weight:600; color:var(--text2); }
+        .dt-chevron { font-size:16px; color:var(--text3); transition:transform .3s cubic-bezier(.16,1,.3,1); }
+        .subj-card.open .dt-chevron { transform:rotate(180deg); }
+
+        /* DETAILS PANEL */
+        .details-panel { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.16,1,.3,1); }
+        .subj-card.open .details-panel { max-height:3000px; }
+        .details-inner { padding:14px 14px 18px; display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--border); }
+
+        /* topic rows */
+        .topic-row { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px; }
+        body.light .topic-row { background:#f1f5f9; }
+        .topic-num { width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.06); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:var(--text3); flex-shrink:0; }
+        body.light .topic-num { background:rgba(0,0,0,0.05); }
+        .topic-info { flex:1; }
+        .topic-text { font-size:0.88rem; font-weight:600; color:var(--text); line-height:1.35; }
+        .topic-sub  { font-size:0.73rem; color:var(--text3); margin-top:3px; }
+
+        /* deadline */
+        .deadline-banner { background:rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.18); border-radius:14px; padding:11px 14px; display:flex; align-items:center; gap:10px; margin-top:4px; }
+        .dl-dot { width:9px; height:9px; background:var(--amber); border-radius:50%; flex-shrink:0; animation:blink 1.8s ease-in-out infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+        .dl-text { font-size:0.8rem; color:var(--amber); font-weight:600; }
+        .dl-sub  { font-size:0.72rem; color:#92714a; margin-top:2px; }
+
+        /* LOCKED card (no tasks yet) */
+        .subj-card.locked .subj-top { opacity:.75; }
+        .locked-note { margin:0 14px 16px; padding:12px 14px; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.08); border-radius:14px; font-size:0.82rem; color:var(--text3); text-align:center; }
+        body.light .locked-note { background:rgba(0,0,0,0.02); border-color:rgba(0,0,0,0.1); }
+
+        /* FOOTER */
+        .footer-back { text-align:center; margin-top:30px; }
+        .footer-back a { color:var(--text3); text-decoration:none; font-size:0.85rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:10px 22px; border-radius:40px; display:inline-block; transition:color .2s,background .2s; }
+        .footer-back a:hover { color:var(--text); background:rgba(255,255,255,0.08); }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="header">
+        <a class="back-btn" href="index.html">←</a>
+        <div class="header-text">
+            <h1>Sərbəst İşlər</h1>
+            <p>Bu ayın tapşırıqları</p>
+        </div>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+    </div>
+
+    <div class="date-strip">
+        <span id="dateNow">—</span>
+        <span class="pill">📚 2025–2026 · II Semestr</span>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         1. İNFORMASİYA TEXNOLOGİYALARI
+    ══════════════════════════════════════ -->
+    <div class="subj-card" data-idx="0" style="animation-delay:.06s">
+        <div class="subj-top">
+            <div class="subj-icon" style="background:rgba(59,130,246,0.15);">💻</div>
+            <div class="subj-meta">
+                <div class="subj-name">İnformasiya texnologiyalarının əsasları</div>
+                <div class="badge-row">
+                    <span class="badge purple">Slayt</span>
+                    <span class="badge blue">10 mövzu</span>
+                    <span class="badge amber">📅 Bu ay</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-goal">
+            <div class="goal-label">Tapşırığın məqsədi</div>
+            <div class="goal-text">Aşağıdakı 10 mövzudan <strong>birini seçib</strong> ona aid slayt hazırla və öyrən. Slayt müəllimə təqdim olunacaq.</div>
+        </div>
+
+        <div class="details-toggle" onclick="toggleDetails(0)">
+            <span class="dt-label">📋 Bütün mövzulara bax</span>
+            <span class="dt-chevron">⌄</span>
+        </div>
+        <div class="details-panel">
+            <div class="details-inner">
+                <div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Kompüter texnologiyalarının yaranma tarixi</div><div class="topic-sub">Tarixi inkişaf, ilk kompüterlər, nəsillər</div></div></div>
+                <div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Kompüter texnologiyalarının tətbiqi</div><div class="topic-sub">Müasir həyatda istifadə sahələri</div></div></div>
+                <div class="topic-row"><div class="topic-num">3</div><div class="topic-info"><div class="topic-text">Proqram təminatı</div><div class="topic-sub">Sistem və tətbiqi proqramlar, növləri</div></div></div>
+                <div class="topic-row"><div class="topic-num">4</div><div class="topic-info"><div class="topic-text">Əməliyyat sistemləri</div><div class="topic-sub">Windows, Linux, macOS — funksiyalar və fərqlər</div></div></div>
+                <div class="topic-row"><div class="topic-num">5</div><div class="topic-info"><div class="topic-text">Ofis proqramları</div><div class="topic-sub">Word, Excel, PowerPoint — istifadə qaydaları</div></div></div>
+                <div class="topic-row"><div class="topic-num">6</div><div class="topic-info"><div class="topic-text">Kompüter şəbəkələrinin arxitekturası</div><div class="topic-sub">LAN, WAN, topologiyalar, şəbəkə komponentləri</div></div></div>
+                <div class="topic-row"><div class="topic-num">7</div><div class="topic-info"><div class="topic-text">İntellektual sistemlər</div><div class="topic-sub">Tərif, növlər, tətbiq sahələri</div></div></div>
+                <div class="topic-row"><div class="topic-num">8</div><div class="topic-info"><div class="topic-text">Süni intellekt</div><div class="topic-sub">Tarixi, alt sahələri, müasir tətbiqləri</div></div></div>
+                <div class="topic-row"><div class="topic-num">9</div><div class="topic-info"><div class="topic-text">Bilik bazası və məlumat bazası</div><div class="topic-sub">Fərqlər, strukturlar, idarəetmə sistemləri</div></div></div>
+                <div class="topic-row"><div class="topic-num">10</div><div class="topic-info"><div class="topic-text">Ekspert sistemlər</div><div class="topic-sub">Quruluşu, işləmə prinsipi, real dünya nümunələri</div></div></div>
+                <div class="deadline-banner">
+                    <div class="dl-dot"></div>
+                    <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Yunis Bədəlov / Rəna Hüseynova</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         2. PROQRAMLAŞDIRMA
+    ══════════════════════════════════════ -->
+    <div class="subj-card" data-idx="1" style="animation-delay:.10s">
+        <div class="subj-top">
+            <div class="subj-icon" style="background:rgba(34,197,94,0.15);">🖥️</div>
+            <div class="subj-meta">
+                <div class="subj-name">Proqramlaşdırmanın əsasları</div>
+                <div class="badge-row">
+                    <span class="badge teal">Müsahibə + Slayt</span>
+                    <span class="badge amber">📅 Bu ay</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-goal">
+            <div class="goal-label">Tapşırığın məqsədi</div>
+            <div class="goal-text">Hər hansı bir İT mütəxəssisi ilə görüşüb müsahibə apar, ona bir neçə peşəkar sual ver və cavablarını qeyd et. Sonra bu müsahibəyə əsaslanaraq slayt hazırla.</div>
+        </div>
+
+        <div class="details-toggle" onclick="toggleDetails(1)">
+            <span class="dt-label">📋 Slaytın məzmununa bax</span>
+            <span class="dt-chevron">⌄</span>
+        </div>
+        <div class="details-panel">
+            <div class="details-inner">
+                <div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Müsahibədən bir fotoşəkil</div><div class="topic-sub">İT mütəxəssisi ilə birgə çəkilmiş şəkil slayta əlavə edilməlidir</div></div></div>
+                <div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Verilmiş suallar və alınan cavablar</div><div class="topic-sub">Hər sual və ona verilən cavab slaytda aydın şəkildə göstərilməlidir</div></div></div>
+                <div class="topic-row"><div class="topic-num">3</div><div class="topic-info"><div class="topic-text">Nəticə: Bu müsahibədən nə öyrəndim?</div><div class="topic-sub">Slaytın sonunda müsahibədən çıxardığın fərdi nəticə yazılmalıdır</div></div></div>
+                <div class="deadline-banner">
+                    <div class="dl-dot"></div>
+                    <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Talıbzadə Sərxan</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         3. SAHİBKARLIQ
+    ══════════════════════════════════════ -->
+    <div class="subj-card" data-idx="2" style="animation-delay:.14s">
+        <div class="subj-top">
+            <div class="subj-icon" style="background:rgba(20,184,166,0.15);">💼</div>
+            <div class="subj-meta">
+                <div class="subj-name">Sahibkarlığın əsasları və biznesə giriş</div>
+                <div class="badge-row">
+                    <span class="badge purple">Slayt</span>
+                    <span class="badge blue">15 mövzu</span>
+                    <span class="badge amber">📅 Bu ay</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="task-goal">
+            <div class="goal-label">Tapşırığın məqsədi</div>
+            <div class="goal-text">Aşağıdakı 15 mövzudan <strong>birini seçib</strong> ona aid slayt hazırla və öyrən. Slayt müəllimə təqdim olunacaq.</div>
+        </div>
+
+        <div class="details-toggle" onclick="toggleDetails(2)">
+            <span class="dt-label">📋 Bütün mövzulara bax</span>
+            <span class="dt-chevron">⌄</span>
+        </div>
+        <div class="details-panel">
+            <div class="details-inner">
+                <div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Sahibkarlıq anlayışı və onun iqtisadiyyatda rolu</div></div></div>
+                <div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Biznes və sahibkarlıq: oxşar və fərqli cəhətlər</div></div></div>
+                <div class="topic-row"><div class="topic-num">3</div><div class="topic-info"><div class="topic-text">Sahibkarın əsas xüsusiyyətləri və bacarıqları</div></div></div>
+                <div class="topic-row"><div class="topic-num">4</div><div class="topic-info"><div class="topic-text">Rəqabət və onun biznesə təsiri</div></div></div>
+                <div class="topic-row"><div class="topic-num">5</div><div class="topic-info"><div class="topic-text">Bazar iqtisadiyyatında sahibkarlığın inkişaf amilləri</div></div></div>
+                <div class="topic-row"><div class="topic-num">6</div><div class="topic-info"><div class="topic-text">Dövlətin sahibkarlığın inkişafında rolu</div></div></div>
+                <div class="topic-row"><div class="topic-num">7</div><div class="topic-info"><div class="topic-text">Biznes ideyasının formalaşdırılması mərhələləri</div></div></div>
+                <div class="topic-row"><div class="topic-num">8</div><div class="topic-info"><div class="topic-text">Biznes-plan: anlayışı və strukturu</div></div></div>
+                <div class="topic-row"><div class="topic-num">9</div><div class="topic-info"><div class="topic-text">Startap anlayışı və startapların xüsusiyyətləri</div></div></div>
+                <div class="topic-row"><div class="topic-num">10</div><div class="topic-info"><div class="topic-text">Rəqəmsal sahibkarlıq və elektron biznes</div></div></div>
+                <div class="topic-row"><div class="topic-num">11</div><div class="topic-info"><div class="topic-text">İnnovasiya və sahibkarlıq fəaliyyəti</div></div></div>
+                <div class="topic-row"><div class="topic-num">12</div><div class="topic-info"><div class="topic-text">Sosial sahibkarlıq anlayışı</div></div></div>
+                <div class="topic-row"><div class="topic-num">13</div><div class="topic-info"><div class="topic-text">Yaşıl biznes və davamlı inkişaf</div></div></div>
+                <div class="topic-row"><div class="topic-num">14</div><div class="topic-info"><div class="topic-text">Gənclərin sahibkarlıq fəaliyyətində iştirakı</div></div></div>
+                <div class="topic-row"><div class="topic-num">15</div><div class="topic-info"><div class="topic-text">İnvestisiya anlayışı və biznesdə əhəmiyyəti</div></div></div>
+                <div class="deadline-banner">
+                    <div class="dl-dot"></div>
+                    <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Əliyeva Günay / Mirzai Pərvin</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         4–6: DİGƏR FƏNLƏR — hələlik tapşırıq yoxdur
+    ══════════════════════════════════════ -->
+    <div class="subj-card locked" style="animation-delay:.18s">
+        <div class="subj-top">
+            <div class="subj-icon" style="background:rgba(168,85,247,0.12);">📐</div>
+            <div class="subj-meta">
+                <div class="subj-name">Diskret riyaziyyat</div>
+                <div class="badge-row"><span class="badge amber">📅 Bu ay</span></div>
+            </div>
+        </div>
+        <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
+    </div>
+
+    <div class="subj-card locked" style="animation-delay:.21s">
+        <div class="subj-top">
+            <div class="subj-icon" style="background:rgba(239,68,68,0.12);">∫</div>
+            <div class="subj-meta">
+                <div class="subj-name">Diferensial tənliklər</div>
+                <div class="badge-row"><span class="badge amber">📅 Bu ay</span></div>
+            </div>
+        </div>
+        <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
+    </div>
+
+    <div class="subj-card locked" style="animation-delay:.24s">
+        <div class="subj-top">
+            <div class="subj-icon" style="background:rgba(245,166,35,0.12);">📊</div>
+            <div class="subj-meta">
+                <div class="subj-name">XDIAK</div>
+                <div class="badge-row"><span class="badge amber">📅 Bu ay</span></div>
+            </div>
+        </div>
+        <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
+    </div>
+
+    <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
+</div>
+
+<script>
+    const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
+    const d=new Date();
+    document.getElementById('dateNow').textContent=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+
+    function toggleDetails(idx){
+        const cards=document.querySelectorAll('.subj-card:not(.locked)');
+        const card=cards[idx];
+        card.classList.toggle('open');
+    }
+
+    function toggleTheme(){
+        const isLight=document.body.classList.toggle('light');
+        document.getElementById('themeToggle').textContent=isLight?'🌑':'🌙';
+        localStorage.setItem('theme',isLight?'light':'dark');
+    }
+    (function(){
+        if(localStorage.getItem('theme')==='light'){
+            document.body.classList.add('light');
+            document.getElementById('themeToggle').textContent='🌑';
+        }
+    })();
+</script>
+</body>
+</html>
