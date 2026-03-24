@@ -630,9 +630,18 @@
         return LESSONS.filter(function(l){ return l.day===day&&(l.weeks==='both'||l.weeks===wt); });
     }
 
+    function isTodayHoliday(){
+        var now=new Date();
+        var ds=now.getFullYear()+'-'+(now.getMonth()<9?'0':'')+(now.getMonth()+1)+'-'+(now.getDate()<10?'0':'')+now.getDate();
+        return HOLIDAYS.indexOf(ds)>=0;
+    }
+
     function getTodaysLessons(){
         var t=getToday(); if(t>4) return [];
-        return getLessonsForDay(t,getWeekType()).sort(function(a,b){return a.start-b.start;});
+        if(isTodayHoliday()) return [];
+        var wt=getWeekTypeForDate(new Date());
+        if(!wt) return [];
+        return getLessonsForDay(t,wt).sort(function(a,b){return a.start-b.start;});
     }
 
     function findCurrentLesson(){
@@ -769,8 +778,14 @@
         var now = new Date();
         var nowMin = now.getHours()*60 + now.getMinutes();
         var isToday = date.toDateString() === now.toDateString();
+        var afterSem  = date > new Date(2026,4,28);
+        var beforeSem = date < new Date(2026,1,16);
 
-        if(isHoliday || !lessonDay || !wt) {
+        if(afterSem){
+            listEl.innerHTML = '<div class="cal-no-lesson">🎓 Semestr bitdi</div>';
+        } else if(beforeSem){
+            listEl.innerHTML = '<div class="cal-no-lesson">📅 Semestr başlamamışdı</div>';
+        } else if(isHoliday || !lessonDay || !wt) {
             listEl.innerHTML = '<div class="cal-no-lesson">🎉 Tətil günüdür</div>';
         } else {
             var lessons = getLessonsForDay(lessonDay, wt).sort(function(a,b){return a.start-b.start;});
@@ -866,10 +881,19 @@
         var container=document.getElementById('lessonCard');
         var today=getToday();
         var lesson=findCurrentLesson();
+        var semesterEnded = new Date() > new Date(2026,4,28);
         if(!lesson){
-            container.innerHTML=today>4
-                ?'<div class="no-lesson"><div class="no-lesson-emoji">📭</div><div class="no-lesson-text">Bu gün dərs yoxdur</div></div>'
-                :'<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Bugünki dərslər bitdi</div></div>';
+            var msg;
+            if(semesterEnded){
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">🎓</div><div class="no-lesson-text">Semestr bitdi</div></div>';
+            } else if(isTodayHoliday()){
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">🎉</div><div class="no-lesson-text">Bu gün tətildir</div></div>';
+            } else if(today>4){
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">📭</div><div class="no-lesson-text">Bu gün dərs yoxdur</div></div>';
+            } else {
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Bugünki dərslər bitdi</div></div>';
+            }
+            container.innerHTML=msg;
             return;
         }
         var nowMin=new Date().getHours()*60+new Date().getMinutes();
