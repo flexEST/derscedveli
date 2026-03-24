@@ -385,9 +385,7 @@ function openPDF(type){
     // type = 'cavabli' or 'cavabsiz'
     var base = curPdf.replace(/\.pdf$/i, '');
     var url = base + '_' + type + '.pdf';
-    fetch(url,{method:'HEAD'})
-        .then(r=>{ window.open(r.ok ? url : 'error404.html','_blank'); })
-        .catch(()=>{ window.open('error404.html','_blank'); });
+    window.open(url, '_blank');
 }
 
 function closePdfChoice(){
