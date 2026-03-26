@@ -2,8 +2,8 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sərbəst İşlər</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Sərbəst İşlər — Aprel 2026</title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -25,7 +25,6 @@
         @keyframes blob { from{transform:translate(0,0)scale(1)} to{transform:translate(24px,32px)scale(1.06)} }
         .wrap { max-width:480px; margin:0 auto; position:relative; z-index:1; }
 
-        /* HEADER */
         .header { display:flex; align-items:center; gap:12px; margin-bottom:20px; animation:fadeUp .4s ease both; }
         .back-btn { width:42px; height:42px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:13px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:18px; color:var(--text2); transition:background .2s; flex-shrink:0; }
         .back-btn:hover { background:rgba(255,255,255,0.09); color:var(--text); }
@@ -38,13 +37,11 @@
         .theme-toggle:active { transform:scale(0.92); }
         body.light .theme-toggle { background:rgba(0,0,0,0.04); }
 
-        /* DATE STRIP */
         .date-strip { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:18px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; animation:fadeUp .45s ease .05s both; }
         body.light .date-strip { background:rgba(0,0,0,0.03); }
         .date-strip span { font-size:0.85rem; color:var(--text2); }
         .date-strip .pill { background:linear-gradient(135deg,#6d28d9,#a855f7); color:white; font-weight:700; padding:4px 14px; border-radius:40px; font-size:0.78rem; }
 
-        /* ── SUBJECT CARD (main card, no accordion) ── */
         .subj-card {
             background:var(--surface);
             border:1px solid var(--border);
@@ -55,7 +52,6 @@
         }
         body.light .subj-card { box-shadow:0 2px 14px rgba(0,0,0,0.07); }
 
-        /* top summary row — always visible */
         .subj-top {
             display:flex; align-items:center; gap:14px;
             padding:18px 18px 16px;
@@ -71,7 +67,6 @@
         .badge.green  { background:rgba(34,197,94,0.10);   border:1px solid rgba(34,197,94,0.18);  color:#86efac; }
         .badge.teal   { background:rgba(20,184,166,0.10);  border:1px solid rgba(20,184,166,0.18); color:#5eead4; }
 
-        /* TASK GOAL — main visible description */
         .task-goal {
             margin:0 14px 14px;
             background:rgba(255,255,255,0.03);
@@ -83,7 +78,6 @@
         .goal-label { font-size:0.68rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:8px; }
         .goal-text  { font-size:0.92rem; font-weight:600; color:var(--text); line-height:1.5; }
 
-        /* DETAILS TOGGLE */
         .details-toggle {
             display:flex; align-items:center; justify-content:space-between;
             padding:12px 18px;
@@ -97,12 +91,10 @@
         .dt-chevron { font-size:16px; color:var(--text3); transition:transform .3s cubic-bezier(.16,1,.3,1); }
         .subj-card.open .dt-chevron { transform:rotate(180deg); }
 
-        /* DETAILS PANEL */
         .details-panel { max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.16,1,.3,1); }
         .subj-card.open .details-panel { max-height:3000px; }
         .details-inner { padding:14px 14px 18px; display:flex; flex-direction:column; gap:8px; border-top:1px solid var(--border); }
 
-        /* topic rows */
         .topic-row { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; display:flex; align-items:flex-start; gap:10px; }
         body.light .topic-row { background:#f1f5f9; }
         .topic-num { width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.06); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:700; color:var(--text3); flex-shrink:0; }
@@ -111,75 +103,29 @@
         .topic-text { font-size:0.88rem; font-weight:600; color:var(--text); line-height:1.35; }
         .topic-sub  { font-size:0.73rem; color:var(--text3); margin-top:3px; }
 
-        /* deadline */
         .deadline-banner { background:rgba(245,166,35,0.08); border:1px solid rgba(245,166,35,0.18); border-radius:14px; padding:11px 14px; display:flex; align-items:center; gap:10px; margin-top:4px; }
         .dl-dot { width:9px; height:9px; background:var(--amber); border-radius:50%; flex-shrink:0; animation:blink 1.8s ease-in-out infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
         .dl-text { font-size:0.8rem; color:var(--amber); font-weight:600; }
         .dl-sub  { font-size:0.72rem; color:#92714a; margin-top:2px; }
 
-        /* LOCKED card (no tasks yet) */
         .subj-card.locked .subj-top { opacity:.75; }
         .locked-note { margin:0 14px 16px; padding:12px 14px; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.08); border-radius:14px; font-size:0.82rem; color:var(--text3); text-align:center; }
         body.light .locked-note { background:rgba(0,0,0,0.02); border-color:rgba(0,0,0,0.1); }
 
-        /* FOOTER */
         .footer-back { text-align:center; margin-top:30px; }
         .footer-back a { color:var(--text3); text-decoration:none; font-size:0.85rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:10px 22px; border-radius:40px; display:inline-block; transition:color .2s,background .2s; }
         .footer-back a:hover { color:var(--text); background:rgba(255,255,255,0.08); }
 
-
-        /* ── CALENDAR ── */
         .cal-wrap { margin:-8px 0 20px; }
-        .cal-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:18px; padding:11px 16px; cursor:pointer; user-select:none; transition:background .2s, border-radius .2s; }
-        body.light .cal-bar { background:rgba(0,0,0,0.03); }
-        .cal-bar:hover { background:rgba(255,255,255,0.06); }
-        .cal-bar.open { border-bottom-left-radius:0; border-bottom-right-radius:0; border-bottom-color:transparent; background:rgba(59,130,246,0.07); border-color:rgba(59,130,246,0.35); margin-bottom:0; }
-        .cal-bar-left { font-size:0.82rem; font-weight:600; color:var(--text2); display:flex; align-items:center; gap:7px; }
-        .cal-bar-caret { font-size:0.58rem; color:var(--text3); transition:transform .3s; }
-        .cal-bar-caret.open { transform:rotate(180deg); }
-        .cal-panel { display:none; background:rgba(255,255,255,0.04); border:1px solid rgba(59,130,246,0.35); border-top:none; border-bottom-left-radius:18px; border-bottom-right-radius:18px; padding:16px 14px 18px; margin-bottom:20px; }
-        body.light .cal-panel { background:rgba(0,0,0,0.02); }
-        .cal-panel.open { display:block; animation:fadeUp .22s cubic-bezier(.16,1,.3,1); }
+        .subj-mini-cal { margin-top:6px; background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.2); border-radius:13px; padding:14px; display:none; }
+        .subj-mini-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+        .subj-mini-cal-day { text-align:center; font-size:0.72rem; padding:5px 2px; border-radius:7px; transition:opacity .15s; }
+        .subj-mini-cal-dow { text-align:center; font-size:0.55rem; font-weight:700; color:var(--text3); text-transform:uppercase; padding:2px 0 4px; }
+        .subj-mini-cal-detail { margin-top:8px; }
 
-        /* legend */
-        .cal-legend { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px; }
-        .cal-legend-item { display:flex; align-items:center; gap:5px; font-size:0.67rem; font-weight:600; color:var(--text2); }
-        .cal-legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-
-        /* month nav */
-        .cal-nav-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-        .cal-month-lbl { font-size:0.92rem; font-weight:700; color:var(--text); }
-        .cal-nav-btn { background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text2); width:28px; height:28px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; transition:background .2s; }
-        .cal-nav-btn:hover { background:rgba(255,255,255,0.1); color:var(--text); }
-        body.light .cal-nav-btn { background:rgba(0,0,0,0.04); }
-
-        /* grid */
-        .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; margin-bottom:14px; }
-        .cal-dow { text-align:center; font-size:0.58rem; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.4px; padding:2px 0 5px; }
-        .cal-day { text-align:center; font-size:0.78rem; font-weight:500; color:var(--text2); padding:6px 2px; border-radius:8px; cursor:pointer; position:relative; transition:opacity .15s; }
-        .cal-day.other { color:var(--text3); opacity:.3; pointer-events:none; }
-        .cal-day.wknd { opacity:.35; pointer-events:none; }
-        .cal-day.today { background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important; color:white!important; font-weight:700!important; border:none!important; opacity:1!important; box-shadow:0 4px 12px -2px rgba(59,130,246,0.5); }
-        /* subject colors */
-        .cal-day.s-it   { background:rgba(59,130,246,0.2);  border:1px solid rgba(59,130,246,0.4);  color:var(--text); font-weight:700; }
-        .cal-day.s-proq { background:rgba(34,197,94,0.18);  border:1px solid rgba(34,197,94,0.38);  color:var(--text); font-weight:700; }
-        .cal-day.s-sah  { background:rgba(20,184,166,0.18); border:1px solid rgba(20,184,166,0.38); color:var(--text); font-weight:700; }
-        .cal-day.s-multi{ background:rgba(168,85,247,0.18); border:1px solid rgba(168,85,247,0.38); color:var(--text); font-weight:700; }
-        .cal-day.s-dim  { opacity:.28; }
-        .cal-day.s-it:active,.cal-day.s-proq:active,.cal-day.s-sah:active,.cal-day.s-multi:active { opacity:.7; }
-
-        /* day detail panel */
-        .cal-day-detail { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:14px; padding:12px 14px; animation:fadeUp .2s ease; }
-        body.light .cal-day-detail { background:rgba(0,0,0,0.02); }
-        .cal-detail-date { font-size:0.68rem; text-transform:uppercase; letter-spacing:1.2px; color:var(--text3); font-weight:700; margin-bottom:8px; }
-        .cal-subj-row { display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--card); border:1px solid var(--border); border-radius:10px; margin-bottom:5px; }
-        body.light .cal-subj-row { background:#f1f5f9; }
-        .cal-subj-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-        .cal-subj-info { flex:1; min-width:0; }
-        .cal-subj-name { font-size:0.82rem; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .cal-subj-time { font-size:0.7rem; color:var(--text3); margin-top:1px; }
-        .cal-no-lesson { font-size:0.82rem; color:var(--text3); padding:6px 4px; }
+        .update-notice { margin:-10px 0 18px; background:rgba(245,166,35,0.10); border:1px solid rgba(245,166,35,0.25); border-radius:14px; padding:10px 14px; text-align:center; font-size:0.74rem; color:#f5a623; letter-spacing:0.2px; font-weight:600; }
+        
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     </style>
 </head>
@@ -192,7 +138,7 @@
             <h1>Sərbəst İşlər — Aprel</h1>
             <p>Aprel ayının tapşırıqları</p>
         </div>
-        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
     </div>
 
     <div class="date-strip">
@@ -200,13 +146,11 @@
         <span class="pill">📅 Aprel 2026</span>
     </div>
 
-    <div style="margin:-10px 0 18px;background:rgba(245,166,35,0.10);border:1px solid rgba(245,166,35,0.25);border-radius:14px;padding:10px 14px;text-align:center;font-size:0.74rem;color:#f5a623;letter-spacing:0.2px;font-weight:600;">
-        🔄 Dəyişiklikləri görmək üçün yuxarıdakı yenilə düyməsini bas
+    <div class="update-notice">
+        🔄 Dəyişiklikləri görmək üçün səhifəni yeniləyin
     </div>
 
-    <!-- ══════════════════════════════════════
-         1. İNFORMASİYA TEXNOLOGİYALARI
-    ══════════════════════════════════════ -->
+    <!-- İNFORMASİYA TEXNOLOGİYALARI -->
     <div class="subj-card" data-idx="0" style="animation-delay:.06s">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(59,130,246,0.15);">💻</div>
@@ -234,9 +178,9 @@
                 </div>
                 <button onclick="toggleSubjCal('it')" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button>
             </div>
-            <div id="cal-it" style="display:none;margin-top:6px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.2);border-radius:13px;padding:14px;">
-                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;" id="grid-it"></div>
-                <div id="detail-it" style="margin-top:8px;"></div>
+            <div id="cal-it" class="subj-mini-cal">
+                <div id="grid-it" class="subj-mini-cal-grid"></div>
+                <div id="detail-it" class="subj-mini-cal-detail"></div>
             </div>
         </div>
 
@@ -256,7 +200,7 @@
                 <div class="topic-row"><div class="topic-num">8</div><div class="topic-info"><div class="topic-text">Süni intellekt</div><div class="topic-sub">Tarixi, alt sahələri, müasir tətbiqləri</div></div></div>
                 <div class="topic-row"><div class="topic-num">9</div><div class="topic-info"><div class="topic-text">Bilik bazası və məlumat bazası</div><div class="topic-sub">Fərqlər, strukturlar, idarəetmə sistemləri</div></div></div>
                 <div class="topic-row"><div class="topic-num">10</div><div class="topic-info"><div class="topic-text">Ekspert sistemlər</div><div class="topic-sub">Quruluşu, işləmə prinsipi, real dünya nümunələri</div></div></div>
-<div class="deadline-banner">
+                <div class="deadline-banner">
                     <div class="dl-dot"></div>
                     <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Yunis Bədəlov / Rəna Hüseynova</div></div>
                 </div>
@@ -264,9 +208,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         2. PROQRAMLAŞDIRMA
-    ══════════════════════════════════════ -->
+    <!-- PROQRAMLAŞDIRMA -->
     <div class="subj-card" data-idx="1" style="animation-delay:.10s">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(34,197,94,0.15);">🖥️</div>
@@ -293,9 +235,9 @@
                 </div>
                 <button onclick="toggleSubjCal('proq')" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:#86efac;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button>
             </div>
-            <div id="cal-proq" style="display:none;margin-top:6px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);border-radius:13px;padding:14px;">
-                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;" id="grid-proq"></div>
-                <div id="detail-proq" style="margin-top:8px;"></div>
+            <div id="cal-proq" class="subj-mini-cal">
+                <div id="grid-proq" class="subj-mini-cal-grid"></div>
+                <div id="detail-proq" class="subj-mini-cal-detail"></div>
             </div>
         </div>
 
@@ -308,7 +250,7 @@
                 <div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Müsahibədən bir fotoşəkil</div><div class="topic-sub">İT mütəxəssisi ilə birgə çəkilmiş şəkil slayta əlavə edilməlidir</div></div></div>
                 <div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Verilmiş suallar və alınan cavablar</div><div class="topic-sub">Hər sual və ona verilən cavab slaytda aydın şəkildə göstərilməlidir</div></div></div>
                 <div class="topic-row"><div class="topic-num">3</div><div class="topic-info"><div class="topic-text">Nəticə: Bu müsahibədən nə öyrəndim?</div><div class="topic-sub">Slaytın sonunda müsahibədən çıxardığın fərdi nəticə yazılmalıdır</div></div></div>
-<div class="deadline-banner">
+                <div class="deadline-banner">
                     <div class="dl-dot"></div>
                     <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Talıbzadə Sərxan</div></div>
                 </div>
@@ -316,9 +258,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         3. SAHİBKARLIQ
-    ══════════════════════════════════════ -->
+    <!-- SAHİBKARLIQ -->
     <div class="subj-card" data-idx="2" style="animation-delay:.14s">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(20,184,166,0.15);">💼</div>
@@ -346,9 +286,9 @@
                 </div>
                 <button onclick="toggleSubjCal('sah')" style="background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);color:#5eead4;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button>
             </div>
-            <div id="cal-sah" style="display:none;margin-top:6px;background:rgba(20,184,166,0.05);border:1px solid rgba(20,184,166,0.2);border-radius:13px;padding:14px;">
-                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;" id="grid-sah"></div>
-                <div id="detail-sah" style="margin-top:8px;"></div>
+            <div id="cal-sah" class="subj-mini-cal">
+                <div id="grid-sah" class="subj-mini-cal-grid"></div>
+                <div id="detail-sah" class="subj-mini-cal-detail"></div>
             </div>
         </div>
 
@@ -373,7 +313,7 @@
                 <div class="topic-row"><div class="topic-num">13</div><div class="topic-info"><div class="topic-text">Yaşıl biznes və davamlı inkişaf</div></div></div>
                 <div class="topic-row"><div class="topic-num">14</div><div class="topic-info"><div class="topic-text">Gənclərin sahibkarlıq fəaliyyətində iştirakı</div></div></div>
                 <div class="topic-row"><div class="topic-num">15</div><div class="topic-info"><div class="topic-text">İnvestisiya anlayışı və biznesdə əhəmiyyəti</div></div></div>
-<div class="deadline-banner">
+                <div class="deadline-banner">
                     <div class="dl-dot"></div>
                     <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Əliyeva Günay / Mirzai Pərvin</div></div>
                 </div>
@@ -381,10 +321,8 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════
-         4–6: DİGƏR FƏNLƏR — hələlik tapşırıq yoxdur
-    ══════════════════════════════════════ -->
-    <div class="subj-card locked" style="animation-delay:.18s">
+    <!-- DİGƏR FƏNLƏR -->
+    <div class="subj-card locked">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(168,85,247,0.12);">📐</div>
             <div class="subj-meta">
@@ -393,10 +331,9 @@
             </div>
         </div>
         <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
-
     </div>
 
-    <div class="subj-card locked" style="animation-delay:.21s">
+    <div class="subj-card locked">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(239,68,68,0.12);">∫</div>
             <div class="subj-meta">
@@ -405,10 +342,9 @@
             </div>
         </div>
         <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
-
     </div>
 
-    <div class="subj-card locked" style="animation-delay:.24s">
+    <div class="subj-card locked">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(245,166,35,0.12);">📖</div>
             <div class="subj-meta">
@@ -417,226 +353,212 @@
             </div>
         </div>
         <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
-
     </div>
 
     <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
 </div>
 
 <script>
-    const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
-    const d=new Date();
-    document.getElementById('dateNow').textContent=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
-
-    function toggleDetails(idx){
-        const cards=document.querySelectorAll('.subj-card:not(.locked)');
-        const card=cards[idx];
-        card.classList.toggle('open');
-    }
-
-
-    // ── CALENDAR ──
-    var APRIL_LESSONS = {
-        it:   [2,6,9,13,16,20,23,27,30],
-        proq: [6,9,13,20,23,27],
-        sah:  [14,28]
+    // Həftənin günləri (düzgün Azərbaycan tərcüməsi)
+    // JavaScript-də getDay(): 0 = Bazar, 1 = Bazar ertəsi, 2 = Çərşənbə axşamı, 3 = Çərşənbə, 4 = Cümə axşamı, 5 = Cümə, 6 = Şənbə
+    const DAY_NAMES_FULL = ['Bazar', 'Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə'];
+    const DAY_NAMES_SHORT = ['Bzr', 'B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şnb'];
+    
+    // Dərs günləri (Aprel 2026)
+    const SUBJ_DAYS = {
+        it:   [2, 6, 9, 13, 16, 20, 23, 27, 30],
+        proq: [6, 9, 13, 20, 23, 27],
+        sah:  [14, 28]
     };
-    var APRIL_SUBJECTS = {
-        it:   {name:'İnformasiya texnologiyalarının əsasları', icon:'💻', color:'#3b82f6', times:'09:00–10:20 · 12:00–13:20'},
-        proq: {name:'Proqramlaşdırmanın əsasları', icon:'🖥️', color:'#22c55e', times:'10:30–11:50'},
-        sah:  {name:'Sahibkarlığın əsasları', icon:'💼', color:'#14b8a6', times:'12:00–13:20'}
+    
+    const SUBJ_COLOR = {
+        it:   '#3b82f6',
+        proq: '#22c55e',
+        sah:  '#14b8a6'
     };
-    var HOLIDAYS_APR = [9,20]; // not real lesson days even if listed
-    var DOWS = ['B.e','Ç.a','Çər','C.a','Cüm','Şnb','Bzr'];
-    var calOpen = false;
-    var calYear = 2026, calMonth = 3; // April = month index 3
-
-    function getDayClass(day) {
-        var hasIT   = APRIL_LESSONS.it.indexOf(day)   >= 0;
-        var hasProq = APRIL_LESSONS.proq.indexOf(day) >= 0;
-        var hasSah  = APRIL_LESSONS.sah.indexOf(day)  >= 0;
-        var n = (hasIT?1:0)+(hasProq?1:0)+(hasSah?1:0);
-        if(n === 0) return null;
-        if(n > 1)   return 's-multi';
-        if(hasIT)   return 's-it';
-        if(hasProq) return 's-proq';
-        return 's-sah';
+    
+    const SUBJ_NAME = {
+        it:   'İnformasiya texnologiyalarının əsasları',
+        proq: 'Proqramlaşdırmanın əsasları',
+        sah:  'Sahibkarlığın əsasları'
+    };
+    
+    const SUBJ_TIME = {
+        it:   '09:00–10:20 · 12:00–13:20',
+        proq: '10:30–11:50',
+        sah:  '12:00–13:20'
+    };
+    
+    let calOpenState = { it: false, proq: false, sah: false };
+    
+    // Tarix məlumatları
+    const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
+    const d = new Date();
+    document.getElementById('dateNow').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    
+    function toggleDetails(idx) {
+        const cards = document.querySelectorAll('.subj-card:not(.locked)');
+        if (cards[idx]) cards[idx].classList.toggle('open');
     }
-
-    function getDaySubjects(day) {
-        var r = [];
-        if(APRIL_LESSONS.it.indexOf(day)   >= 0) r.push('it');
-        if(APRIL_LESSONS.proq.indexOf(day) >= 0) r.push('proq');
-        if(APRIL_LESSONS.sah.indexOf(day)  >= 0) r.push('sah');
-        return r;
+    
+    function getDayOfWeek(day, month, year) {
+        const date = new Date(year, month, day);
+        return date.getDay(); // 0-6
     }
-
-    function renderCal(year, month) {
-        calYear = year; calMonth = month;
-        var MONTHS_AZ = ['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
-        document.getElementById('calMonthLbl').textContent = MONTHS_AZ[month] + ' ' + year;
-        var isApril = (year===2026 && month===3);
-        var grid = document.getElementById('calGrid');
-        grid.innerHTML = '';
-        DOWS.forEach(function(d){
-            var el = document.createElement('div');
-            el.className = 'cal-dow'; el.textContent = d; grid.appendChild(el);
-        });
-        var firstDow = new Date(year,month,1).getDay();
-        var offset = firstDow === 0 ? 6 : firstDow-1;
-        var daysInPrev = new Date(year,month,0).getDate();
-        var daysInMonth = new Date(year,month+1,0).getDate();
-        var today = new Date();
-
-        for(var i=0;i<offset;i++){
-            var el=document.createElement('div');
-            el.className='cal-day other';
-            el.textContent=daysInPrev-offset+1+i;
-            grid.appendChild(el);
-        }
-        for(var d=1;d<=daysInMonth;d++){
-            var date=new Date(year,month,d);
-            var dow=date.getDay();
-            var isToday=d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear();
-            var isWknd=(dow===0||dow===6);
-            var el=document.createElement('div');
-            var cls='cal-day';
-            if(isWknd){ cls+=' wknd'; }
-            else if(isApril){
-                var sc=getDayClass(d);
-                if(sc) cls+=' '+sc;
-                else   cls+=' s-dim';
-            }
-            if(isToday) cls+=' today';
-            el.className=cls; el.textContent=d;
-            if(!isWknd){
-                (function(dd){ el.addEventListener('click', function(){ showDayDetail(dd,year,month); }); })(d);
-            }
-            grid.appendChild(el);
-        }
-        var rem=(offset+daysInMonth)%7;
-        if(rem!==0){for(var i=1;i<=7-rem;i++){var el=document.createElement('div');el.className='cal-day other';el.textContent=i;grid.appendChild(el);}}
+    
+    function getDayNameShort(day, month, year) {
+        const dow = getDayOfWeek(day, month, year);
+        return DAY_NAMES_SHORT[dow];
     }
-
-    function showDayDetail(day, year, month) {
-        var MONTHS_AZ=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
-        var DAYNAMES=['Bazar','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə'];
-        var date=new Date(year,month,day);
-        var dow=date.getDay();
-        var det=document.getElementById('calDayDetail');
-        var isApril=(year===2026&&month===3);
-        var subjKeys=isApril?getDaySubjects(day):[];
-
-        var html='<div class="cal-day-detail">';
-        html+='<div class="cal-detail-date">'+day+' '+MONTHS_AZ[month]+' — '+DAYNAMES[dow]+'</div>';
-        if(!subjKeys.length){
-            html+='<div class="cal-no-lesson">Bu gün sərbəst iş dərsi yoxdur</div>';
-        } else {
-            subjKeys.forEach(function(k){
-                var s=APRIL_SUBJECTS[k];
-                html+='<div class="cal-subj-row">'
-                    +'<div class="cal-subj-dot" style="background:'+s.color+';"></div>'
-                    +'<div class="cal-subj-info">'
-                    +'<div class="cal-subj-name">'+s.icon+' '+s.name+'</div>'
-                    +'<div class="cal-subj-time">🕒 '+s.times+'</div>'
-                    +'</div></div>';
-            });
-        }
-        html+='</div>';
-        det.innerHTML=html;
+    
+    function getDayNameFull(day, month, year) {
+        const dow = getDayOfWeek(day, month, year);
+        return DAY_NAMES_FULL[dow];
     }
-
-
-
-    // ── PER-SUBJECT MINI CALENDARS ──
-    var SUBJ_DAYS = { it:[2,6,9,13,16,20,23,27,30], proq:[6,9,13,20,23,27], sah:[14,28] };
-    var SUBJ_COLOR = { it:'#3b82f6', proq:'#22c55e', sah:'#14b8a6' };
-    var DOWS_S = ['B','Ç.a','Çər','C.a','Cüm','Şnb','Bz'];
-    var DAYNAMES_S = ['Bazar','B.ertəsi','Ç.axşamı','Çərşənbə','C.axşamı','Cümə','Şənbə'];
-    var calOpenState = { it:false, proq:false, sah:false };
-
+    
     function buildSubjCal(key) {
-        var days = SUBJ_DAYS[key];
-        var color = SUBJ_COLOR[key];
-        var grid = document.getElementById('grid-' + key);
+        const days = SUBJ_DAYS[key];
+        const color = SUBJ_COLOR[key];
+        const grid = document.getElementById('grid-' + key);
         if (!grid) return;
+        
         grid.innerHTML = '';
-        DOWS_S.forEach(function(d) {
-            var el = document.createElement('div');
-            el.style.cssText = 'text-align:center;font-size:0.55rem;font-weight:700;color:var(--text3);text-transform:uppercase;padding:2px 0 4px;';
-            el.textContent = d;
+        
+        // Həftənin günləri başlığı (düzgün sıra: B.e, Ç.a, Çər, C.a, Cüm, Şnb, Bzr)
+        const weekdays = ['B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şnb', 'Bzr'];
+        weekdays.forEach(function(dayName) {
+            const el = document.createElement('div');
+            el.className = 'subj-mini-cal-dow';
+            el.textContent = dayName;
             grid.appendChild(el);
         });
-        // April 2026 starts on Wednesday → Mon=0,Tue=1 blanks → offset=2
-        var offset = 2;
-        var today = new Date();
-        var isCurrentMonth = (today.getFullYear()===2026 && today.getMonth()===3);
-        for (var i = 0; i < offset; i++) {
-            var el = document.createElement('div');
+        
+        // Aprel 2026: 1 aprel Çərşənbə günüdür (getDay() = 3)
+        // İndekslər: 0=B.e, 1=Ç.a, 2=Çər, 3=C.a, 4=Cüm, 5=Şnb, 6=Bzr
+        // 1 aprel Çərşənbə olduğu üçün 2-ci indeksə düşür, yəni offset = 2 (neçə boş xana)
+        const offset = 2; // 1 aprel 3-cü gün (Çərşənbə) olduğu üçün 2 boş xana (B.e, Ç.a)
+        
+        const today = new Date();
+        const isCurrentMonth = (today.getFullYear() === 2026 && today.getMonth() === 3);
+        const currentDay = today.getDate();
+        
+        // Əvvəlki aydan gələn günlər
+        for (let i = 0; i < offset; i++) {
+            const el = document.createElement('div');
+            el.className = 'subj-mini-cal-day';
             el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
             el.textContent = 29 + i;
             grid.appendChild(el);
         }
-        for (var d = 1; d <= 30; d++) {
-            // Apr 1 = Wed(dow4 in JS) → (offset+d-1) col: Mon=0..Sun=6
-            var col = (offset + d - 1) % 7; // 0=Mon..6=Sun
-            var isWknd = (col === 5 || col === 6);
-            var isLesson = days.indexOf(d) >= 0;
-            var isToday = isCurrentMonth && d === today.getDate();
-            var el = document.createElement('div');
-            var base = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;transition:opacity .15s;';
+        
+        // Aprel ayının günləri
+        for (let d = 1; d <= 30; d++) {
+            const col = (offset + d - 1) % 7;
+            const isWknd = (col === 5 || col === 6); // Şənbə=5, Bazar=6
+            const isLesson = days.indexOf(d) >= 0;
+            const isToday = isCurrentMonth && d === currentDay;
+            
+            const el = document.createElement('div');
+            el.className = 'subj-mini-cal-day';
+            
+            let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;transition:opacity .15s;';
+            
             if (isToday) {
-                el.style.cssText = base + 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
+                cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
             } else if (isLesson) {
-                el.style.cssText = base + 'background:'+color+'30;border:1px solid '+color+'70;color:var(--text);font-weight:700;cursor:pointer;';
-                (function(dd){ el.addEventListener('click', function() { showSubjDay(key, dd); }); })(d);
+                cssText += `background:${color}30;border:1px solid ${color}70;color:var(--text);font-weight:700;cursor:pointer;`;
+                el.addEventListener('click', (function(day) {
+                    return function() { showSubjDayDetail(key, day); };
+                })(d));
             } else if (isWknd) {
-                el.style.cssText = base + 'opacity:0.2;color:var(--text3);';
+                cssText += 'opacity:0.2;color:var(--text3);';
             } else {
-                el.style.cssText = base + 'opacity:0.28;color:var(--text3);';
+                cssText += 'opacity:0.28;color:var(--text3);';
             }
+            
+            el.style.cssText = cssText;
             el.textContent = d;
             grid.appendChild(el);
         }
-        var filled = offset + 30;
-        var rem = filled % 7;
+        
+        // Sonrakı aydan gələn günlər
+        const filled = offset + 30;
+        const rem = filled % 7;
         if (rem !== 0) {
-            for (var i = 1; i <= 7 - rem; i++) {
-                var el = document.createElement('div');
+            for (let i = 1; i <= 7 - rem; i++) {
+                const el = document.createElement('div');
+                el.className = 'subj-mini-cal-day';
                 el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
                 el.textContent = i;
                 grid.appendChild(el);
             }
         }
     }
-
-    function showSubjDay(key, day) {
-        var color = SUBJ_COLOR[key];
-        var col = (2 + day - 1) % 7;
-        var det = document.getElementById('detail-' + key);
-        det.innerHTML = '<div style="background:'+color+'18;border:1px solid '+color+'45;border-radius:10px;padding:9px 12px;font-size:0.78rem;font-weight:600;color:var(--text);margin-top:4px;">'
-            + '📅 ' + day + ' Aprel — ' + DAYNAMES_S[col] + ' · Dərs var'
-            + '</div>';
+    
+    function showSubjDayDetail(key, day) {
+        const color = SUBJ_COLOR[key];
+        const name = SUBJ_NAME[key];
+        const time = SUBJ_TIME[key];
+        const dayName = getDayNameFull(day, 3, 2026); // Aprel = month 3
+        const det = document.getElementById('detail-' + key);
+        
+        det.innerHTML = `
+            <div style="background:${color}18;border:1px solid ${color}45;border-radius:10px;padding:9px 12px;margin-top:4px;">
+                <div style="font-size:0.78rem;font-weight:600;color:var(--text);">
+                    📅 ${day} Aprel — ${dayName}
+                </div>
+                <div style="font-size:0.7rem;color:var(--text2);margin-top:4px;">
+                    🕒 ${time}
+                </div>
+                <div style="font-size:0.7rem;color:var(--text2);margin-top:2px;">
+                    📚 ${name} dərsi var
+                </div>
+            </div>
+        `;
     }
-
+    
     function toggleSubjCal(key) {
-        var el = document.getElementById('cal-' + key);
-        var isOpen = calOpenState[key];
+        const el = document.getElementById('cal-' + key);
+        const isOpen = calOpenState[key];
         calOpenState[key] = !isOpen;
         el.style.display = isOpen ? 'none' : 'block';
-        if (!isOpen) buildSubjCal(key);
+        if (!isOpen) {
+            buildSubjCal(key);
+        }
     }
-    function toggleTheme(){
-        const isLight=document.body.classList.toggle('light');
-        document.getElementById('themeToggle').textContent=isLight?'🌑':'🌙';
-        localStorage.setItem('theme',isLight?'light':'dark');
+    
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light');
+        document.getElementById('themeToggle').textContent = isLight ? '🌑' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
-    (function(){
-        if(localStorage.getItem('theme')==='light'){
+    
+    // Tema yükləmə
+    (function() {
+        if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light');
-            document.getElementById('themeToggle').textContent='🌑';
+            document.getElementById('themeToggle').textContent = '🌑';
         }
     })();
+    
+    // Konsola dərs günlərinin həftə günlərini yazdır (yoxlama üçün)
+    console.log('=== İnformasiya texnologiyaları dərs günləri ===');
+    SUBJ_DAYS.it.forEach(day => {
+        const dayName = getDayNameFull(day, 3, 2026);
+        console.log(`${day} Aprel → ${dayName}`);
+    });
+    
+    console.log('\n=== Proqramlaşdırma dərs günləri ===');
+    SUBJ_DAYS.proq.forEach(day => {
+        const dayName = getDayNameFull(day, 3, 2026);
+        console.log(`${day} Aprel → ${dayName}`);
+    });
+    
+    console.log('\n=== Sahibkarlıq dərs günləri ===');
+    SUBJ_DAYS.sah.forEach(day => {
+        const dayName = getDayNameFull(day, 3, 2026);
+        console.log(`${day} Aprel → ${dayName}`);
+    });
 </script>
 </body>
 </html>
