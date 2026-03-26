@@ -3,11 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="file:///android_asset/">
     <title>İmtahan Mövzuları</title>
     <link rel="icon" type="image/png" href="logo.png">
+    <script>
+        // Dinamik base href - Android app və online üçün
+        (function() {
+            var base = document.createElement('base');
+            if (window.location.protocol === 'file:') {
+                // Android app-də işləyir - assets qovluğundan oxuyur
+                base.href = 'file:///android_asset/';
+            } else {
+                // Online versiya - GitHub Pages
+                base.href = 'https://flexest.github.io/derscedveli/';
+            }
+            document.head.appendChild(base);
+        })();
+    </script>
     <style>
-        /* BÜTÜN CSS KODUNUZ EYNİ QALIR */
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         :root {
             --bg:#0d1117; --surface:#161b27; --card:#1c2333;
@@ -320,15 +332,6 @@ function toggle(idx){
 }
 document.querySelectorAll('.exam-card')[0].classList.add('open');
 
-// Şəkil yolunu düzgün alan funksiya
-function getImagePath(imgName) {
-    // Android assets-də olduğunu yoxla
-    if (window.location.protocol === 'file:') {
-        return imgName;
-    }
-    return imgName;
-}
-
 const QUIZ_DATA = {
 'diskret_riyaziyyat': [{
     title: 'İmtahan 1',
@@ -528,9 +531,7 @@ function buildPanel(ei){
             });
             h+=`</div></div>`;
         } else if(q.type==='IMG_B'){
-            // Şəkil yolunu base ilə birlikdə yaz
-            const imgPath = q.img;
-            h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Şəkilə bax · Uyğunlaşdır</span><img class="q-img" src="${imgPath}" alt="Sual ${qi+1}" onerror="this.onerror=null; console.log('Şəkil yüklənmədi: ${imgPath}')">`;
+            h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Şəkilə bax · Uyğunlaşdır</span><img class="q-img" src="${q.img}" alt="Sual ${qi+1}">`;
             q.items.forEach((item,ii)=>{
                 h+=`<div class="img-match-item" id="mi-${ei}-${qi}-${ii}"><div class="img-match-label">${item}</div><div class="img-match-vars">`;
                 q.variants.forEach((v,vi)=>{ h+=`<div class="match-var" id="mv-${ei}-${qi}-${ii}-${vi}" onclick="pickB('${curKey}',${ei},${qi},${ii},${vi})">${String.fromCharCode(97+vi)}</div>`; });
