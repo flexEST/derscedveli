@@ -34,12 +34,13 @@
             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
             background:var(--bg1); min-height:100vh;
             display:flex; justify-content:center; align-items:flex-start;
-            padding:40px 12px 40px; position:relative; overflow-x:hidden;
+            padding:60px 12px 40px; position:relative; overflow-x:hidden;
             transition:background 0.3s;
         }
         body::before{content:'';position:fixed;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(59,130,246,0.18) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:blobDrift 12s ease-in-out infinite alternate;}
         body::after{content:'';position:fixed;bottom:-100px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(245,166,35,0.13) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:blobDrift 15s ease-in-out infinite alternate-reverse;}
         @keyframes blobDrift{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,40px) scale(1.08);}}
+        @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
         .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
         .main-card{position:relative;z-index:1;width:100%;max-width:420px;background:var(--bg2);border:1px solid var(--glass-border);border-radius:36px;padding:24px 20px 20px;box-shadow:var(--shadow-card);animation:cardIn 0.5s cubic-bezier(0.16,1,0.3,1);transition:background 0.3s,border-color 0.3s;}
         @keyframes cardIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
@@ -306,7 +307,18 @@
 </head>
 <body>
 <div class="noise"></div>
+<div style="position:relative;width:100%;max-width:420px;">
+    <div style="position:absolute;top:-38px;right:4px;z-index:10;">
+        <a href="update.html" style="text-decoration:none;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);padding:6px 12px;border-radius:30px;box-shadow:0 4px 18px rgba(59,130,246,0.5);">
+            <span style="width:6px;height:6px;background:white;border-radius:50%;display:inline-block;animation:pulse 1.8s ease-in-out infinite;flex-shrink:0;"></span>
+            <span style="font-size:0.68rem;font-weight:800;color:white;letter-spacing:0.3px;">v1.0.1</span>
+            <span style="width:1px;height:9px;background:rgba(255,255,255,0.3);display:inline-block;"></span>
+            <span style="font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.85);">Yenilənmələrə bax</span>
+        </a>
+    </div>
+
 <div class="main-card">
+
     <div class="app-header">
         <div class="header-logo">
             <img src="logo.png" alt="logo" onerror="this.style.display='none';this.parentElement.innerHTML='📘';">
@@ -318,9 +330,6 @@
             </div>
             <div class="header-sub">
                 <span class="est-badge">AZMIU</span>
-                <a href="update.html" style="text-decoration:none;">
-                    <span style="background:var(--glass);border:1px solid var(--glass-border);color:var(--text-3);font-size:0.65rem;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:0.5px;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='var(--glass-hover)'" onmouseout="this.style.background='var(--glass)'">v1.0.1 ✦</span>
-                </a>
             </div>
         </div>
     </div>
@@ -382,6 +391,7 @@
         <div class="footer-note"><span>09:00–10:20</span><span>10:30–11:50</span><span>12:00–13:20</span></div>
     </div>
 </div>
+</div><!-- end wrapper -->
 
 <!-- MODAL: CƏDVƏL -->
 <div id="scheduleModal" class="modal">
@@ -548,6 +558,11 @@
                 <span style="font-size:0.82rem;color:var(--red);font-weight:700;" id="subjKesrText">—</span>
             </div>
         </div>
+        <div id="subjBookBox" style="display:none;margin-top:10px;">
+            <a id="subjBookBtn" href="book.pdf" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:var(--radius-lg);color:white;font-family:inherit;font-size:0.88rem;font-weight:700;text-decoration:none;box-shadow:0 6px 16px -3px rgba(168,85,247,0.4);transition:transform 0.15s,filter 0.15s;" ontouchstart="this.style.filter='brightness(0.9)'" ontouchend="this.style.filter=''">
+                📖 Kitabı aç — book.pdf
+            </a>
+        </div>
         <button class="subj-close" id="subjClose">Bağla</button>
     </div>
 </div>
@@ -589,7 +604,7 @@
 
     function getWeekTypeForDate(d) {
         const year = d.getFullYear();
-        const upper = [[16,2,20,2],[2,3,6,3],[16,3,20,3],[30,3,3,4],[13,4,17,4],[27,4,1,5],[11,5,15,5],[25,5,26,5]];
+        const upper = [[16,2,20,2],[2,3,6,3],[16,3,20,3],[30,3,3,4],[13,4,17,4],[27,4,1,5],[11,5,15,5],[25,5,29,5]];
         const lower = [[23,2,27,2],[9,3,13,3],[23,3,27,3],[6,4,10,4],[20,4,24,4],[4,5,8,5],[18,5,22,5]];
         // Individual holiday dates — no lessons these days
         var holidays = [
@@ -618,8 +633,19 @@
         return null;
     }
     function getWeekType(){
+        // Try today first
         var wt = getWeekTypeForDate(new Date());
-        return wt ? wt : 'upper';
+        if(wt) return wt;
+        // If today is holiday/weekend, look ahead up to 7 days for next teaching day
+        for(var i=1;i<=7;i++){
+            var next = new Date();
+            next.setDate(next.getDate()+i);
+            var dow = next.getDay();
+            if(dow===0||dow===6) continue;
+            var nwt = getWeekTypeForDate(next);
+            if(nwt) return nwt;
+        }
+        return 'upper';
     }
 
     function hasLessonsOnDate(date){
@@ -747,7 +773,7 @@
             var isWknd=(dow===0||dow===6);
             var isHoliday=HOLIDAYS.indexOf(dateStr(date))>=0;
             var beforeSemester=date<new Date(2026,1,16);
-            var afterSemester=date>=new Date(2026,4,27);
+            var afterSemester=date>new Date(2026,4,29);
             var outOfSemester=beforeSemester||afterSemester;
             var hasL=!isWknd&&!isHoliday&&!outOfSemester&&hasLessonsOnDate(date);
             var el=document.createElement('div');
@@ -783,7 +809,7 @@
         var now = new Date();
         var nowMin = now.getHours()*60 + now.getMinutes();
         var isToday = date.toDateString() === now.toDateString();
-        var afterSem  = date > new Date(2026,4,28);
+        var afterSem  = date > new Date(2026,4,29);
         var beforeSem = date < new Date(2026,1,16);
 
         if(afterSem){
@@ -886,7 +912,7 @@
         var container=document.getElementById('lessonCard');
         var today=getToday();
         var lesson=findCurrentLesson();
-        var semesterEnded = new Date() > new Date(2026,4,28);
+        var semesterEnded = new Date() > new Date(2026,4,29);
         if(!lesson){
             var msg;
             if(semesterEnded){
@@ -978,7 +1004,7 @@
 
     // SUBJECT POPUP — fully dynamic, recalculated in real time
     var SEMESTER_START = new Date(2026,1,16); // Feb 16
-    var SEMESTER_END   = new Date(2026,4,26); // May 26 — last actual lesson day (May 27 is holiday, semester ends)
+    var SEMESTER_END   = new Date(2026,4,29); // May 29
 
     // Map lesson name → canonical subject key
     function normaliseSubject(name) {
@@ -1006,7 +1032,7 @@
         'XDIAK': {
             teachers: '👩‍🏫 Fərzəliyeva Ədilə (Seminar)',
             limitCount: 11, limitHours: 75, limitRule: '5-7 qayıb 1 bal, 8-10 qayıb 2 bal aparır',
-            kesrText: "11-ci qayıbda kəsr"
+            kesrText: "11-ci qayıbda kəsr", bookPdf: 'book.pdf'
         },
         'Diskret riyaziyyat': {
             teachers: '👨‍🏫 Bəndəliyev Rövşən (Mühazirə + Seminar)',
@@ -1090,6 +1116,15 @@
         lh.textContent = meta.limitHours;
         document.getElementById('subjLimitRule').textContent = meta.limitRule;
         document.getElementById('subjKesrText').textContent = meta.kesrText;
+
+        var bookBox = document.getElementById('subjBookBox');
+        var bookBtn = document.getElementById('subjBookBtn');
+        if(meta.bookPdf){
+            bookBox.style.display = 'block';
+            bookBtn.href = meta.bookPdf;
+        } else {
+            bookBox.style.display = 'none';
+        }
         var limitColor = meta.limitCount >= 13 ? 'var(--red)' : meta.limitCount >= 11 ? 'var(--amber)' : 'var(--green)';
         lc.style.color = limitColor;
         lh.style.color = limitColor;
