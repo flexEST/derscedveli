@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="file:///android_asset/">
     <title>İmtahan Mövzuları</title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
+        /* BÜTÜN CSS KODUNUZ EYNİ QALIR */
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         :root {
             --bg:#0d1117; --surface:#161b27; --card:#1c2333;
@@ -137,14 +139,12 @@
         .result-bar.r { background:var(--red); }
         .btn-retry { padding:9px 26px; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:30px; color:var(--text2); font-family:var(--r); font-size:0.85rem; font-weight:600; cursor:pointer; transition:background .2s,color .2s; }
         .btn-retry:hover { background:rgba(255,255,255,0.1); color:var(--text); }
-        /* TYPE-A */
         .opt-check { width:20px; height:20px; border-radius:5px; border:1.5px solid var(--border); background:rgba(255,255,255,0.05); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; transition:all .18s; }
         .option.selected .opt-check { background:rgba(59,130,246,0.3); border-color:rgba(59,130,246,0.6); color:#93c5fd; }
         .option.correct  .opt-check { background:rgba(34,197,94,0.3);  border-color:rgba(34,197,94,0.6);  color:#86efac; }
         .option.wrong    .opt-check { background:rgba(239,68,68,0.2);   border-color:rgba(239,68,68,0.5);  color:#fca5a5; }
         .option.missed   { background:rgba(34,197,94,0.06); border-color:rgba(34,197,94,0.25); }
         .option.missed   .opt-check { border-color:rgba(34,197,94,0.5); }
-        /* TYPE-B */
         .match-wrap { display:flex; flex-direction:column; gap:10px; }
         .match-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; }
         .match-item.correct-item { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); }
@@ -160,7 +160,6 @@
         .q-type-badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:12px; margin-bottom:8px; }
         .q-type-badge.multi { background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); color:#c084fc; }
         .q-type-badge.match { background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.3); color:var(--amber); }
-        /* IMG_B */
         .q-img { width:100%; border-radius:12px; margin-bottom:14px; border:1px solid var(--border); }
         .img-match-item { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 13px; margin-bottom:8px; }
         .img-match-item.correct-item { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); }
@@ -321,14 +320,16 @@ function toggle(idx){
 }
 document.querySelectorAll('.exam-card')[0].classList.add('open');
 
-const QUIZ_DATA = {
+// Şəkil yolunu düzgün alan funksiya
+function getImagePath(imgName) {
+    // Android assets-də olduğunu yoxla
+    if (window.location.protocol === 'file:') {
+        return imgName;
+    }
+    return imgName;
+}
 
-// ════════════════════════════════════════════════════════
-// DISKRET RİYAZİYYAT — Kollokvium I
-// Tip: IMG_B — şəkil göstərilir, 1·2·3 maddə, a·b·c·d·e boş variantlar
-// Şəkil faylları: diskret_1.png ... diskret_5.png (eyni qovluqda)
-// correctMap: [[a=0,b=1,c=2,d=3,e=4], ...] — hər maddə üçün düzgün variant indeksi
-// ════════════════════════════════════════════════════════
+const QUIZ_DATA = {
 'diskret_riyaziyyat': [{
     title: 'İmtahan 1',
     questions: [
@@ -339,10 +340,6 @@ const QUIZ_DATA = {
         { type:'IMG_B', img:'diskret_5.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[4],[0],[1]] }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// DISKRET RİYAZİYYAT — Kollokvium II
-// ════════════════════════════════════════════════════════
 'diskret_riyaziyyat_2': [{
     title: 'İmtahan 1',
     questions: [
@@ -353,10 +350,6 @@ const QUIZ_DATA = {
         { type:'STD', text:'Sual 5 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// PROQRAMLAŞDIRMANIN ƏSASLARI — Kollokvium I
-// ════════════════════════════════════════════════════════
 'proqramlasdirma': [{
     title: 'İmtahan 1',
     questions: [
@@ -367,10 +360,6 @@ const QUIZ_DATA = {
         { type:'STD', text:'Sual 5 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// PROQRAMLAŞDIRMANIN ƏSASLARI — Kollokvium II
-// ════════════════════════════════════════════════════════
 'proqramlasdirma_2': [{
     title: 'İmtahan 1',
     questions: [
@@ -381,42 +370,16 @@ const QUIZ_DATA = {
         { type:'STD', text:'Sual 5 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// İNFORMASİYA TEXNOLOGİYALARININ ƏSASLARI — Kollokvium I
-// Sual 1-3: Tip A (çoxlu seçim), Sual 4-5: Tip B (uyğunlaşdırma)
-// ════════════════════════════════════════════════════════
 'informasiya_texnologiyalari': [{
     title: 'İmtahan 1',
     questions: [
-        {
-            type:'A',
-            text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir? ',
-            statements:['Müəyyənlik','Kütləvilik','Nəticəvilik','İctimailik','Sonsuzluq'],
-            correct:[0,1,2]
-        },
+        { type:'A', text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir? ', statements:['Müəyyənlik','Kütləvilik','Nəticəvilik','İctimailik','Sonsuzluq'], correct:[0,1,2] },
         { type:'A', text:'Sual 2 — İnformasiya tex. (I kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[1,2,3] },
         { type:'A', text:'Sual 3 — İnformasiya tex. (I kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[0,2,4] },
-        {
-            type:'B',
-            text:'4. Uyğunluğu müəyyən edin: ',
-            items:['MS EXCEL(2013) Görünüş (View-Вид) ','MS EXCEL(2013) Data(Data-Данные) ','MS EXCEL(2013) Daxil et( İnsert –Вставить) '],
-            variants:['Formula sətri','Çeşidləmə ','Diaqram','Orfoqrafiya','Proqressiya '],
-            correctMap:[[0],[1],[2]]
-        },
-        {
-            type:'B',
-            text:'5.Uyğunluğu müəyyən edin: ',
-            items:['Antivirus proqramları ','Arxivləşdirmə proqramları ','Tətbiqi proqramlar '],
-            variants:['Dilmanc, Simulyasiya','Forex c – Kasperski ','Linux','WinRar','Dr Web'],
-            correctMap:[[4],[3],[0]]
-        }
+        { type:'B', text:'4. Uyğunluğu müəyyən edin: ', items:['MS EXCEL(2013) Görünüş (View-Вид) ','MS EXCEL(2013) Data(Data-Данные) ','MS EXCEL(2013) Daxil et( İnsert –Вставить) '], variants:['Formula sətri','Çeşidləmə ','Diaqram','Orfoqrafiya','Proqressiya '], correctMap:[[0],[1],[2]] },
+        { type:'B', text:'5.Uyğunluğu müəyyən edin: ', items:['Antivirus proqramları ','Arxivləşdirmə proqramları ','Tətbiqi proqramlar '], variants:['Dilmanc, Simulyasiya','Forex c – Kasperski ','Linux','WinRar','Dr Web'], correctMap:[[4],[3],[0]] }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// İNFORMASİYA TEXNOLOGİYALARININ ƏSASLARI — Kollokvium II
-// ════════════════════════════════════════════════════════
 'informasiya_texnologiyalari_2': [{
     title: 'İmtahan 1',
     questions: [
@@ -427,10 +390,6 @@ const QUIZ_DATA = {
         { type:'B', text:'Sual 5 — İnformasiya tex. (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[1],[2],[3],[4],[0]] }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// XDIAK — Kollokvium I
-// ════════════════════════════════════════════════════════
 'xdiak': [{
     title: 'İmtahan 1',
     questions: [
@@ -441,10 +400,6 @@ const QUIZ_DATA = {
         { type:'B', text:'5. Choose the correct definitions:', items:['Scalability','Maintenance','Transfer','Eliminate','Shift'], variants:['is the process of keeping something in good condition','To move or change from one position, direction, or condition to another.','To move from one place, person, or thing to another','The ability of a system, network, or process to handle a growing amount of work',' To completely remove or get rid of something, especially something unwanted or undesirable'], correctMap:[[3],[0],[2],[4],[1]] }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// XDIAK — Kollokvium II
-// ════════════════════════════════════════════════════════
 'xdiak_2': [{
     title: 'İmtahan 1',
     questions: [
@@ -455,12 +410,6 @@ const QUIZ_DATA = {
         { type:'B', text:'Sual 5 — XDIAK (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[1],[4],[3],[2],[0]] }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// DİFERENSİAL TƏNLİKLƏR — Kollokvium I
-// Tip: IMG_B — şəkil + 1·2·3 + a·b·c·d·e
-// Şəkil faylları: diferensial_1.png ... diferensial_5.png
-// ════════════════════════════════════════════════════════
 'diferensial_tenlikler': [{
     title: 'İmtahan 1',
     questions: [
@@ -471,10 +420,6 @@ const QUIZ_DATA = {
         { type:'IMG_B', img:'diferensial_5.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[4],[0],[1]] }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// DİFERENSİAL TƏNLİKLƏR — Kollokvium II
-// ════════════════════════════════════════════════════════
 'diferensial_tenlikler_2': [{
     title: 'İmtahan 1',
     questions: [
@@ -485,10 +430,6 @@ const QUIZ_DATA = {
         { type:'STD', text:'Sual 5 — Diferensial tənliklər (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// SAHİBKARLIQ — Kollokvium I
-// ════════════════════════════════════════════════════════
 'sahibkarlik': [{
     title: 'İmtahan 1',
     questions: [
@@ -499,10 +440,6 @@ const QUIZ_DATA = {
         { type:'B', text:'5. Uyğunluğu müəyyən edin: ', items:['V. Zombart','Y. Şumpeter','D. Rikardo'], variants:['Sahibkarı "iqtisadçı", "təşkilatçı" və "ticarətçi" hesab edirdilər','Kapitalizmdə mücərrəd, sonsuz və təbii istehsal üsulu kimi sahibkarlıq fəaliyyəti; və onu əkinçiliyin mühüm elementi hesab edirdi. ','Sahibkarlıq fəaliyyəti kapitalizmdən doğan istismar alətidir ','Sahibkar istehsal amillərinin yeni kombinasiyasını həyata keçirir və bununla da iqtisadi inkişafı təmin edən şəxsi çağırıb. ','Öz kapitalı və sahibkarlıq məhsulları istehsal etmək təşəbbüsü bacarığı ilə risk edən insandır.'], correctMap:[[0],[3],[1]] }
     ]
 }],
-
-// ════════════════════════════════════════════════════════
-// SAHİBKARLIQ — Kollokvium II
-// ════════════════════════════════════════════════════════
 'sahibkarlik_2': [{
     title: 'İmtahan 1',
     questions: [
@@ -513,8 +450,7 @@ const QUIZ_DATA = {
         { type:'B', text:'Sual 5 — Sahibkarlıq (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[0],[3],[4],[2],[1]] }
     ]
 }]
-
-}; // end QUIZ_DATA
+};
 
 let curPdf='', curKey='';
 let quizAnswers=[];
@@ -592,7 +528,9 @@ function buildPanel(ei){
             });
             h+=`</div></div>`;
         } else if(q.type==='IMG_B'){
-            h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Şəkilə bax · Uyğunlaşdır</span><img class="q-img" src="${q.img}" alt="Sual ${qi+1}">`;
+            // Şəkil yolunu base ilə birlikdə yaz
+            const imgPath = q.img;
+            h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Şəkilə bax · Uyğunlaşdır</span><img class="q-img" src="${imgPath}" alt="Sual ${qi+1}" onerror="this.onerror=null; console.log('Şəkil yüklənmədi: ${imgPath}')">`;
             q.items.forEach((item,ii)=>{
                 h+=`<div class="img-match-item" id="mi-${ei}-${qi}-${ii}"><div class="img-match-label">${item}</div><div class="img-match-vars">`;
                 q.variants.forEach((v,vi)=>{ h+=`<div class="match-var" id="mv-${ei}-${qi}-${ii}-${vi}" onclick="pickB('${curKey}',${ei},${qi},${ii},${vi})">${String.fromCharCode(97+vi)}</div>`; });
