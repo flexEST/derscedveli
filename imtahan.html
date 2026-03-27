@@ -6,14 +6,11 @@
     <title>İmtahan Mövzuları</title>
     <link rel="icon" type="image/png" href="logo.png">
     <script>
-        // Dinamik base href - Android app və online üçün
         (function() {
             var base = document.createElement('base');
             if (window.location.protocol === 'file:') {
-                // Android app-də işləyir - assets qovluğundan oxuyur
                 base.href = 'file:///android_asset/';
             } else {
-                // Online versiya - GitHub Pages
                 base.href = 'https://flexest.github.io/derscedveli/';
             }
             document.head.appendChild(base);
@@ -172,12 +169,32 @@
         .q-type-badge { display:inline-block; font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:12px; margin-bottom:8px; }
         .q-type-badge.multi { background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); color:#c084fc; }
         .q-type-badge.match { background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.3); color:var(--amber); }
+        .q-type-badge.order { background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.3); color:#93c5fd; }
         .q-img { width:100%; border-radius:12px; margin-bottom:14px; border:1px solid var(--border); }
         .img-match-item { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 13px; margin-bottom:8px; }
         .img-match-item.correct-item { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); }
         .img-match-item.wrong-item   { background:rgba(239,68,68,0.07);  border-color:rgba(239,68,68,0.25); }
         .img-match-label { font-size:0.88rem; font-weight:700; color:var(--text); margin-bottom:7px; }
         .img-match-vars  { display:flex; flex-wrap:wrap; gap:6px; }
+
+        /* ORDER type styles */
+        .order-list { display:flex; flex-direction:column; gap:8px; }
+        .order-item { background:var(--card); border:1.5px solid var(--border); border-radius:13px; padding:12px 14px; display:flex; align-items:center; gap:12px; cursor:grab; user-select:none; transition:all .2s; }
+        .order-item:active { cursor:grabbing; }
+        .order-item.dragging { opacity:0.4; transform:scale(0.98); }
+        .order-item.drag-over { border-color:rgba(59,130,246,0.5); background:rgba(59,130,246,0.08); }
+        .order-item.correct-order { background:rgba(34,197,94,0.10); border-color:rgba(34,197,94,0.4); cursor:default; }
+        .order-item.wrong-order   { background:rgba(239,68,68,0.08);  border-color:rgba(239,68,68,0.3);  cursor:default; }
+        .order-pos { width:28px; height:28px; border-radius:8px; background:rgba(255,255,255,0.06); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700; color:var(--text3); flex-shrink:0; }
+        .order-item.correct-order .order-pos { background:rgba(34,197,94,0.2); border-color:rgba(34,197,94,0.4); color:#86efac; }
+        .order-item.wrong-order   .order-pos { background:rgba(239,68,68,0.15); border-color:rgba(239,68,68,0.3); color:#fca5a5; }
+        .order-text { font-size:0.88rem; font-weight:500; color:var(--text); flex:1; line-height:1.35; }
+        .order-drag-handle { font-size:16px; color:var(--text3); flex-shrink:0; }
+        .order-hint { font-size:0.75rem; color:var(--text3); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+        .order-correct-answer { margin-top:10px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.2); border-radius:12px; padding:10px 14px; }
+        .order-correct-answer-title { font-size:0.72rem; font-weight:700; color:#86efac; letter-spacing:.5px; text-transform:uppercase; margin-bottom:6px; }
+        .order-correct-row { font-size:0.82rem; color:var(--text2); padding:2px 0; }
+
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     </style>
 </head>
@@ -377,8 +394,8 @@ const QUIZ_DATA = {
     title: 'İmtahan 1',
     questions: [
         { type:'A', text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir? ', statements:['Müəyyənlik','Kütləvilik','Nəticəvilik','İctimailik','Sonsuzluq'], correct:[0,1,2] },
-        { type:'A', text:'Sual 2 — İnformasiya tex. (I kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[1,2,3] },
-        { type:'A', text:'Sual 3 — İnformasiya tex. (I kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[0,2,4] },
+        { type:'ORDER', text:'2. Aşağıda Exceldə verilən funksiyaların hesablamalarını artma sirasina görə düzün:', statements:['z=2x+5 haradakı x=6 ','y=ax+b haradakı a=3; b=2; x=2 ','s=5y+10x haradakı y=3; x=2 '], correct:[1,0,2] },
+        { type:'ORDER', text:'3. Aşağıda verilən variantlardan budaqlanan alqoritmin həll ardıcılığını göstərin: ', statements:['Daxil etmə ','Hesablama ','Şərt bloku'], correct:[0,1,2] },
         { type:'B', text:'4. Uyğunluğu müəyyən edin: ', items:['MS EXCEL(2013) Görünüş (View-Вид) ','MS EXCEL(2013) Data(Data-Данные) ','MS EXCEL(2013) Daxil et( İnsert –Вставить) '], variants:['Formula sətri','Çeşidləmə ','Diaqram','Orfoqrafiya','Proqressiya '], correctMap:[[0],[1],[2]] },
         { type:'B', text:'5.Uyğunluğu müəyyən edin: ', items:['Antivirus proqramları ','Arxivləşdirmə proqramları ','Tətbiqi proqramlar '], variants:['Dilmanc, Simulyasiya','Forex c – Kasperski ','Linux','WinRar','Dr Web'], correctMap:[[4],[3],[0]] }
     ]
@@ -387,8 +404,8 @@ const QUIZ_DATA = {
     title: 'İmtahan 1',
     questions: [
         { type:'A', text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir? ', statements:['Müəyyənlik ','Kütləvilik ','Nəticəvilik','İctimailik ','Sonsuzluq '], correct:[0,1,2] },
-        { type:'A', text:'Sual 2 — İnformasiya tex. (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[1,2,3] },
-        { type:'A', text:'Sual 3 — İnformasiya tex. (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[0,2,4] },
+        { type:'ORDER', text:'2. Aşağıda Exceldə verilən funksiyaların hesablamalarını artma sirasina görə düzün. :', statements:['1. z=2x+5 haradakı x=6 ','2. y=ax+b haradakı a=3; b=2; x=2 ','3.s=5y+10x haradakı y=3; x=2 '], correct:[1,0,2] },
+        { type:'ORDER', text:'3. Ardıcıllığı düzgün müəyyən edin:', statements:['Statement X','Statement Y','Statement Z'], correct:[1,2,0] },
         { type:'B', text:'Sual 4 — İnformasiya tex. (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[0],[1],[2],[3],[4]] },
         { type:'B', text:'Sual 5 — İnformasiya tex. (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[1],[2],[3],[4],[0]] }
     ]
@@ -491,6 +508,7 @@ function openQuiz(){
     quizAnswers=data.map(e=>e.questions.map(q=>{
         if(q.type==='A') return new Set();
         if(q.type==='B'||q.type==='IMG_B') return q.items.map(()=>new Set());
+        if(q.type==='ORDER') return q.statements.map((_,i)=>i); // başlanğıc: orijinal ardıcıllıq
         return -1;
     }));
     data.forEach((exam,ei)=>{
@@ -504,6 +522,7 @@ function openQuiz(){
         panel.id='qp-'+ei;
         panel.innerHTML=buildPanel(ei);
         panelsEl.appendChild(panel);
+        attachOrderDragListeners(ei);
     });
     document.getElementById('quizOverlay').classList.add('show');
     document.body.style.overflow='hidden';
@@ -538,10 +557,168 @@ function buildPanel(ei){
                 h+=`</div></div>`;
             });
             h+=`</div>`;
+        } else if(q.type==='ORDER'){
+            // Statements-i qarışdırılmış şəkildə göstər (shuffle)
+            const shuffled = q.statements.map((_,i)=>i);
+            shuffleArray(shuffled);
+            // quizAnswers-ə shuffled vəziyyəti saxla
+            if(quizAnswers[ei] && quizAnswers[ei][qi]){
+                quizAnswers[ei][qi] = [...shuffled];
+            }
+            h+=`<div class="q-card" id="qcard-order-${ei}-${qi}">`;
+            h+=`<div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div>`;
+            h+=`<span class="q-type-badge order">↕ Ardıcıllıq — düzgün sıraya düz</span>`;
+            h+=`<div class="q-text">${q.text}</div>`;
+            h+=`<div class="order-hint">☰ Elementləri sürüşdürərək düzgün ardıcıllığa sal</div>`;
+            h+=`<div class="order-list" id="order-list-${ei}-${qi}" data-ei="${ei}" data-qi="${qi}">`;
+            shuffled.forEach((origIdx, pos)=>{
+                h+=`<div class="order-item" draggable="true" data-orig="${origIdx}" id="oi-${ei}-${qi}-${pos}">`;
+                h+=`<div class="order-pos">${pos+1}</div>`;
+                h+=`<div class="order-text">${q.statements[origIdx]}</div>`;
+                h+=`<div class="order-drag-handle">⋮⋮</div>`;
+                h+=`</div>`;
+            });
+            h+=`</div></div>`;
         }
     });
     h+=`<button class="btn-submit" id="sub-${ei}" onclick="submitExam('${curKey}',${ei})">Nəticəni gör</button><div class="result-box" id="res-${ei}"></div>`;
     return h;
+}
+
+// Fisher-Yates shuffle
+function shuffleArray(arr){
+    for(let i=arr.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+}
+
+// Drag & Drop for ORDER type
+function attachOrderDragListeners(ei){
+    const exam=QUIZ_DATA[curKey][ei];
+    exam.questions.forEach((q,qi)=>{
+        if(q.type!=='ORDER') return;
+        const listEl=document.getElementById(`order-list-${ei}-${qi}`);
+        if(!listEl) return;
+        setupOrderDragDrop(listEl, ei, qi);
+    });
+}
+
+function setupOrderDragDrop(listEl, ei, qi){
+    let dragSrc=null;
+
+    function onDragStart(e){
+        dragSrc=this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed='move';
+        e.dataTransfer.setData('text/plain','');
+    }
+    function onDragEnd(e){
+        this.classList.remove('dragging');
+        listEl.querySelectorAll('.order-item').forEach(el=>el.classList.remove('drag-over'));
+        updateOrderAnswers(listEl,ei,qi);
+    }
+    function onDragOver(e){
+        e.preventDefault();
+        e.dataTransfer.dropEffect='move';
+        return false;
+    }
+    function onDragEnter(e){
+        this.classList.add('drag-over');
+    }
+    function onDragLeave(e){
+        this.classList.remove('drag-over');
+    }
+    function onDrop(e){
+        e.stopPropagation();
+        if(dragSrc!==this){
+            const items=[...listEl.querySelectorAll('.order-item')];
+            const srcIdx=items.indexOf(dragSrc);
+            const dstIdx=items.indexOf(this);
+            if(srcIdx<dstIdx){
+                listEl.insertBefore(dragSrc, this.nextSibling);
+            } else {
+                listEl.insertBefore(dragSrc, this);
+            }
+            updateOrderPositions(listEl);
+            updateOrderAnswers(listEl,ei,qi);
+        }
+        this.classList.remove('drag-over');
+        return false;
+    }
+
+    // Touch support
+    let touchItem=null, touchClone=null, touchStartY=0;
+
+    function onTouchStart(e){
+        touchItem=this;
+        touchStartY=e.touches[0].clientY;
+        touchItem.classList.add('dragging');
+        // Clone for visual feedback
+        touchClone=touchItem.cloneNode(true);
+        touchClone.style.cssText=`position:fixed;left:${touchItem.getBoundingClientRect().left}px;top:${touchItem.getBoundingClientRect().top}px;width:${touchItem.offsetWidth}px;opacity:0.85;z-index:9999;pointer-events:none;border-radius:13px;background:rgba(59,130,246,0.2);border:1.5px solid rgba(59,130,246,0.5);`;
+        document.body.appendChild(touchClone);
+    }
+    function onTouchMove(e){
+        if(!touchItem) return;
+        e.preventDefault();
+        const touch=e.touches[0];
+        if(touchClone){
+            touchClone.style.top=(touch.clientY - touchItem.offsetHeight/2)+'px';
+        }
+        const items=[...listEl.querySelectorAll('.order-item')];
+        items.forEach(el=>el.classList.remove('drag-over'));
+        const el=document.elementFromPoint(touch.clientX, touch.clientY);
+        const target=el ? el.closest('.order-item') : null;
+        if(target && target!==touchItem) target.classList.add('drag-over');
+    }
+    function onTouchEnd(e){
+        if(!touchItem) return;
+        touchItem.classList.remove('dragging');
+        if(touchClone){ touchClone.remove(); touchClone=null; }
+        const touch=e.changedTouches[0];
+        const el=document.elementFromPoint(touch.clientX, touch.clientY);
+        const target=el ? el.closest('.order-item') : null;
+        if(target && target!==touchItem){
+            const items=[...listEl.querySelectorAll('.order-item')];
+            const srcIdx=items.indexOf(touchItem);
+            const dstIdx=items.indexOf(target);
+            if(srcIdx<dstIdx){
+                listEl.insertBefore(touchItem, target.nextSibling);
+            } else {
+                listEl.insertBefore(touchItem, target);
+            }
+            updateOrderPositions(listEl);
+            updateOrderAnswers(listEl,ei,qi);
+        }
+        listEl.querySelectorAll('.order-item').forEach(el=>el.classList.remove('drag-over'));
+        touchItem=null;
+    }
+
+    listEl.querySelectorAll('.order-item').forEach(item=>{
+        item.addEventListener('dragstart', onDragStart);
+        item.addEventListener('dragend', onDragEnd);
+        item.addEventListener('dragover', onDragOver);
+        item.addEventListener('dragenter', onDragEnter);
+        item.addEventListener('dragleave', onDragLeave);
+        item.addEventListener('drop', onDrop);
+        item.addEventListener('touchstart', onTouchStart, {passive:false});
+        item.addEventListener('touchmove', onTouchMove, {passive:false});
+        item.addEventListener('touchend', onTouchEnd);
+    });
+}
+
+function updateOrderPositions(listEl){
+    listEl.querySelectorAll('.order-item').forEach((el,pos)=>{
+        const posEl=el.querySelector('.order-pos');
+        if(posEl) posEl.textContent=pos+1;
+    });
+}
+
+function updateOrderAnswers(listEl, ei, qi){
+    const items=[...listEl.querySelectorAll('.order-item')];
+    quizAnswers[ei][qi]=items.map(el=>parseInt(el.dataset.orig));
 }
 
 function switchTab(ei){ document.querySelectorAll('.qtab').forEach((t,i)=>t.classList.toggle('active',i===ei)); document.querySelectorAll('.qpanel').forEach((p,i)=>p.classList.toggle('active',i===ei)); }
@@ -552,6 +729,15 @@ function pickB(key,ei,qi,ii,vi){ if(document.getElementById('sub-'+ei).disabled)
 
 function gradeTypeA(q,chosen){ const c=new Set(q.correct); const nCh=chosen.size; const nCorr=[...chosen].filter(x=>c.has(x)).length; const nWr=nCh-nCorr; if(nCorr===3&&nWr===0) return 2; if(nCorr>=2&&nWr===0) return 1; if(nCorr>=2&&nWr>=1&&nCh<=4) return 1; return 0; }
 function gradeTypeB(q,chosenArr){ let pts=0; q.items.forEach((_,ii)=>{ const corr=new Set(q.correctMap[ii]); const sel=chosenArr[ii]; const allOk=[...sel].every(v=>corr.has(v)); const nCorr=[...sel].filter(v=>corr.has(v)).length; if(!allOk) return; if(nCorr===corr.size) pts+=1; else if(nCorr>0) pts+=0.5; }); return Math.min(2,Math.round((pts/q.items.length)*2*10)/10); }
+
+// ORDER grading: bütün 3 element dəqiq düzgün ardıcıllıqda olmalıdır — ya 2 bal, ya 0
+function gradeTypeOrder(q, chosenArr){
+    if(!chosenArr || chosenArr.length !== q.correct.length) return 0;
+    for(let i=0;i<q.correct.length;i++){
+        if(chosenArr[i] !== q.correct[i]) return 0;
+    }
+    return 2;
+}
 
 function submitExam(key,ei){
     const exam=QUIZ_DATA[key][ei];
@@ -569,6 +755,36 @@ function submitExam(key,ei){
         } else if(q.type==='B'||q.type==='IMG_B'){
             const chosenArr=quizAnswers[ei][qi]; pts=gradeTypeB(q,chosenArr);
             q.items.forEach((_,ii)=>{ const corr=new Set(q.correctMap[ii]); const sel=chosenArr[ii]; const allOk=[...sel].every(v=>corr.has(v)); const miEl=document.getElementById(`mi-${ei}-${qi}-${ii}`); q.variants.forEach((_,vi)=>{ const mvEl=document.getElementById(`mv-${ei}-${qi}-${ii}-${vi}`); const wasSel=sel.has(vi); const isCorr=corr.has(vi); mvEl.classList.remove('sel'); if(wasSel&&isCorr) mvEl.classList.add('corr'); else if(wasSel&&!isCorr) mvEl.classList.add('wrng'); else if(!wasSel&&isCorr) mvEl.classList.add('miss'); }); if(sel.size>0){miEl.classList.toggle('correct-item',allOk);miEl.classList.toggle('wrong-item',!allOk);} });
+        } else if(q.type==='ORDER'){
+            const chosenArr=quizAnswers[ei][qi];
+            pts=gradeTypeOrder(q, chosenArr);
+            // Hər elementi rənglə
+            const listEl=document.getElementById(`order-list-${ei}-${qi}`);
+            if(listEl){
+                const items=[...listEl.querySelectorAll('.order-item')];
+                const isAllCorrect = pts===2;
+                items.forEach((el, pos)=>{
+                    el.draggable=false;
+                    el.style.cursor='default';
+                    if(isAllCorrect){
+                        el.classList.add('correct-order');
+                    } else {
+                        el.classList.add('wrong-order');
+                    }
+                });
+                // Düzgün cavabı göstər (sehv olduqda)
+                if(!isAllCorrect){
+                    const cardEl=document.getElementById(`qcard-order-${ei}-${qi}`);
+                    if(cardEl){
+                        let answerHtml=`<div class="order-correct-answer"><div class="order-correct-answer-title">✅ Düzgün ardıcıllıq:</div>`;
+                        q.correct.forEach((origIdx,pos)=>{
+                            answerHtml+=`<div class="order-correct-row">${pos+1}. ${q.statements[origIdx]}</div>`;
+                        });
+                        answerHtml+=`</div>`;
+                        cardEl.insertAdjacentHTML('beforeend', answerHtml);
+                    }
+                }
+            }
         }
         qScores.push({pts,max}); totalScore+=pts; maxScore+=max;
     });
@@ -581,8 +797,14 @@ function submitExam(key,ei){
 }
 
 function retryExam(key,ei){
-    quizAnswers[ei]=QUIZ_DATA[key][ei].questions.map(q=>{ if(q.type==='A') return new Set(); if(q.type==='B'||q.type==='IMG_B') return q.items.map(()=>new Set()); return -1; });
+    quizAnswers[ei]=QUIZ_DATA[key][ei].questions.map(q=>{
+        if(q.type==='A') return new Set();
+        if(q.type==='B'||q.type==='IMG_B') return q.items.map(()=>new Set());
+        if(q.type==='ORDER') return q.statements.map((_,i)=>i);
+        return -1;
+    });
     document.getElementById('qp-'+ei).innerHTML=buildPanel(ei);
+    attachOrderDragListeners(ei);
 }
 
 function closeQuiz(){ document.getElementById('quizOverlay').classList.remove('show'); document.getElementById('subjectPopup').classList.add('show'); document.body.style.overflow='hidden'; }
