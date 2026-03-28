@@ -41,6 +41,16 @@
         body::after{content:'';position:fixed;bottom:-100px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(245,166,35,0.13) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:blobDrift 15s ease-in-out infinite alternate-reverse;}
         @keyframes blobDrift{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,40px) scale(1.08);}}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 0 12px rgba(59, 130, 246, 0.6), 0 4px 12px rgba(59, 130, 246, 0.3);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.9), 0 4px 16px rgba(59, 130, 246, 0.5);
+                transform: scale(1.02);
+            }
+        }
         .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
         .main-card{position:relative;z-index:1;width:100%;max-width:420px;background:var(--bg2);border:1px solid var(--glass-border);border-radius:36px;padding:24px 20px 20px;box-shadow:var(--shadow-card);animation:cardIn 0.5s cubic-bezier(0.16,1,0.3,1);transition:background 0.3s,border-color 0.3s;}
         @keyframes cardIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
@@ -213,6 +223,20 @@
         .building-code span{background:var(--glass);border:1px solid var(--glass-border);padding:4px 14px;border-radius:20px;color:var(--text-3);}
         .footer-note{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;}
         .footer-note span{background:var(--glass);border:1px solid var(--glass-border);padding:4px 12px;border-radius:30px;font-size:0.72rem;color:var(--text-3);letter-spacing:0.3px;}
+        .est-glow{
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: white;
+            font-weight: 800;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            letter-spacing: 4px;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.6), 0 4px 12px rgba(59, 130, 246, 0.3);
+            animation: glowPulse 2s ease-in-out infinite;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
 
         /* MODALS */
         .modal{display:none;position:fixed;inset:0;background:rgba(10,13,20,0.95);z-index:1000;overflow-y:auto;backdrop-filter:blur(8px);}
@@ -386,10 +410,18 @@
         <a href="serbestisler.html" class="action-btn" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.4);text-decoration:none;">📋 Sərbəst işlər</a>
     </div>
 
-    <div class="footer-area">
-        <div class="building-code"><span>🏛️ 845A5</span></div>
-        <div class="footer-note"><span>09:00–10:20</span><span>10:30–11:50</span><span>12:00–13:20</span></div>
+    <!-- Replace the footer-area section with this updated version -->
+<div class="footer-area">
+    <div class="building-code"><span>🏛️ 845A5</span></div>
+    <div class="footer-note">
+        <span>09:00–10:20</span>
+        <span>10:30–11:50</span>
+        <span>12:00–13:20</span>
     </div>
+    <div style="text-align: center; margin-top: 4px;">
+        <span class="est-glow">E S T</span>
+    </div>
+</div>
 </div>
 </div><!-- end wrapper -->
 
