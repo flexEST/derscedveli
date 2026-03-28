@@ -779,7 +779,7 @@
     var HOLIDAYS = [
         '2026-03-09','2026-03-20','2026-03-23','2026-03-24',
         '2026-03-25','2026-03-26','2026-03-27','2026-03-30',
-        '2026-05-11','2026-05-27'
+        '2026-05-11','2026-05-27','2026-05-28','2026-05-29'
     ];
 
     function dateStr(d){
@@ -842,7 +842,7 @@
         var now = new Date();
         var nowMin = now.getHours()*60 + now.getMinutes();
         var isToday = date.toDateString() === now.toDateString();
-        var afterSem  = date > new Date(2026,4,27);
+        var afterSem  = date > new Date(2026,4,29);
         var beforeSem = date < new Date(2026,1,16);
 
         if(afterSem){
