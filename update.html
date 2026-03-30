@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="az" data-theme="dark">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -8,548 +7,312 @@
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         :root {
-            --bg1: #0d1117;
-            --bg2: #161b27;
-            --glass: rgba(255, 255, 255, 0.045);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-hover: rgba(255, 255, 255, 0.07);
-            --amber: #f5a623;
-            --amber-dim: rgba(245, 166, 35, 0.15);
-            --blue: #3b82f6;
-            --blue-dim: rgba(59, 130, 246, 0.15);
-            --green: #22c55e;
-            --green-dim: rgba(34, 197, 94, 0.15);
-            --red: #ef4444;
-            --text: #f1f5f9;
-            --text-2: #94a3b8;
-            --text-3: #475569;
-            --surface: rgba(255, 255, 255, 0.04);
-            --radius-xl: 28px;
-            --radius-lg: 20px;
-            --radius-md: 14px;
-            --radius-sm: 10px;
+            --bg1:#0d1117; --bg2:#161b27;
+            --glass:rgba(255,255,255,0.045); --glass-border:rgba(255,255,255,0.08); --glass-hover:rgba(255,255,255,0.07);
+            --amber:#f5a623; --amber-dim:rgba(245,166,35,0.15);
+            --blue:#3b82f6; --blue-dim:rgba(59,130,246,0.15);
+            --green:#22c55e; --green-dim:rgba(34,197,94,0.15);
+            --red:#ef4444; --text:#f1f5f9; --text-2:#94a3b8; --text-3:#475569;
+            --surface:rgba(255,255,255,0.04);
+            --radius-xl:28px; --radius-lg:20px; --radius-md:14px; --radius-sm:10px;
         }
-
         [data-theme="light"] {
-            --bg1: #f0f4ff;
-            --bg2: #ffffff;
-            --glass: rgba(0, 0, 0, 0.04);
-            --glass-border: rgba(0, 0, 0, 0.09);
-            --glass-hover: rgba(0, 0, 0, 0.06);
-            --amber: #d97706;
-            --amber-dim: rgba(217, 119, 6, 0.1);
-            --blue: #2563eb;
-            --blue-dim: rgba(37, 99, 235, 0.1);
-            --green: #16a34a;
-            --green-dim: rgba(22, 163, 74, 0.1);
-            --red: #dc2626;
-            --text: #0f172a;
-            --text-2: #475569;
-            --text-3: #94a3b8;
-            --surface: rgba(0, 0, 0, 0.03);
+            --bg1:#f0f4ff; --bg2:#ffffff;
+            --glass:rgba(0,0,0,0.04); --glass-border:rgba(0,0,0,0.09); --glass-hover:rgba(0,0,0,0.06);
+            --amber:#d97706; --amber-dim:rgba(217,119,6,0.1);
+            --blue:#2563eb; --blue-dim:rgba(37,99,235,0.1);
+            --green:#16a34a; --green-dim:rgba(22,163,74,0.1);
+            --red:#dc2626; --text:#0f172a; --text-2:#475569; --text-3:#94a3b8;
+            --surface:rgba(0,0,0,0.03);
         }
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+            background:var(--bg1); min-height:100vh;
+            display:flex; justify-content:center; align-items:flex-start;
+            padding:40px 12px 60px;
+            position:relative; overflow-x:hidden;
+            transition:background 0.3s;
+        }
+        body::before{content:'';position:fixed;top:-120px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(59,130,246,0.18) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:blobDrift 12s ease-in-out infinite alternate;}
+        body::after{content:'';position:fixed;bottom:-100px;right:-60px;width:380px;height:380px;background:radial-gradient(circle,rgba(245,166,35,0.13) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:blobDrift 15s ease-in-out infinite alternate-reverse;}
+        @keyframes blobDrift{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,40px) scale(1.08);}}
+        .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        .main-card{
+            position:relative;z-index:1;
+            width:100%;max-width:420px;
+            background:var(--bg2);
+            border:1px solid var(--glass-border);
+            border-radius:36px;
+            padding:24px 20px 28px;
+            box-shadow:0 32px 64px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04) inset;
+            animation:cardIn 0.5s cubic-bezier(0.16,1,0.3,1);
+            transition:background 0.3s,border-color 0.3s;
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg1);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 12px 60px;
-            position: relative;
-            overflow-x: hidden;
-            transition: background 0.3s;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: -120px;
-            left: -80px;
-            width: 420px;
-            height: 420px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.18) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: blobDrift 12s ease-in-out infinite alternate;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -100px;
-            right: -60px;
-            width: 380px;
-            height: 380px;
-            background: radial-gradient(circle, rgba(245, 166, 35, 0.13) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: blobDrift 15s ease-in-out infinite alternate-reverse;
-        }
-
-        @keyframes blobDrift {
-            from { transform: translate(0, 0) scale(1); }
-            to { transform: translate(30px, 40px) scale(1.08); }
-        }
-
-        .noise {
-            position: fixed;
-            inset: 0;
-            opacity: 0.025;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .main-card {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 420px;
-            background: var(--bg2);
-            border: 1px solid var(--glass-border);
-            border-radius: 36px;
-            padding: 24px 20px 28px;
-            box-shadow: 0 32px 64px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-            animation: cardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transition: background 0.3s, border-color 0.3s;
-        }
-
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes cardIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
         /* HEADER */
-        .page-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
+        .page-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+        .back-btn{
+            background:var(--glass);border:1px solid var(--glass-border);
+            width:40px;height:40px;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:18px;cursor:pointer;text-decoration:none;color:var(--text-2);
+            transition:background 0.2s;flex-shrink:0;
         }
-
-        .back-btn {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            text-decoration: none;
-            color: var(--text-2);
-            transition: background 0.2s;
-            flex-shrink: 0;
-        }
-
-        .back-btn:hover {
-            background: var(--glass-hover);
-            color: var(--text);
-        }
-
-        .page-title {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--text);
-            letter-spacing: -0.3px;
-        }
-
-        .page-title span {
-            color: var(--blue);
-        }
+        .back-btn:hover{background:var(--glass-hover);color:var(--text);}
+        .page-title{font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
+        .page-title span{color:var(--blue);}
 
         /* CURRENT VERSION CARD */
-        .version-card {
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-            border-radius: var(--radius-xl);
-            padding: 20px;
-            margin-bottom: 0;
-            position: relative;
-            overflow: hidden;
+        .version-card{
+            background:linear-gradient(135deg,#1d4ed8,#3b82f6);
+            border-radius:var(--radius-xl);
+            padding:20px;
+            margin-bottom:20px;
+            position:relative;
+            overflow:hidden;
         }
-
-        .version-card::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 150px;
-            height: 150px;
-            background: rgba(255, 255, 255, 0.07);
-            border-radius: 50%;
+        .version-card::before{
+            content:'';position:absolute;top:-40px;right:-40px;
+            width:150px;height:150px;
+            background:rgba(255,255,255,0.07);
+            border-radius:50%;
         }
-
-        .version-label {
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .version-number {
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: white;
-            line-height: 1;
-            letter-spacing: -1px;
-            margin-bottom: 6px;
-        }
-
-        .version-date {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500;
-        }
-
-        .version-badge {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 20px;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        /* UPDATE IMAGE */
-        .update-image-wrap {
-            width: 100%;
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            margin: 16px 0;
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .update-image-wrap img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: var(--radius-xl);
-            object-fit: cover;
+        .version-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.6);font-weight:700;margin-bottom:4px;}
+        .version-number{font-size:2.4rem;font-weight:800;color:white;line-height:1;letter-spacing:-1px;margin-bottom:6px;}
+        .version-date{font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:500;}
+        .version-badge{
+            display:inline-block;
+            background:rgba(255,255,255,0.2);
+            border:1px solid rgba(255,255,255,0.3);
+            color:white;font-size:0.7rem;font-weight:700;
+            padding:3px 10px;border-radius:20px;margin-top:10px;
+            letter-spacing:0.5px;
         }
 
         /* INSTALL SECTION */
-        .install-section {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-xl);
-            padding: 18px;
-            margin-bottom: 20px;
+        .install-section{
+            background:var(--glass);
+            border:1px solid var(--glass-border);
+            border-radius:var(--radius-xl);
+            padding:18px;
+            margin-bottom:20px;
         }
-
-        .install-title {
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-3);
-            font-weight: 700;
-            margin-bottom: 14px;
+        .install-title{
+            font-size:0.72rem;text-transform:uppercase;
+            letter-spacing:1.5px;color:var(--text-3);
+            font-weight:700;margin-bottom:14px;
         }
-
-        .install-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #15803d, #22c55e);
-            border: none;
-            border-radius: var(--radius-lg);
-            color: white;
-            font-family: inherit;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 8px 20px -4px rgba(34, 197, 94, 0.45);
-            transition: transform 0.15s, filter 0.15s;
-            letter-spacing: 0.2px;
+        .install-btn{
+            display:flex;align-items:center;justify-content:center;gap:10px;
+            width:100%;padding:14px;
+            background:linear-gradient(135deg,#15803d,#22c55e);
+            border:none;border-radius:var(--radius-lg);
+            color:white;font-family:inherit;font-size:0.95rem;font-weight:700;
+            cursor:pointer;text-decoration:none;
+            box-shadow:0 8px 20px -4px rgba(34,197,94,0.45);
+            transition:transform 0.15s,filter 0.15s;
+            letter-spacing:0.2px;
         }
-
-        .install-btn:active {
-            transform: scale(0.97);
-            filter: brightness(0.9);
-        }
-
-        .install-note {
-            font-size: 0.9rem;
-            color: yellow;
-            text-align: center;
-            margin-top: 0px;
-            line-height: 1.5;
-            border-radius: 10px;
-            display: inline-block;
+        .install-btn:active{transform:scale(0.97);filter:brightness(0.9);}
+        .install-note{
+            font-size:0.72rem;color:var(--text-3);
+            text-align:center;margin-top:10px;
+            line-height:1.5;
         }
 
         /* CHANGELOG */
-        .changelog-section {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-xl);
-            overflow: hidden;
+        .changelog-section{
+            background:var(--glass);
+            border:1px solid var(--glass-border);
+            border-radius:var(--radius-xl);
+            overflow:hidden;
+        }
+        .changelog-header{
+            padding:16px 18px 14px;
+            border-bottom:1px solid var(--glass-border);
+        }
+        .changelog-title{font-size:1rem;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;}
+        .changelog-title .new-badge{
+            background:linear-gradient(135deg,#7c3aed,#a855f7);
+            color:white;font-size:0.62rem;font-weight:700;
+            padding:2px 9px;border-radius:20px;letter-spacing:0.5px;
         }
 
-        .changelog-header {
-            padding: 16px 18px 14px;
-            border-bottom: 1px solid var(--glass-border);
+        .version-block{padding:16px 18px;border-bottom:1px solid var(--glass-border);}
+        .version-block:last-child{border-bottom:none;}
+        .vb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+        .vb-version{font-size:0.9rem;font-weight:800;color:var(--text);}
+        .vb-date{font-size:0.72rem;color:var(--text-3);}
+        .vb-current{
+            background:var(--blue-dim);border:1px solid rgba(59,130,246,0.2);
+            color:var(--blue);font-size:0.62rem;font-weight:700;
+            padding:2px 9px;border-radius:20px;
         }
 
-        .changelog-title {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .change-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
+        .change-item:last-child{margin-bottom:0;}
+        .change-dot{
+            width:6px;height:6px;border-radius:50%;
+            flex-shrink:0;margin-top:5px;
         }
+        .change-dot.add{background:var(--green);}
+        .change-dot.fix{background:var(--amber);}
+        .change-dot.change{background:var(--blue);}
+        .change-text{font-size:0.85rem;color:var(--text-2);line-height:1.4;}
+        .change-text strong{color:var(--text);font-weight:600;}
 
-        .changelog-title .new-badge {
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            color: white;
-            font-size: 0.62rem;
-            font-weight: 700;
-            padding: 2px 9px;
-            border-radius: 20px;
-            letter-spacing: 0.5px;
+        .change-type{
+            font-size:0.6rem;font-weight:700;text-transform:uppercase;
+            letter-spacing:0.5px;padding:1px 7px;border-radius:10px;
+            display:inline-block;margin-right:5px;vertical-align:middle;
         }
+        .change-type.add{background:var(--green-dim);color:var(--green);}
+        .change-type.fix{background:var(--amber-dim);color:var(--amber);}
+        .change-type.change{background:var(--blue-dim);color:var(--blue);}
 
-        .version-block {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--glass-border);
+        /* UPCOMING / NOTES */
+        .notes-section{
+            margin-top:20px;
+            background:var(--glass);
+            border:1px solid var(--glass-border);
+            border-radius:var(--radius-xl);
+            padding:18px;
         }
-
-        .version-block:last-child {
-            border-bottom: none;
+        .notes-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-3);font-weight:700;margin-bottom:12px;}
+        .notes-textarea{
+            width:100%;background:var(--surface);
+            border:1px solid var(--glass-border);
+            border-radius:var(--radius-md);
+            padding:12px 14px;
+            color:var(--text);font-family:inherit;font-size:0.85rem;
+            resize:none;min-height:100px;
+            outline:none;transition:border-color 0.2s;
+            line-height:1.5;
         }
+        .notes-textarea:focus{border-color:rgba(59,130,246,0.4);}
+        .notes-textarea::placeholder{color:var(--text-3);}
 
-        .vb-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .vb-version {
-            font-size: 0.9rem;
-            font-weight: 800;
-            color: var(--text);
-        }
-
-        .vb-date {
-            font-size: 0.72rem;
-            color: var(--text-3);
-        }
-
-        .vb-current {
-            background: var(--blue-dim);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            color: var(--blue);
-            font-size: 0.62rem;
-            font-weight: 700;
-            padding: 2px 9px;
-            border-radius: 20px;
-        }
-
-        .change-item {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .change-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .change-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            margin-top: 5px;
-        }
-
-        .change-dot.add  { background: var(--green); }
-        .change-dot.fix  { background: var(--amber); }
-        .change-dot.change { background: var(--blue); }
-
-        .change-text {
-            font-size: 0.85rem;
-            color: var(--text-2);
-            line-height: 1.4;
-        }
-
-        .change-text strong {
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        .change-type {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 1px 7px;
-            border-radius: 10px;
-            display: inline-block;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-
-        .change-type.add    { background: var(--green-dim); color: var(--green); }
-        .change-type.fix    { background: var(--amber-dim); color: var(--amber); }
-        .change-type.change { background: var(--blue-dim);  color: var(--blue);  }
-
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
+        ::-webkit-scrollbar{width:4px;}
+        ::-webkit-scrollbar-track{background:transparent;}
+        ::-webkit-scrollbar-thumb{background:var(--glass-border);border-radius:4px;}
     </style>
 </head>
-
 <body>
-    <div class="noise"></div>
+<div class="noise"></div>
 
-    <div class="main-card">
+<div class="main-card">
 
-        <!-- HEADER -->
-        <div class="page-header">
-            <a href="index.html" class="back-btn">←</a>
-            <div class="page-title">Yenilən<span>mələr</span></div>
-        </div>
-
-        <!-- CURRENT VERSION -->
-        <div class="version-card">
-            <div class="version-label">Yeni versiya</div>
-            <div class="version-number">v1.0.1</div>
-            <div class="version-date">Dərs Cədvəli</div>
-            <div class="version-badge">✦ Yeni güncəllənmə</div>
-        </div>
-
-        <!-- UPDATE IMAGE (between version card and install box) -->
-        <div class="update-image-wrap">
-            <img src="update.png" alt="Yenilənmə" />
-        </div>
-
-        <!-- INSTALL -->
-        <div class="install-section">
-            <div class="install-title">📲 APK Yüklə</div>
-            <a href="https://derscedveli.kesug.com/app.apk" download class="install-btn">
-                ⬇️ Güncəllənməni yüklə — v1.0.1
-            </a>
-            <div class="install-note"><br>Əgər versiyanız yeni versiya ilə eynidirsə yükləməyə ehtiyac yoxdur.
-            </div>
-        </div>
-
-        <!-- CHANGELOG -->
-        <div class="changelog-section">
-            <div class="changelog-header">
-                <div class="changelog-title">
-                    📋 Dəyişikliklər
-                    <span class="new-badge">YENİ</span>
-                </div>
-            </div>
-
-            <!-- v1.0.1 -->
-            <div class="version-block">
-                <div class="vb-header">
-                    <span class="vb-version">v1.0.1</span>
-                    <span class="vb-current">Yeni</span>
-                </div>
-
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span><strong>Fənn popup</strong> —
-                        fənnin üzərinə basanda qalıb/keçilib sayı, qayıb limiti açılır</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span><strong>Kalendar</strong> — günə
-                        basanda o günün dərsləri görünür</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span><strong>İmtahan sualları</strong> —
-                        imtahan/kollokvium üçün suallar və özünü yoxlama testlər</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span><strong>Sərbəst işlər</strong>
-                        aylıq sərbəst işlər</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span><strong>Yenilənmə</strong>
-                        istənilən zaman yenilənmələr yüklə</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot fix"></div>
-                    <div class="change-text"><span class="change-type fix">düzəliş</span>Qayıb bal qaydaları yeniləndi
-                        (1 bal / 2 bal / kəsr)</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot change"></div>
-                    <div class="change-text"><span class="change-type change">dəyişiklik</span>Tema düyməsi "Tünd / Ağ
-                        tema" yazısı ilə yeniləndi</div>
-                </div>
-            </div>
-
-            <!-- v1.0.0 -->
-            <div class="version-block">
-                <div class="vb-header">
-                    <span class="vb-version">v1.0.0</span>
-                    <span class="vb-date">İlk versiya</span>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span>Cari / növbəti dərs, countdown,
-                        progress bar</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span>Həftəlik cədvəl (üst / alt həftə)
-                    </div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span>Qayıb limitləri bölməsi</div>
-                </div>
-                <div class="change-item">
-                    <div class="change-dot add"></div>
-                    <div class="change-text"><span class="change-type add">yeni</span>Tünd / ağ tema, mini kalendar,
-                        həftə xülasəsi</div>
-                </div>
-            </div>
-        </div>
-
+    <!-- HEADER -->
+    <div class="page-header">
+        <a href="index.html" class="back-btn">←</a>
+        <div class="page-title">Yenilən<span>mələr</span></div>
     </div>
 
-    <script>
-        try {
-            var t = localStorage.getItem('theme');
-            if (t) document.documentElement.setAttribute('data-theme', t);
-        } catch(e) {}
-    </script>
-</body>
+    <!-- CURRENT VERSION -->
+    <div class="version-card">
+        <div class="version-label">Cari versiya</div>
+        <div class="version-number">v1.0.1</div>
+        <div class="version-date">2026 · AZMIU Dərs Cədvəli</div>
+        <div class="version-badge">✦ Aktiv versiya</div>
+    </div>
 
+    <!-- INSTALL -->
+    <div class="install-section">
+        <div class="install-title">📲 APK Yüklə</div>
+        <a href="app.apk" download class="install-btn">
+            ⬇️ Tətbiqi yüklə — v1.0.1
+        </a>
+        <div class="install-note">
+            Android üçün · APK faylı<br>
+            Naməlum mənbələrdən quraşdırmağa icazə verin
+        </div>
+    </div>
+
+    <!-- CHANGELOG -->
+    <div class="changelog-section">
+        <div class="changelog-header">
+            <div class="changelog-title">
+                📋 Dəyişikliklər
+                <span class="new-badge">YENİ</span>
+            </div>
+        </div>
+
+        <!-- v1.0.1 -->
+        <div class="version-block">
+            <div class="vb-header">
+                <span class="vb-version">v1.0.1</span>
+                <span class="vb-current">Cari</span>
+            </div>
+
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span><strong>Fənn popup</strong> — fənnin üzərinə basanda qalıb/keçilib sayı, qayıb limiti açılır</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span><strong>Kalendar</strong> — günə basanda o günün dərsləri görünür</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span><strong>Tətil günləri</strong> — kalendarda və cari dərsdə tətil göstərilir</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span><strong>Sərbəst işlər</strong> düyməsi əlavə edildi</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot fix"></div>
+                <div class="change-text"><span class="change-type fix">düzəliş</span>Qayıb bal qaydaları yeniləndi (1 bal / 2 bal / kəsr)</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot change"></div>
+                <div class="change-text"><span class="change-type change">dəyişiklik</span>Tema düyməsi "Tünd / Ağ tema" yazısı ilə yeniləndi</div>
+            </div>
+        </div>
+
+        <!-- v1.0.0 -->
+        <div class="version-block">
+            <div class="vb-header">
+                <span class="vb-version">v1.0.0</span>
+                <span class="vb-date">İlk versiya</span>
+            </div>
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span>Cari / növbəti dərs, countdown, progress bar</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span>Həftəlik cədvəl (üst / alt həftə)</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span>Qayıb limitləri bölməsi</div>
+            </div>
+            <div class="change-item">
+                <div class="change-dot add"></div>
+                <div class="change-text"><span class="change-type add">yeni</span>Tünd / ağ tema, mini kalendar, həftə xülasəsi</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="notes-section">
+        <div class="notes-label">📝 Növbəti versiyada nə olacaq</div>
+        <textarea class="notes-textarea" placeholder="Burada planlaşdırılan yeniliklər yazılacaq...">
+        </textarea>
+    </div>
+
+</div>
+
+<script>
+    // Apply saved theme
+    try {
+        var t = localStorage.getItem('theme');
+        if(t) document.documentElement.setAttribute('data-theme', t);
+    } catch(e) {}
+</script>
+</body>
 </html>
