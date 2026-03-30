@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az" data-theme="dark">
 <head>
@@ -156,8 +157,7 @@
         /* LESSON CARD */
         .lesson-container{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:20px 18px;min-height:190px;position:relative;overflow:hidden;}
         .lesson-container::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(59,130,246,0.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
-        .lesson-name{font-size:1.3rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px;cursor:pointer;display:inline-block;}
-        .lesson-name:hover{text-decoration:underline;opacity:0.9;}
+        .lesson-name{font-size:1.3rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px;}
         .lesson-type-chip{display:inline-block;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.25);color:#93c5fd;padding:2px 10px;border-radius:20px;font-size:0.72rem;font-weight:600;margin-left:8px;vertical-align:middle;}
         [data-theme="light"] .lesson-type-chip{color:#1d4ed8;background:rgba(37,99,235,0.1);border-color:rgba(37,99,235,0.2);}
         .teacher-name{font-size:0.88rem;color:var(--text-2);margin-bottom:10px;}
@@ -193,7 +193,7 @@
         .todays-bar-body{display:none;border-top:1px solid var(--glass-border);padding:10px 12px 14px;}
         .todays-bar-body.open{display:block;animation:fadeSlide 0.22s ease;}
         @keyframes fadeSlide{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:translateY(0);}}
-        .today-lesson-row{display:flex;align-items:center;gap:12px;padding:8px 8px;border-radius:var(--radius-sm);margin-top:2px;transition:background 0.15s;cursor:pointer;}
+        .today-lesson-row{display:flex;align-items:center;gap:12px;padding:8px 8px;border-radius:var(--radius-sm);margin-top:2px;transition:background 0.15s;}
         .today-lesson-row:hover{background:var(--glass-hover);}
         .today-lesson-row.is-current{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);}
         .today-lesson-row.is-done{opacity:0.45;}
@@ -233,7 +233,8 @@
             font-size: 0.78rem;
             letter-spacing: 4px;
             box-shadow: 0 0 12px rgba(59, 130, 246, 0.6), 0 4px 12px rgba(59, 130, 246, 0.3);
-            animation: glowPulse 5s ease-in-out infinite;
+            animation: glowPulse 2s ease-in-out infinite;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
         }
@@ -256,8 +257,7 @@
         .schedule-col{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:18px 16px;margin-bottom:14px;}
         .col-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
         .col-title span{font-size:0.75rem;font-weight:400;color:var(--text-3);background:var(--surface);padding:2px 10px;border-radius:20px;}
-        .lesson-block{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;border-left:4px solid var(--blue);cursor:pointer;}
-        .lesson-block:active{filter:brightness(1.1);}
+        .lesson-block{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;border-left:4px solid var(--blue);}
         .lesson-block:last-child{margin-bottom:0;}
         .block-title{font-weight:600;font-size:0.95rem;color:var(--text);margin-bottom:4px;line-height:1.3;}
         .lesson-type-badge{display:inline-block;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.2);color:#93c5fd;padding:1px 8px;border-radius:16px;font-size:0.68rem;font-weight:600;margin-left:6px;vertical-align:middle;}
@@ -268,14 +268,13 @@
         .exam-title{font-size:1.2rem;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
         .exam-title span{background:linear-gradient(135deg,#dc2626,#ef4444);padding:3px 12px;border-radius:30px;font-size:0.72rem;font-weight:700;color:white;}
         .exam-grid{display:flex;flex-direction:column;gap:10px;}
-        .exam-row{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
+        .exam-row{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
         .exam-name{font-weight:600;color:var(--text);font-size:0.95rem;margin-bottom:4px;}
         .exam-type{font-size:0.72rem;color:var(--text-2);background:var(--glass);padding:2px 10px;border-radius:30px;border:1px solid var(--glass-border);display:inline-block;}
         .exam-date{font-weight:700;color:var(--amber);font-size:0.95rem;text-align:right;}
         .exam-time{font-size:0.82rem;color:var(--text-2);margin-top:3px;text-align:right;}
         .limits-container{display:flex;flex-direction:column;gap:14px;}
-        .subject-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:18px;border-left:5px solid;cursor:pointer;}
-        .subject-card:active{opacity:0.85;}
+        .subject-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:18px;border-left:5px solid;}
         .subject-card.high{border-left-color:var(--red);}
         .subject-card.medium{border-left-color:var(--amber);}
         .subject-card.low{border-left-color:var(--green);}
@@ -320,6 +319,12 @@
         .subj-stat-lbl{font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px;font-weight:600;}
         .subj-close{display:block;width:100%;margin-top:16px;padding:13px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);color:var(--text-2);font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;text-align:center;}
         .subj-close:active{filter:brightness(0.9);}
+        /* clickable lesson blocks */
+        .lesson-block{cursor:pointer;}
+        .lesson-block:active{filter:brightness(1.1);}
+        .subject-card{cursor:pointer;}
+        .subject-card:active{opacity:0.85;}
+
         ::-webkit-scrollbar{width:4px;}
         ::-webkit-scrollbar-track{background:transparent;}
         ::-webkit-scrollbar-thumb{background:var(--glass-border);border-radius:4px;}
@@ -406,6 +411,7 @@
         <a href="serbestisler.html" class="action-btn" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.4);text-decoration:none;">📋 Sərbəst işlər</a>
     </div>
 
+    <!-- Replace the footer-area section with this updated version -->
 <div class="footer-area">
     <div class="building-code"><span>🏛️ 845A5</span></div>
     <div class="footer-note">
@@ -418,7 +424,7 @@
     </div>
 </div>
 </div>
-</div>
+</div><!-- end wrapper -->
 
 <!-- MODAL: CƏDVƏL -->
 <div id="scheduleModal" class="modal">
@@ -570,22 +576,635 @@
         <div id="subjLimitBox" style="margin-top:12px;background:var(--surface);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;">
             <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);font-weight:700;margin-bottom:8px;">Qayıb limiti</div>
             <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;">
-                <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitCount">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Limit</div></div>
-                <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitHours">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Saat</div></div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.5rem;font-weight:800;" id="subjLimitCount">—</div>
+                    <div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Limit</div>
+                </div>
+                <div style="text-align:center;">
+                    <div style="font-size:1.5rem;font-weight:800;" id="subjLimitHours">—</div>
+                    <div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Saat</div>
+                </div>
                 <div style="flex:1;font-size:0.78rem;color:var(--amber);font-weight:600;line-height:1.4;" id="subjLimitRule">—</div>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:8px 10px;"><span style="font-size:1rem;">⚠️</span><span style="font-size:0.82rem;color:var(--red);font-weight:700;" id="subjKesrText">—</span></div>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:8px 10px;">
+                <span style="font-size:1rem;">⚠️</span>
+                <span style="font-size:0.82rem;color:var(--red);font-weight:700;" id="subjKesrText">—</span>
+            </div>
         </div>
-        <div id="subjBookBox" style="display:none;margin-top:10px;"><a id="subjBookBtn" href="book.pdf" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:var(--radius-lg);color:white;font-weight:700;text-decoration:none;">📖 Kitabı aç — book.pdf</a></div>
+        <div id="subjBookBox" style="display:none;margin-top:10px;">
+            <a id="subjBookBtn" href="book.pdf" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:var(--radius-lg);color:white;font-family:inherit;font-size:0.88rem;font-weight:700;text-decoration:none;box-shadow:0 6px 16px -3px rgba(168,85,247,0.4);transition:transform 0.15s,filter 0.15s;" ontouchstart="this.style.filter='brightness(0.9)'" ontouchend="this.style.filter=''">
+                📖 Kitabı aç — book.pdf
+            </a>
+        </div>
         <button class="subj-close" id="subjClose">Bağla</button>
     </div>
 </div>
 
 <script>
-    // [All existing LESSONS, KOLLOKVIУМLAR, MONTHS, DOWS, DAYNAMES, functions, etc. remain unchanged]
-    // --- only modifications: added click handler for lesson name and today's bar rows
-    // For brevity, the script block continues with original definitions and adds click hooks.
-    // (Full script content omitted here for space, but in final answer it's complete with modifications)
+    const LESSONS = [
+        {name:'Proqramlaşdırmanın əsasları',type:'Mühazirə',teacher:'Talıbzadə Sərxan',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'both',room:'1315',day:1},
+        {name:'İnformasiya texnologiyalarının əsasları',type:'Mühazirə',teacher:'Yunis Bədəlov',teacherEmoji:'👨‍🏫',start:630,end:710,weeks:'both',room:'1321',day:1},
+        {name:'İnformasiya texnologiyaları əsasları Laboratoriya',type:'',teacher:'Rəna Hüseynova',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'both',room:'1301',day:1},
+        {name:'XDIAK',type:'Seminar',teacher:'Fərzəliyeva Ədilə',teacherEmoji:'👩‍🏫',start:540,end:620,weeks:'both',room:'827',day:2},
+        {name:'Proqramlaşdırma Laboratoriya',type:'',teacher:'Talıbzadə Sərxan',teacherEmoji:'👩‍🏫',start:630,end:710,weeks:'both',room:'1317',day:2},
+        {name:'Sahibkarlığın əsasları və biznesə giriş',type:'Mühazirə',teacher:'Əliyeva Günay',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'upper',room:'1215',day:2},
+        {name:'Diferensial tənliklər',type:'Mühazirə',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:720,end:800,weeks:'lower',room:'1215',day:2},
+        {name:'Diskret riyaziyyat',type:'Mühazirə',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'upper',room:'1319',day:3},
+        {name:'XDIAK',type:'Seminar',teacher:'Fərzəliyeva Ədilə',teacherEmoji:'👩‍🏫',start:540,end:620,weeks:'lower',room:'827',day:3},
+        {name:'XDIAK',type:'Seminar',teacher:'Fərzəliyeva Ədilə',teacherEmoji:'👩‍🏫',start:630,end:710,weeks:'both',room:'827',day:3},
+        {name:'Diskret riyaziyyat',type:'Seminar',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'upper',room:'907 (II Korpus)',day:4},
+        {name:'Diferensial tənliklər',type:'Seminar',teacher:'Dərişova Aynur',teacherEmoji:'👩‍🏫',start:540,end:620,weeks:'lower',room:'907 (II Korpus)',day:4},
+        {name:'İnformasiya texnologiyalarının əsasları',type:'Mühazirə',teacher:'Yunis Bədəlov',teacherEmoji:'👨‍🏫',start:630,end:710,weeks:'both',room:'1321',day:4},
+        {name:'Sahibkarlığın əsasları və biznesə giriş',type:'Seminar',teacher:'Mirzai Pərvin',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'upper',room:'1319',day:4},
+        {name:'Proqramlaşdırmanın əsasları',type:'Mühazirə',teacher:'Talıbzadə Sərxan',teacherEmoji:'👨‍🏫',start:720,end:800,weeks:'lower',room:'1319',day:4}
+    ];
+
+    // Kollokvium virtual entries — shown as special lesson on their exact dates
+    // Apr 10 = Friday (day 5 in JS) → we use exact-date matching, not day-of-week
+    // We treat them as special; findCurrentLesson checks these first
+    var KOLLOKVIУМLAR = [
+        {name:'Kollokvium (Mart)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,3,10)},
+        {name:'Kollokvium (Aprel)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,4,8)}
+    ];
+
+    const MONTHS   = ['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
+    const DOWS     = ['B.e','Ç.a','Çər','C.a','Cüm','Şnb','Bzr'];
+    const DAYNAMES = ['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı'];
+
+    let currentWeekType = 'upper';
+    let calViewYear, calViewMonth;
+    let datePanelOpen = false;
+
+    function getWeekTypeForDate(d) {
+        const year = d.getFullYear();
+        const upper = [[16,2,20,2],[2,3,6,3],[16,3,20,3],[30,3,3,4],[13,4,17,4],[27,4,1,5],[11,5,15,5],[25,5,29,5]];
+        const lower = [[23,2,27,2],[9,3,13,3],[23,3,27,3],[6,4,10,4],[20,4,24,4],[4,5,8,5],[18,5,22,5]];
+        // Individual holiday dates — no lessons these days
+        var holidays = [
+            '2026-03-09',
+            '2026-03-20',
+            '2026-03-23',
+            '2026-03-24',
+            '2026-03-25',
+            '2026-03-26',
+            '2026-03-27',
+            '2026-03-30',
+            '2026-05-11',
+            '2026-05-27'
+        ];
+        var ds = d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+        if(holidays.indexOf(ds) >= 0) return null;
+        function inRange(ranges) {
+            for (var i=0;i<ranges.length;i++){
+                var r=ranges[i], s=new Date(year,r[1]-1,r[0]), e=new Date(year,r[3]-1,r[2]);
+                if(d>=s&&d<=e) return true;
+            }
+            return false;
+        }
+        if(inRange(upper)) return 'upper';
+        if(inRange(lower)) return 'lower';
+        return null;
+    }
+    function getWeekType(){
+        // Try today first
+        var wt = getWeekTypeForDate(new Date());
+        if(wt) return wt;
+        // If today is holiday/weekend, look ahead up to 7 days for next teaching day
+        for(var i=1;i<=7;i++){
+            var next = new Date();
+            next.setDate(next.getDate()+i);
+            var dow = next.getDay();
+            if(dow===0||dow===6) continue;
+            var nwt = getWeekTypeForDate(next);
+            if(nwt) return nwt;
+        }
+        return 'upper';
+    }
+
+    function hasLessonsOnDate(date){
+        var dow=date.getDay(), dayMap={1:1,2:2,3:3,4:4}, ld=dayMap[dow];
+        if(!ld) return false;
+        var wt=getWeekTypeForDate(date);
+        return LESSONS.some(function(l){ return l.day===ld&&(l.weeks==='both'||l.weeks===wt); });
+    }
+
+    function getToday(){ var d=new Date().getDay(); return d===0?7:d; }
+
+    function getLessonsForDay(day,wt){
+        return LESSONS.filter(function(l){ return l.day===day&&(l.weeks==='both'||l.weeks===wt); });
+    }
+
+    function isTodayHoliday(){
+        var now=new Date();
+        var ds=now.getFullYear()+'-'+(now.getMonth()<9?'0':'')+(now.getMonth()+1)+'-'+(now.getDate()<10?'0':'')+now.getDate();
+        return HOLIDAYS.indexOf(ds)>=0;
+    }
+
+    function getTodaysLessons(){
+        var t=getToday(); if(t>4) return [];
+        if(isTodayHoliday()) return [];
+        var wt=getWeekTypeForDate(new Date());
+        if(!wt) return [];
+        return getLessonsForDay(t,wt).sort(function(a,b){return a.start-b.start;});
+    }
+
+    function findCurrentLesson(){
+        var now=new Date();
+        var nowMin=now.getHours()*60+now.getMinutes();
+        var today=now.toDateString();
+
+        // Check kollokvium days first
+        for(var k=0;k<KOLLOKVIУМLAR.length;k++){
+            var kl=KOLLOKVIУМLAR[k];
+            if(kl.date.toDateString()===today){
+                if(nowMin<kl.start) return Object.assign({},kl,{status:'upcoming',isKollokvium:true});
+                if(nowMin>=kl.start&&nowMin<=kl.end) return Object.assign({},kl,{status:'ongoing',isKollokvium:true});
+            }
+        }
+
+        var list=getTodaysLessons();
+        for(var i=0;i<list.length;i++){
+            var l=list[i];
+            if(nowMin<l.start) return Object.assign({},l,{status:'upcoming'});
+            if(nowMin>=l.start&&nowMin<=l.end) return Object.assign({},l,{status:'ongoing'});
+        }
+        return null;
+    }
+
+    function fmt(m){ return Math.floor(m/60)+':'+(m%60<10?'0':'')+(m%60); }
+
+    // THEME
+    var themeToggle=document.getElementById('themeToggle');
+    var isDark=true;
+    function applyTheme(dark){
+        isDark=dark;
+        document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+        document.getElementById('themeLabel').textContent=dark?'Tünd tema':'Ağ tema';
+        try{localStorage.setItem('theme',dark?'dark':'light');}catch(e){}
+    }
+    themeToggle.onclick=function(){applyTheme(!isDark);};
+    try{applyTheme((localStorage.getItem('theme')||'dark')==='dark');}catch(e){applyTheme(true);}
+
+    // DATE PANEL
+    var dateBar=document.getElementById('dateBar');
+    var datePanel=document.getElementById('datePanel');
+
+    dateBar.onclick=function(e){
+        if(e.target.id==='calPrev'||e.target.id==='calNext') return;
+        datePanelOpen=!datePanelOpen;
+        dateBar.classList.toggle('active',datePanelOpen);
+        datePanel.classList.toggle('open',datePanelOpen);
+        var c=document.getElementById('dateCaret');
+        if(c) c.classList.toggle('open',datePanelOpen);
+        if(datePanelOpen){
+            var n=new Date();
+            renderCalendar(n.getFullYear(),n.getMonth());
+            renderWeekSummary();
+        }
+    };
+
+    document.getElementById('calPrev').addEventListener('click',function(e){
+        e.stopPropagation();
+        calViewMonth--; if(calViewMonth<0){calViewMonth=11;calViewYear--;}
+        document.getElementById('calLessonsPanel').classList.remove('open');
+        renderCalendar(calViewYear,calViewMonth);
+    });
+    document.getElementById('calNext').addEventListener('click',function(e){
+        e.stopPropagation();
+        calViewMonth++; if(calViewMonth>11){calViewMonth=0;calViewYear++;}
+        document.getElementById('calLessonsPanel').classList.remove('open');
+        renderCalendar(calViewYear,calViewMonth);
+    });
+
+    var HOLIDAYS = [
+        '2026-03-09','2026-03-20','2026-03-23','2026-03-24',
+        '2026-03-25','2026-03-26','2026-03-27','2026-03-30',
+        '2026-05-11','2026-05-27'
+    ];
+
+    function dateStr(d){
+        return d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+    }
+
+    // CALENDAR
+    function renderCalendar(year,month){
+        calViewYear=year; calViewMonth=month;
+        document.getElementById('calMonthLabel').textContent=MONTHS[month]+' '+year;
+        var grid=document.getElementById('calGrid');
+        grid.innerHTML='';
+        DOWS.forEach(function(d){var el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el);});
+        var firstDay=new Date(year,month,1);
+        var startOffset=firstDay.getDay()-1; if(startOffset<0) startOffset=6;
+        var daysInMonth=new Date(year,month+1,0).getDate();
+        var daysInPrev=new Date(year,month,0).getDate();
+        var today=new Date();
+        for(var i=0;i<startOffset;i++){var el=document.createElement('div');el.className='cal-day other-month';el.textContent=daysInPrev-startOffset+1+i;grid.appendChild(el);}
+        for(var d=1;d<=daysInMonth;d++){
+            var date=new Date(year,month,d);
+            var dow=date.getDay();
+            var isToday=d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear();
+            var isWknd=(dow===0||dow===6);
+            var isHoliday=HOLIDAYS.indexOf(dateStr(date))>=0;
+            var beforeSemester=date<new Date(2026,1,16);
+            var afterSemester=date>new Date(2026,4,29);
+            var outOfSemester=beforeSemester||afterSemester;
+            var hasL=!isWknd&&!isHoliday&&!outOfSemester&&hasLessonsOnDate(date);
+            var el=document.createElement('div');
+            var cls='cal-day';
+            if(isWknd||outOfSemester) cls+=' other-month';
+            if(hasL)                  cls+=' has-lessons';
+            if(isToday)               cls+=' is-today';
+            if(isHoliday&&!outOfSemester) cls+=' is-holiday';
+            if(!isWknd&&!outOfSemester) cls+=' clickable';
+            el.className=cls; el.textContent=d;
+            if(hasL){var dot=document.createElement('div');dot.className='cal-day-dot';el.appendChild(dot);}
+            (function(clickDate){ el.addEventListener('click',function(){ showCalDayLessons(clickDate); }); })(new Date(date));
+            grid.appendChild(el);
+        }
+        var rem=(startOffset+daysInMonth)%7;
+        if(rem!==0){for(var i=1;i<=7-rem;i++){var el=document.createElement('div');el.className='cal-day other-month';el.textContent=i;grid.appendChild(el);}}
+    }
+
+    function showCalDayLessons(date) {
+        var panel = document.getElementById('calLessonsPanel');
+        var dateEl = document.getElementById('calLessonsDate');
+        var listEl = document.getElementById('calLessonsList');
+
+        var dow = date.getDay();
+        var dayMap = {1:1,2:2,3:3,4:4};
+        var lessonDay = dayMap[dow];
+        var wt = getWeekTypeForDate(date);
+        var isHoliday = HOLIDAYS.indexOf(dateStr(date)) >= 0;
+        var dayNames = ['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə','Bazar'];
+
+        dateEl.textContent = date.getDate()+' '+MONTHS[date.getMonth()]+' — '+(dayNames[dow]||'');
+
+        var now = new Date();
+        var nowMin = now.getHours()*60 + now.getMinutes();
+        var isToday = date.toDateString() === now.toDateString();
+        var afterSem  = date > new Date(2026,4,29);
+        var beforeSem = date < new Date(2026,1,16);
+
+        if(afterSem){
+            listEl.innerHTML = '<div class="cal-no-lesson">🎓 Semestr bitdi</div>';
+        } else if(beforeSem){
+            listEl.innerHTML = '<div class="cal-no-lesson">📅 Semestr başlamamışdı</div>';
+        } else if(isHoliday || !lessonDay || !wt) {
+            listEl.innerHTML = '<div class="cal-no-lesson">🎉 Tətil günüdür</div>';
+        } else {
+            var lessons = getLessonsForDay(lessonDay, wt).sort(function(a,b){return a.start-b.start;});
+            if(!lessons.length) {
+                listEl.innerHTML = '<div class="cal-no-lesson">Bu gün dərs yoxdur</div>';
+            } else {
+                var isPastDay = date < now && !isToday;
+                listEl.innerHTML = lessons.map(function(l) {
+                    var rowCls = 'cal-lesson-row';
+                    if(isPastDay) {
+                        rowCls += ' is-done';
+                    } else if(isToday) {
+                        if(nowMin >= l.start && nowMin <= l.end) rowCls += ' is-current';
+                        else if(nowMin > l.end)                  rowCls += ' is-done';
+                    }
+                    var typeStr = l.type ? ' · '+l.type : '';
+                    return '<div class="'+rowCls+'">'
+                        +'<div class="cal-l-time"><span class="cal-l-time-s">'+fmt(l.start)+'</span><span class="cal-l-time-e">'+fmt(l.end)+'</span></div>'
+                        +'<div class="cal-l-dot"></div>'
+                        +'<div class="cal-l-info"><div class="cal-l-name">'+l.name+'</div><div class="cal-l-sub">🚪 '+l.room+typeStr+'</div></div>'
+                        +'</div>';
+                }).join('');
+            }
+        }
+
+        panel.classList.add('open');
+    }
+
+    // WEEK SUMMARY
+    function renderWeekSummary(){
+        var wt=getWeekType();
+        document.getElementById('summaryWeekBadge').textContent=wt==='upper'?'Üst':'Alt';
+        var total=0,mins=0;
+        for(var day=1;day<=4;day++){
+            var dl=getLessonsForDay(day,wt);
+            total+=dl.length;
+            dl.forEach(function(l){mins+=l.end-l.start;});
+        }
+        var subjectGroups=[
+            ['Proqramlaşdırmanın əsasları','Proqramlaşdırma Laboratoriya'],
+            ['İnformasiya texnologiyalarının əsasları','İnformasiya texnologiyaları əsasları Laboratoriya']
+        ];
+        var allNames=LESSONS.filter(function(l){return l.weeks==='both'||l.weeks===wt;}).map(function(l){return l.name;});
+        var normalized=allNames.map(function(name){
+            for(var i=0;i<subjectGroups.length;i++){if(subjectGroups[i].indexOf(name)>=0) return subjectGroups[i][0];}
+            return name;
+        });
+        var uniq=new Set(normalized).size;
+        document.getElementById('statTotalLessons').textContent=total;
+        document.getElementById('statTotalHours').textContent=(mins/60).toFixed(1);
+        document.getElementById('statSubjects').textContent=uniq;
+        var todayDow=getToday();
+        var nextDay=todayDow>=1&&todayDow<=3?todayDow+1:1;
+        document.getElementById('nextDayLabel').textContent=DAYNAMES[nextDay]+' — dərslər';
+        var nLessons=getLessonsForDay(nextDay,wt).sort(function(a,b){return a.start-b.start;});
+        document.getElementById('nextDayLessons').innerHTML=nLessons.length
+            ?nLessons.map(function(l){return '<div class="next-day-item"><div class="next-day-dot"></div><div class="next-day-name">'+l.name+'</div><div class="next-day-time">'+fmt(l.start)+'</div></div>';}).join('')
+            :'<div style="color:var(--text-3);font-size:0.82rem;">Dərs yoxdur</div>';
+    }
+
+    // TODAY'S BAR
+    document.getElementById('todaysBarToggle').onclick=function(){
+        var body=document.getElementById('todaysBarBody');
+        var chev=document.getElementById('todaysBarChevron');
+        var open=body.classList.toggle('open');
+        chev.classList.toggle('open',open);
+    };
+
+    function renderTodaysBar(){
+        var nowMin=new Date().getHours()*60+new Date().getMinutes();
+        var lessons=getTodaysLessons();
+        var today=getToday();
+        document.getElementById('todaysCount').textContent=lessons.length;
+        var body=document.getElementById('todaysBarBody');
+        if(today>4||!lessons.length){body.innerHTML='<div style="color:var(--text-3);font-size:0.85rem;padding:8px 4px;">Bu gün dərs yoxdur</div>';return;}
+        body.innerHTML=lessons.map(function(l){
+            var isOngoing=nowMin>=l.start&&nowMin<=l.end;
+            var isDone=nowMin>l.end;
+            var isSoon=!isOngoing&&!isDone&&(l.start-nowMin)<=30;
+            var rowCls='today-lesson-row';
+            if(isOngoing) rowCls+=' is-current';
+            if(isDone) rowCls+=' is-done';
+            var status='';
+            if(isOngoing) status='<span class="tl-status live">Davam edir</span>';
+            else if(isDone) status='<span class="tl-status done">Bitdi</span>';
+            else if(isSoon) status='<span class="tl-status soon">Tezliklə</span>';
+            return '<div class="'+rowCls+'"><div class="tl-time-col"><span class="tl-time">'+fmt(l.start)+'</span><span class="tl-time-end">'+fmt(l.end)+'</span></div><div class="tl-dot"></div><div class="tl-info"><div class="tl-name">'+l.name+'</div><div class="tl-sub">🚪 '+l.room+(l.type?' · '+l.type:'')+'</div></div>'+status+'</div>';
+        }).join('');
+    }
+
+    // MAIN LESSON CARD
+    function renderMain(){
+        var container=document.getElementById('lessonCard');
+        var today=getToday();
+        var lesson=findCurrentLesson();
+        var semesterEnded = new Date() > new Date(2026,4,29);
+        if(!lesson){
+            var msg;
+            if(semesterEnded){
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">🎓</div><div class="no-lesson-text">Semestr bitdi</div></div>';
+            } else if(isTodayHoliday()){
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">🎉</div><div class="no-lesson-text">Bu gün tətildir</div></div>';
+            } else if(today>4){
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">📭</div><div class="no-lesson-text">Bu gün dərs yoxdur</div></div>';
+            } else {
+                msg='<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Bugünki dərslər bitdi</div></div>';
+            }
+            container.innerHTML=msg;
+            return;
+        }
+        var nowMin=new Date().getHours()*60+new Date().getMinutes();
+        var cdText,cdSub,statusCls='',progressHTML='';
+        if(lesson.status==='upcoming'){
+            var diff=lesson.start-nowMin;
+            cdText='Başlamasına '+(Math.floor(diff/60)>0?Math.floor(diff/60)+' saat ':'')+diff%60+' dəqiqə';
+            cdSub=fmt(lesson.start)+'-da başlayır';
+        } else {
+            var pct=Math.min(100,Math.round(((nowMin-lesson.start)/(lesson.end-lesson.start))*100));
+            var nearEnd=pct>=75;
+            var diff=lesson.end-nowMin;
+            cdText='Bitməsinə '+(Math.floor(diff/60)>0?Math.floor(diff/60)+' saat ':'')+diff%60+' dəqiqə';
+            cdSub=fmt(lesson.end)+'-da bitir';
+            statusCls='ongoing';
+            progressHTML='<div class="progress-wrap"><div class="progress-header"><span class="progress-label">İrəliləyiş</span><span class="progress-pct">'+pct+'%</span></div><div class="progress-track"><div class="progress-fill'+(nearEnd?' near-end':'')+'" style="width:'+pct+'%"></div></div></div>';
+        }
+
+        if(lesson.isKollokvium){
+            // Special kollokvium card
+            container.innerHTML=
+                '<div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#f59e0b;font-weight:700;margin-bottom:8px;">📝 KOLLOKVİUM GÜN</div>'+
+                '<div class="lesson-name">'+lesson.name+'</div>'+
+                '<div class="teacher-name">'+lesson.teacherEmoji+' '+lesson.teacher+'</div>'+
+                '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(lesson.start)+'–'+fmt(lesson.end)+'</span><span class="meta-chip room">🏛️ '+lesson.room+'</span></div>'+
+                '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
+                progressHTML+
+                '<a href="imtahan.html" style="display:block;margin-top:12px;padding:11px;background:linear-gradient(135deg,#b45309,#f59e0b);border-radius:12px;color:white;font-weight:700;font-size:0.9rem;text-align:center;text-decoration:none;">📄 İmtahan suallarını aç</a>';
+        } else {
+            var typeHTML=lesson.type?'<span class="lesson-type-chip">'+lesson.type+'</span>':'';
+            container.innerHTML=
+                '<div class="lesson-name">'+lesson.name+typeHTML+'</div>'+
+                '<div class="teacher-name">'+lesson.teacherEmoji+' '+lesson.teacher+'</div>'+
+                '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(lesson.start)+'–'+fmt(lesson.end)+'</span><span class="meta-chip room">🚪 '+lesson.room+'</span></div>'+
+                '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
+                progressHTML;
+        }
+    }
+
+    // DATE BAR
+    function updateDateTime(){
+        var n=new Date();
+        document.getElementById('todayDate').innerHTML=n.getDate()+' '+MONTHS[n.getMonth()]+' '+n.getFullYear()+' <span class="date-caret'+(datePanelOpen?' open':'')+'" id="dateCaret">▼</span>';
+        document.getElementById('liveClock').textContent=n.toLocaleTimeString('az-AZ',{hour:'2-digit',minute:'2-digit'});
+        document.getElementById('weekType').textContent=getWeekType()==='upper'?'Üst həftə':'Alt həftə';
+    }
+
+    // SCHEDULE MODAL
+    function renderSchedule(wt){
+        var c=document.getElementById('scheduleContainer'); c.innerHTML='';
+        document.getElementById('thisWeekType').textContent=getWeekType()==='upper'?'(Üst)':'(Alt)';
+        document.getElementById('upperWeekBtn').classList.toggle('active',wt==='upper');
+        document.getElementById('lowerWeekBtn').classList.toggle('active',wt==='lower');
+        [{ad:'I GÜN',saat:'09:00–13:20',day:1},{ad:'II GÜN',saat:'09:00–13:20',day:2},{ad:'III GÜN',saat:'09:00–11:50',day:3},{ad:'IV GÜN',saat:'09:00–13:20',day:4}]
+        .forEach(function(g){
+            var dersler=getLessonsForDay(g.day,wt).sort(function(a,b){return a.start-b.start;});
+            var html='<div class="schedule-col"><div class="col-title">'+g.ad+' <span>'+g.saat+'</span></div>';
+            if(!dersler.length){html+='<div style="color:var(--text-3);padding:16px 0;text-align:center;font-size:0.9rem;">Dərs yoxdur</div>';}
+            else{dersler.forEach(function(d){var badge=d.type?'<span class="lesson-type-badge">'+d.type+'</span>':'';html+='<div class="lesson-block"><div class="block-title">'+d.name+badge+'</div><div class="block-teacher">'+d.teacherEmoji+' '+d.teacher+'</div><div class="block-meta"><span>🕒 '+fmt(d.start)+'–'+fmt(d.end)+'</span><span>🚪 '+d.room+'</span></div></div>';});}
+            html+='</div>'; c.innerHTML+=html;
+        });
+        addScheduleClickHandlers();
+    }
+
+    var scheduleModal=document.getElementById('scheduleModal');
+    var weeksModal=document.getElementById('weeksModal');
+    document.getElementById('showScheduleBtn').onclick=function(){renderSchedule(getWeekType());scheduleModal.style.display='block';};
+    document.getElementById('showWeeksBtn').onclick=function(){weeksModal.style.display='block';};
+    document.getElementById('upperWeekBtn').onclick=function(){renderSchedule('upper');};
+    document.getElementById('lowerWeekBtn').onclick=function(){renderSchedule('lower');};
+    document.getElementById('closeScheduleModal').onclick=function(){scheduleModal.style.display='none';};
+    document.getElementById('closeWeeksModal').onclick=function(){weeksModal.style.display='none';};
+    window.onclick=function(e){
+        if(e.target===scheduleModal) scheduleModal.style.display='none';
+        if(e.target===weeksModal) weeksModal.style.display='none';
+    };
+
+    // SUBJECT POPUP — fully dynamic, recalculated in real time
+    var SEMESTER_START = new Date(2026,1,16); // Feb 16
+    var SEMESTER_END   = new Date(2026,4,29); // May 29
+
+    // Map lesson name → canonical subject key
+    function normaliseSubject(name) {
+        name = name.trim();
+        if(name.indexOf('Proqramlaşdırma') >= 0) return 'Proqramlaşdırmanın əsasları';
+        if(name.indexOf('İnformasiya')     >= 0) return 'İnformasiya texnologiyalarının əsasları';
+        if(name.indexOf('XDIAK')           >= 0) return 'XDIAK';
+        if(name.indexOf('Diskret')         >= 0) return 'Diskret riyaziyyat';
+        if(name.indexOf('Diferensial')     >= 0) return 'Diferensial tənliklər';
+        if(name.indexOf('Sahibkar')        >= 0) return 'Sahibkarlığın əsasları və biznesə giriş';
+        return name;
+    }
+
+    var SUBJECT_META = {
+        'Proqramlaşdırmanın əsasları': {
+            teachers: '👨‍🏫 Talıbzadə Sərxan (Mühazirə + Laboratoriya)',
+            limitCount: 11, limitHours: 75, limitRule: '5-7 qayıb 1 bal, 8-10 qayıb 2 bal aparır',
+            kesrText: "11-ci qayıbda kəsr"
+        },
+        'İnformasiya texnologiyalarının əsasları': {
+            teachers: '👨‍🏫 Yunis Bədəlov · 👩‍🏫 Rəna Hüseynova',
+            limitCount: 13, limitHours: 90, limitRule: '6-8 qayıb 1 bal, 9-12 qayıb 2 bal aparır',
+            kesrText: "13-cü qayıbda kəsr"
+        },
+        'XDIAK': {
+            teachers: '👩‍🏫 Fərzəliyeva Ədilə (Seminar)',
+            limitCount: 11, limitHours: 75, limitRule: '5-7 qayıb 1 bal, 8-10 qayıb 2 bal aparır',
+            kesrText: "11-ci qayıbda kəsr", bookPdf: 'book.pdf'
+        },
+        'Diskret riyaziyyat': {
+            teachers: '👨‍🏫 Bəndəliyev Rövşən (Mühazirə + Seminar)',
+            limitCount: 5, limitHours: 30, limitRule: '3 qayıb 1 bal, 4 qayıb 2 bal aparır',
+            kesrText: "5-ci qayıbda kəsr"
+        },
+        'Diferensial tənliklər': {
+            teachers: '👨‍🏫 Bəndəliyev Rövşən · 👩‍🏫 Dərişova Aynur',
+            limitCount: 5, limitHours: 30, limitRule: '3 qayıb 1 bal, 4 qayıb 2 bal aparır',
+            kesrText: "5-ci qayıbda kəsr"
+        },
+        'Sahibkarlığın əsasları və biznesə giriş': {
+            teachers: '👩‍🏫 Əliyeva Günay · 👩‍🏫 Mirzai Pərvin',
+            limitCount: 5, limitHours: 30, limitRule: '3 qayıb 1 bal, 4 qayıb 2 bal aparır',
+            kesrText: "5-ci qayıbda kəsr"
+        }
+    };
+
+    function countLessonsInRange(subjKey, fromDate, toDate, onlyEnded) {
+        var count = 0;
+        var now = new Date();
+        var nowMin = now.getHours()*60 + now.getMinutes();
+        var todayStr = now.toDateString();
+
+        for(var d = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate()); d <= toDate; d.setDate(d.getDate()+1)) {
+            var dow = d.getDay();
+            var dayMap = {1:1,2:2,3:3,4:4};
+            var lessonDay = dayMap[dow];
+            if(!lessonDay) continue;
+            var wt = getWeekTypeForDate(d);
+            if(!wt) continue;
+
+            var dStr = d.toDateString();
+            var isPast   = d < now && dStr !== todayStr;
+            var isToday  = dStr === todayStr;
+
+            LESSONS.forEach(function(l) {
+                if(l.day !== lessonDay) return;
+                if(l.weeks !== 'both' && l.weeks !== wt) return;
+                if(normaliseSubject(l.name) !== subjKey) return;
+
+                if(onlyEnded) {
+                    if(isPast) { count++; }
+                    else if(isToday && nowMin > l.end) { count++; }
+                } else {
+                    count++;
+                }
+            });
+        }
+        return count;
+    }
+
+    function getSubjectCounts(subjKey) {
+        var total  = countLessonsInRange(subjKey, SEMESTER_START, SEMESTER_END, false);
+        var done   = countLessonsInRange(subjKey, SEMESTER_START, SEMESTER_END, true);
+        var remaining = total - done;
+        return { total: total, done: done, remaining: remaining };
+    }
+
+    var subjModal = document.getElementById('subjModal');
+
+    function openSubjectPopup(rawName) {
+        var key  = normaliseSubject(rawName);
+        var meta = SUBJECT_META[key];
+        if(!meta) return;
+
+        var c    = getSubjectCounts(key);
+        var pct  = c.total > 0 ? Math.round((c.done / c.total) * 100) : 0;
+
+        document.getElementById('subjName').textContent    = key;
+        document.getElementById('subjTeacher').textContent = meta.teachers;
+        document.getElementById('subjDone').textContent    = c.done;
+        document.getElementById('subjLeft').textContent    = c.remaining;
+        document.getElementById('subjTotal').textContent   = c.total;
+        document.getElementById('subjPct').textContent     = pct + '%';
+
+        // limit box
+        var lc = document.getElementById('subjLimitCount');
+        var lh = document.getElementById('subjLimitHours');
+        lc.textContent = meta.limitCount;
+        lh.textContent = meta.limitHours;
+        document.getElementById('subjLimitRule').textContent = meta.limitRule;
+        document.getElementById('subjKesrText').textContent = meta.kesrText;
+
+        var bookBox = document.getElementById('subjBookBox');
+        var bookBtn = document.getElementById('subjBookBtn');
+        if(meta.bookPdf){
+            bookBox.style.display = 'block';
+            bookBtn.href = meta.bookPdf;
+        } else {
+            bookBox.style.display = 'none';
+        }
+        var limitColor = meta.limitCount >= 13 ? 'var(--red)' : meta.limitCount >= 11 ? 'var(--amber)' : 'var(--green)';
+        lc.style.color = limitColor;
+        lh.style.color = limitColor;
+
+        var fill = document.getElementById('subjFill');
+        fill.style.width = '0%';
+        fill.className   = 'subj-progress-fill';
+        if(pct >= 75)      fill.className += ' done';
+        else if(pct >= 40) fill.className += ' warn';
+        setTimeout(function(){ fill.style.width = pct + '%'; }, 30);
+
+        var leftEl = document.getElementById('subjLeft');
+        leftEl.className = 'subj-stat-val';
+        if(c.remaining <= 3)       leftEl.className += ' red';
+        else if(c.remaining <= 7)  leftEl.className += ' amber';
+        else                       leftEl.className += ' green';
+
+        subjModal.classList.add('open');
+    }
+
+    document.getElementById('subjClose').onclick = function(){ subjModal.classList.remove('open'); };
+    subjModal.addEventListener('click', function(e){
+        if(e.target === subjModal) subjModal.classList.remove('open');
+    });
+
+    function addScheduleClickHandlers() {
+        document.querySelectorAll('.lesson-block').forEach(function(el){
+            el.onclick = function(e){
+                e.stopPropagation();
+                var title = el.querySelector('.block-title');
+                if(title) openSubjectPopup(title.textContent.trim());
+            };
+        });
+    }
+
+    document.querySelectorAll('.subject-card').forEach(function(el){
+        el.addEventListener('click', function(){
+            var nameEl = el.querySelector('.subject-name');
+            if(nameEl) openSubjectPopup(nameEl.textContent.trim());
+        });
+    });
+
+    function refresh(){updateDateTime();renderMain();renderTodaysBar();}
+    var now=new Date();
+    calViewYear=now.getFullYear(); calViewMonth=now.getMonth();
+    refresh();
+    setInterval(refresh,1000);
 </script>
 </body>
 </html>
