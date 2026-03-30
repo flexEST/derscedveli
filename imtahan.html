@@ -2,8 +2,8 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İmtahan Mövzuları</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>İmtahan Mövzuları - Fənn Testləri</title>
     <link rel="icon" type="image/png" href="logo.png">
     <script>
         (function() {
@@ -153,7 +153,6 @@
         .option.correct  .opt-check { background:rgba(34,197,94,0.3);  border-color:rgba(34,197,94,0.6);  color:#86efac; }
         .option.wrong    .opt-check { background:rgba(239,68,68,0.2);   border-color:rgba(239,68,68,0.5);  color:#fca5a5; }
         .option.missed   { background:rgba(34,197,94,0.06); border-color:rgba(34,197,94,0.25); }
-        .option.missed   .opt-check { border-color:rgba(34,197,94,0.5); }
         .match-wrap { display:flex; flex-direction:column; gap:10px; }
         .match-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; }
         .match-item.correct-item { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); }
@@ -170,14 +169,12 @@
         .q-type-badge.multi { background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); color:#c084fc; }
         .q-type-badge.match { background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.3); color:var(--amber); }
         .q-type-badge.order { background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.3); color:#93c5fd; }
-        .q-img { width:100%; border-radius:12px; margin-bottom:14px; border:1px solid var(--border); }
+        .q-img { width:100%; border-radius:12px; margin-bottom:14px; border:1px solid var(--border); max-height:200px; object-fit:contain; background:var(--card); }
         .img-match-item { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 13px; margin-bottom:8px; }
         .img-match-item.correct-item { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); }
         .img-match-item.wrong-item   { background:rgba(239,68,68,0.07);  border-color:rgba(239,68,68,0.25); }
         .img-match-label { font-size:0.88rem; font-weight:700; color:var(--text); margin-bottom:7px; }
         .img-match-vars  { display:flex; flex-wrap:wrap; gap:6px; }
-
-        /* ORDER type styles */
         .order-list { display:flex; flex-direction:column; gap:8px; }
         .order-item { background:var(--card); border:1.5px solid var(--border); border-radius:13px; padding:12px 14px; display:flex; align-items:center; gap:12px; cursor:grab; user-select:none; transition:all .2s; }
         .order-item:active { cursor:grabbing; }
@@ -194,21 +191,23 @@
         .order-correct-answer { margin-top:10px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.2); border-radius:12px; padding:10px 14px; }
         .order-correct-answer-title { font-size:0.72rem; font-weight:700; color:#86efac; letter-spacing:.5px; text-transform:uppercase; margin-bottom:6px; }
         .order-correct-row { font-size:0.82rem; color:var(--text2); padding:2px 0; }
-
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-
-        /* XDIAK words button */
         .popup-btn.words { background:linear-gradient(135deg,#6d28d9,#8b5cf6); box-shadow:0 8px 20px -4px rgba(139,92,246,0.35); }
-
-        /* Results section */
-        .results-section { background:var(--surface); border:1px solid var(--border); border-radius:24px; margin-bottom:14px; overflow:hidden; animation:fadeUp .4s ease .2s both; }
-        .results-header { display:flex; align-items:center; gap:14px; padding:18px; cursor:pointer; transition:background .2s; user-select:none; }
-        .results-header:active { background:rgba(255,255,255,0.04); }
-        .results-panel { max-height:0; overflow:hidden; transition:max-height .5s cubic-bezier(.16,1,.3,1); }
-        .results-section.open .results-panel { max-height:5000px; border-top:1px solid var(--border); }
-        .results-section.open .results-chevron { transform:rotate(180deg); }
-        .results-chevron { font-size:18px; color:var(--text3); transition:transform .3s cubic-bezier(.16,1,.3,1); flex-shrink:0; }
-        .results-inner { padding:14px; }
+        .hist-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; position:relative; transition:background .2s; }
+        .hist-item:hover .hist-delete { opacity:0.8; visibility:visible; }
+        .hist-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+        .hist-dot.pass { background:var(--green); }
+        .hist-dot.fail { background:var(--red); }
+        .hist-info { flex:1; min-width:0; }
+        .hist-subj { font-size:0.85rem; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .hist-meta { font-size:0.72rem; color:var(--text3); margin-top:2px; }
+        .hist-score { font-size:1rem; font-weight:800; flex-shrink:0; margin-right:6px; }
+        .hist-score.pass { color:var(--green); }
+        .hist-score.fail { color:var(--red); }
+        .hist-delete { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:12px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0; visibility:hidden; transition:opacity 0.2s, background 0.2s; flex-shrink:0; color:#f87171; font-size:1rem; }
+        .hist-delete:hover { background:rgba(239,68,68,0.3); color:#fff; border-color:#ef4444; }
+        .hist-clear { width:100%; padding:10px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:12px; color:#fca5a5; font-family:var(--r); font-size:0.8rem; font-weight:600; cursor:pointer; margin-top:12px; transition:background .2s; }
+        .hist-clear:hover { background:rgba(239,68,68,0.15); }
         .best-section { margin-bottom:16px; }
         .best-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; }
         .best-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
@@ -219,21 +218,8 @@
         .best-card-score.fail { color:var(--red); }
         .best-card-score.none { color:var(--text3); font-size:1rem; font-weight:600; }
         .best-card-koll { font-size:0.68rem; color:var(--text3); margin-top:2px; }
-        .hist-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; }
+        .hist-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; margin-top:16px; }
         .hist-empty { text-align:center; color:var(--text3); font-size:0.85rem; padding:20px 0; }
-        .hist-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; }
-        .hist-item:last-child { margin-bottom:0; }
-        .hist-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-        .hist-dot.pass { background:var(--green); }
-        .hist-dot.fail { background:var(--red); }
-        .hist-info { flex:1; min-width:0; }
-        .hist-subj { font-size:0.85rem; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .hist-meta { font-size:0.72rem; color:var(--text3); margin-top:2px; }
-        .hist-score { font-size:1rem; font-weight:800; flex-shrink:0; }
-        .hist-score.pass { color:var(--green); }
-        .hist-score.fail { color:var(--red); }
-        .hist-clear { width:100%; padding:10px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:12px; color:#fca5a5; font-family:var(--r); font-size:0.8rem; font-weight:600; cursor:pointer; margin-top:12px; transition:background .2s; }
-        .hist-clear:hover { background:rgba(239,68,68,0.15); }
     </style>
 </head>
 <body>
@@ -250,15 +236,13 @@
         <span id="dateNow">—</span>
         <span class="pill">2025–2026 / II Semestr</span>
     </div>
-    <div style="margin:-8px 0 18px;background:rgba(245,166,35,0.10);border:1px solid rgba(245,166,35,0.25);border-radius:14px;padding:10px 14px;text-align:center;font-size:0.74rem;color:#f5a623;letter-spacing:0.2px;font-weight:600;">
-        🔄 Dəyişiklikləri görmək üçün yuxarıdakı yenilə düyməsini bas
-    </div>
-    <button onclick="openResultsOverlay()" style="width:100%;margin-bottom:14px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:var(--r);transition:background .18s,border-color .18s;" onmouseover="this.style.background='rgba(59,130,246,0.08)';this.style.borderColor='rgba(59,130,246,0.25)'" onmouseout="this.style.background='var(--surface)';this.style.borderColor='var(--border)'">
-        <span style="font-size:0.92rem;font-weight:600;color:var(--text);">Test Nəticələri - nəticələri göstər</span>
+    <button onclick="openResultsOverlay()" style="width:100%;margin-bottom:14px;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:var(--r);">
+        <span style="font-size:0.92rem;font-weight:600;color:var(--text);">Test Nəticələri</span>
         <span id="resultsBadge" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#86efac;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;">0 nəticə</span>
     </button>
+    
     <!-- KOLLOKVIUM I -->
-    <div class="exam-card" data-index="0" style="animation-delay:.08s">
+    <div class="exam-card" data-index="0">
         <div class="exam-header" onclick="toggle(0)">
             <div class="exam-icon" style="background:rgba(59,130,246,0.15);">📝</div>
             <div class="exam-meta">
@@ -267,29 +251,11 @@
             </div>
             <span class="chevron">⌄</span>
         </div>
-        <div class="subjects-panel"><div class="subjects-inner">
-            <div class="subject-row" onclick="openSubject('Diskret riyaziyyat','I','diskret_riyaziyyat.pdf','diskret_riyaziyyat')">
-                <div class="subject-num">1</div><div class="subject-info"><div class="subject-name">Diskret riyaziyyat</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('Proqramlaşdırmanın əsasları','I','proqramlasdirma.pdf','proqramlasdirma')">
-                <div class="subject-num">2</div><div class="subject-info"><div class="subject-name">Proqramlaşdırmanın əsasları</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('İnformasiya texnologiyalarının əsasları','I','informasiya_texnologiyalari.pdf','informasiya_texnologiyalari')">
-                <div class="subject-num">3</div><div class="subject-info"><div class="subject-name">İnformasiya texnologiyalarının əsasları</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('XDIAK','I','xdiak.pdf','xdiak')">
-                <div class="subject-num">4</div><div class="subject-info"><div class="subject-name">XDIAK</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('Diferensial tənliklər','I','diferensial_tenlikler.pdf','diferensial_tenlikler')">
-                <div class="subject-num">5</div><div class="subject-info"><div class="subject-name">Diferensial tənliklər</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('Sahibkarlığın əsasları və biznesə giriş','I','sahibkarlik.pdf','sahibkarlik')">
-                <div class="subject-num">6</div><div class="subject-info"><div class="subject-name">Sahibkarlığın əsasları və biznesə giriş</div><div class="subject-hint">Mövzu sualları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-        </div></div>
+        <div class="subjects-panel"><div class="subjects-inner" id="subjects1"></div></div>
     </div>
+    
     <!-- KOLLOKVIUM II -->
-    <div class="exam-card" data-index="1" style="animation-delay:.14s">
+    <div class="exam-card" data-index="1">
         <div class="exam-header" onclick="toggle(1)">
             <div class="exam-icon" style="background:rgba(245,166,35,0.15);">📋</div>
             <div class="exam-meta">
@@ -298,31 +264,12 @@
             </div>
             <span class="chevron">⌄</span>
         </div>
-        <div class="subjects-panel"><div class="subjects-inner">
-            <div class="subject-row" onclick="openSubject('Diskret riyaziyyat','II','diskret_riyaziyyat_2.pdf','diskret_riyaziyyat_2')">
-                <div class="subject-num">1</div><div class="subject-info"><div class="subject-name">Diskret riyaziyyat</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('Proqramlaşdırmanın əsasları','II','proqramlasdirma_2.pdf','proqramlasdirma_2')">
-                <div class="subject-num">2</div><div class="subject-info"><div class="subject-name">Proqramlaşdırmanın əsasları</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('İnformasiya texnologiyalarının əsasları','II','informasiya_texnologiyalari_2.pdf','informasiya_texnologiyalari_2')">
-                <div class="subject-num">3</div><div class="subject-info"><div class="subject-name">İnformasiya texnologiyalarının əsasları</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('XDIAK','II','xdiak_2.pdf','xdiak_2')">
-                <div class="subject-num">4</div><div class="subject-info"><div class="subject-name">XDIAK</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('Diferensial tənliklər','II','diferensial_tenlikler_2.pdf','diferensial_tenlikler_2')">
-                <div class="subject-num">5</div><div class="subject-info"><div class="subject-name">Diferensial tənliklər</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-            <div class="subject-row" onclick="openSubject('Sahibkarlığın əsasları və biznesə giriş','II','sahibkarlik_2.pdf','sahibkarlik_2')">
-                <div class="subject-num">6</div><div class="subject-info"><div class="subject-name">Sahibkarlığın əsasları və biznesə giriş</div><div class="subject-hint">II kollokvium mövzuları</div></div><span class="pdf-badge">PDF</span>
-            </div>
-        </div></div>
+        <div class="subjects-panel"><div class="subjects-inner" id="subjects2"></div></div>
     </div>
     <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
 </div>
 
-<!-- SUBJECT POPUP -->
+<!-- POPUPS -->
 <div class="popup-overlay" id="subjectPopup" onclick="overlayClick(event)">
     <div class="popup-box">
         <div class="popup-close" onclick="closeSubject()">✕</div>
@@ -331,20 +278,11 @@
         <div class="popup-title" id="popTitle">—</div>
         <p class="popup-sub">Mövzu materiallarını aşağıdan seçin</p>
         <div class="popup-divider"></div>
-        <button class="popup-btn pdf" id="popPdfBtn" onclick="openPDF()">
-            <div class="pb-icon">📄</div>
-            <div class="pb-text"><span class="pb-title">İmtahan sualları</span><span class="pb-sub">PDF faylını aç</span></div>
-            <span class="pb-arr">›</span>
-        </button>
-        <button class="popup-btn test" onclick="openQuiz()">
-            <div class="pb-icon">✏️</div>
-            <div class="pb-text"><span class="pb-title">Özünü yoxla</span><span class="pb-sub">İnteraktiv test</span></div>
-            <span class="pb-arr">›</span>
-        </button>
+        <button class="popup-btn pdf" onclick="openPDFChoice()"><div class="pb-icon">📄</div><div class="pb-text"><span class="pb-title">İmtahan sualları</span><span class="pb-sub">PDF faylını aç</span></div><span class="pb-arr">›</span></button>
+        <button class="popup-btn test" onclick="openQuiz()"><div class="pb-icon">✏️</div><div class="pb-text"><span class="pb-title">Özünü yoxla</span><span class="pb-sub">İnteraktiv test</span></div><span class="pb-arr">›</span></button>
     </div>
 </div>
 
-<!-- PDF CHOICE POPUP -->
 <div class="popup-overlay" id="pdfChoicePopup" onclick="pdfChoiceOverlayClick(event)">
     <div class="popup-box">
         <div class="popup-close" onclick="closePdfChoice()">✕</div>
@@ -353,54 +291,28 @@
         <div class="popup-title" id="pdfChoiceTitle">—</div>
         <p class="popup-sub">Hansı variantı açmaq istəyirsiniz?</p>
         <div class="popup-divider"></div>
-        <button class="popup-btn pdf" onclick="openPDF('cavabli')">
-            <div class="pb-icon">✅</div>
-            <div class="pb-text"><span class="pb-title">Cavablı variant</span><span class="pb-sub">Düzgün cavablarla PDF</span></div>
-            <span class="pb-arr">›</span>
-        </button>
-        <button class="popup-btn" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);box-shadow:0 8px 20px -4px rgba(59,130,246,0.35);" onclick="openPDF('cavabsiz')">
-            <div class="pb-icon">📝</div>
-            <div class="pb-text"><span class="pb-title">Cavabsız variant</span><span class="pb-sub">Özün həll etmək üçün</span></div>
-            <span class="pb-arr">›</span>
-        </button>
-        <button class="popup-btn words" id="pdfWordsBtn" onclick="openWords()" style="display:none;">
-            <div class="pb-icon">📚</div>
-            <div class="pb-text"><span class="pb-title">Sözlər və Qaydalar</span><span class="pb-sub">Imtahana aid materiallar</span></div>
-            <span class="pb-arr">›</span>
-        </button>
+        <button class="popup-btn pdf" onclick="openPDF('cavabli')"><div class="pb-icon">✅</div><div class="pb-text"><span class="pb-title">Cavablı variant</span><span class="pb-sub">Düzgün cavablarla PDF</span></div><span class="pb-arr">›</span></button>
+        <button class="popup-btn" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);" onclick="openPDF('cavabsiz')"><div class="pb-icon">📝</div><div class="pb-text"><span class="pb-title">Cavabsız variant</span><span class="pb-sub">Özün həll etmək üçün</span></div><span class="pb-arr">›</span></button>
+        <button class="popup-btn words" id="pdfWordsBtn" onclick="openWords()" style="display:none;"><div class="pb-icon">📚</div><div class="pb-text"><span class="pb-title">Sözlər və Qaydalar</span><span class="pb-sub">Imtahana aid materiallar</span></div><span class="pb-arr">›</span></button>
     </div>
 </div>
 
-<!-- RESULTS OVERLAY -->
 <div class="quiz-overlay" id="resultsOverlay">
     <div class="quiz-wrap">
-        <div class="quiz-header">
-            <div class="quiz-back" onclick="closeResultsOverlay()">←</div>
-            <div>
-                <div class="quiz-htitle">Test Nəticələri</div>
-                <div class="quiz-hsub" id="resultCount">0 test edilib</div>
-            </div>
-        </div>
-        <div style="margin-bottom:18px;">
-            <div class="best-title">⭐ Hər fənn üzrə ən yaxşı nəticə</div>
-            <div class="best-grid" id="bestGrid"></div>
-        </div>
+        <div class="quiz-header"><div class="quiz-back" onclick="closeResultsOverlay()">←</div><div><div class="quiz-htitle">Test Nəticələri</div><div class="quiz-hsub" id="resultCount">0 test edilib</div></div></div>
+        <div class="best-section"><div class="best-title">⭐ Hər fənn üzrə ən yaxşı nəticə</div><div class="best-grid" id="bestGrid"></div></div>
         <div class="hist-title">📋 Bütün nəticələr</div>
         <div id="histList"></div>
         <button class="hist-clear" id="clearBtn">🗑 Bütün nəticələri sil</button>
     </div>
 </div>
 
-<!-- QUIZ POPUP -->
 <div class="quiz-overlay" id="quizOverlay">
     <div class="quiz-wrap">
         <div class="quiz-header">
             <div class="quiz-back" onclick="closeQuiz()">←</div>
-            <div style="flex:1;">
-                <div class="quiz-htitle" id="quizTitle">Test</div>
-                <div class="quiz-hsub">5 sual</div>
-            </div>
-            <div id="quizTimer" style="display:flex;align-items:center;justify-content:center;min-width:54px;height:40px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;font-size:0.95rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:1px;flex-shrink:0;transition:background .3s,color .3s,border-color .3s;">10:00</div>
+            <div style="flex:1;"><div class="quiz-htitle" id="quizTitle">Test</div><div class="quiz-hsub" id="quizSubtitle">5 sual</div></div>
+            <div id="quizTimer" style="display:flex;align-items:center;justify-content:center;min-width:54px;height:40px;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:12px;font-size:0.95rem;font-weight:800;color:var(--text);">10:00</div>
         </div>
         <div class="qtabs" id="qtabs"></div>
         <div id="qpanels"></div>
@@ -408,677 +320,705 @@
 </div>
 
 <script>
-    const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
-    const nd=new Date();
-    document.getElementById('dateNow').textContent=nd.getDate()+' '+months[nd.getMonth()]+' '+nd.getFullYear();
+// ==================== INITIALIZATION ====================
+const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
+document.getElementById('dateNow').textContent = new Date().getDate()+' '+months[new Date().getMonth()]+' '+new Date().getFullYear();
 
-    function toggle(idx){
-        document.querySelectorAll('.exam-card').forEach((c,i)=>{ i===idx ? c.classList.toggle('open') : c.classList.remove('open'); });
-    }
-    document.querySelectorAll('.exam-card')[0].classList.add('open');
+// Subject data
+const subjectsData = {
+    'I': [
+        {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat.pdf', key:'diskret_riyaziyyat'},
+        {name:'Proqramlaşdırmanın əsasları', pdf:'proqramlasdirma.pdf', key:'proqramlasdirma'},
+        {name:'İnformasiya texnologiyalarının əsasları', pdf:'informasiya_texnologiyalari.pdf', key:'informasiya_texnologiyalari'},
+        {name:'XDIAK', pdf:'xdiak.pdf', key:'xdiak'},
+        {name:'Diferensial tənliklər', pdf:'diferensial_tenlikler.pdf', key:'diferensial_tenlikler'},
+        {name:'Sahibkarlığın əsasları və biznesə giriş', pdf:'sahibkarlik.pdf', key:'sahibkarlik'}
+    ],
+    'II': [
+        {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat_2.pdf', key:'diskret_riyaziyyat_2'},
+        {name:'Proqramlaşdırmanın əsasları', pdf:'proqramlasdirma_2.pdf', key:'proqramlasdirma_2'},
+        {name:'İnformasiya texnologiyalarının əsasları', pdf:'informasiya_texnologiyalari_2.pdf', key:'informasiya_texnologiyalari_2'},
+        {name:'XDIAK', pdf:'xdiak_2.pdf', key:'xdiak_2'},
+        {name:'Diferensial tənliklər', pdf:'diferensial_tenlikler_2.pdf', key:'diferensial_tenlikler_2'},
+        {name:'Sahibkarlığın əsasları və biznesə giriş', pdf:'sahibkarlik_2.pdf', key:'sahibkarlik_2'}
+    ]
+};
 
-    const QUIZ_DATA = {
-    'diskret_riyaziyyat': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'IMG_B', img:'diskret_1.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[3],[0,1,2],[4]] },
-            { type:'IMG_B', img:'diskret_2.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[2],[3],[0]] },
-            { type:'IMG_B', img:'diskret_3.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[1],[2,4],[3]] },
-            { type:'IMG_B', img:'diskret_4.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[2],[4]] },
-            { type:'IMG_B', img:'diskret_5.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[1],[2,3],[0]] }
-        ]
-    }],
-    'diskret_riyaziyyat_2': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'STD', text:'Sual 1 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:0 },
-            { type:'STD', text:'Sual 2 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:1 },
-            { type:'STD', text:'Sual 3 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:2 },
-            { type:'STD', text:'Sual 4 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:3 },
-            { type:'STD', text:'Sual 5 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
-        ]
-    }],
-    'proqramlasdirma': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'STD', text:'Sual 1 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:0 },
-            { type:'STD', text:'Sual 2 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:1 },
-            { type:'STD', text:'Sual 3 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:2 },
-            { type:'STD', text:'Sual 4 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:3 },
-            { type:'STD', text:'Sual 5 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
-        ]
-    }],
-    'proqramlasdirma_2': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'STD', text:'Sual 1 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:0 },
-            { type:'STD', text:'Sual 2 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:1 },
-            { type:'STD', text:'Sual 3 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:2 },
-            { type:'STD', text:'Sual 4 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:3 },
-            { type:'STD', text:'Sual 5 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
-        ]
-    }],
-    'informasiya_texnologiyalari': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'A', text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir? ', statements:['Müəyyənlik','Kütləvilik','Nəticəvilik','İctimailik','Sonsuzluq'], correct:[0,1,2] },
-            { type:'ORDER', text:'2. Aşağıda Exceldə verilən funksiyaların hesablamalarını artma sirasina görə düzün:', statements:['z=2x+5 haradakı x=6 ','y=ax+b haradakı a=3; b=2; x=2 ','s=5y+10x haradakı y=3; x=2 '], correct:[1,0,2] },
-            { type:'ORDER', text:'3. Aşağıda verilən variantlardan budaqlanan alqoritmin həll ardıcılığını göstərin: ', statements:['Daxil etmə ','Hesablama ','Şərt bloku'], correct:[0,1,2] },
-            { type:'B', text:'4. Uyğunluğu müəyyən edin: ', items:['MS EXCEL(2013) Görünüş (View-Вид) ','MS EXCEL(2013) Data(Data-Данные) ','MS EXCEL(2013) Daxil et( İnsert –Вставить) '], variants:['Formula sətri','Çeşidləmə ','Diaqram','Orfoqrafiya','Proqressiya '], correctMap:[[0],[1],[2]] },
-            { type:'B', text:'5.Uyğunluğu müəyyən edin: ', items:['Antivirus proqramları ','Arxivləşdirmə proqramları ','Tətbiqi proqramlar '], variants:['Dilmanc, Simulyasiya','Forex c – Kasperski ','Linux','WinRar','Dr Web'], correctMap:[[4],[3],[0]] }
-        ]
-    }],
-    'informasiya_texnologiyalari_2': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'A', text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir? ', statements:['Müəyyənlik ','Kütləvilik ','Nəticəvilik','İctimailik ','Sonsuzluq '], correct:[0,1,2] },
-            { type:'ORDER', text:'2. Aşağıda Exceldə verilən funksiyaların hesablamalarını artma sirasina görə düzün. :', statements:['1. z=2x+5 haradakı x=6 ','2. y=ax+b haradakı a=3; b=2; x=2 ','3.s=5y+10x haradakı y=3; x=2 '], correct:[1,0,2] },
-            { type:'ORDER', text:'3. Ardıcıllığı düzgün müəyyən edin:', statements:['Statement X','Statement Y','Statement Z'], correct:[1,2,0] },
-            { type:'B', text:'Sual 4 — İnformasiya tex. (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[0],[1],[2],[3],[4]] },
-            { type:'B', text:'Sual 5 — İnformasiya tex. (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[1],[2],[3],[4],[0]] }
-        ]
-    }],
-    'xdiak': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'A', text:'1. Choose the correct sentences with the correct tense forms.', statements:['They take into the consideration the reduced costs next year','The engineers distinguished three types of automation many years ago','The employees often override the warning about the weather','The owner of the company interconnects the conditions in the plant','The software workflows operate independently next year'], correct:[1,2,3] },
-            { type:'A', text:'2. Choose the correct sentences in the passive voice:', statements:['The control and monitoring functions were performed by employees previously','Conditions are formed for the optimum utilization of production resources','Mechanized production were improved by the scientists many years ago','Productivity will be brought to industry by automation next year','The parameters was set by the operators yesterday'], correct:[0,1,3] },
-            { type:'A', text:'3. Choose the correct sentences with the correct modal verb.', statements:['Integrated automation have to encompass the functions of the enterprise','Total automation must focus on the continuous improvement soon','The driver has to permanently monitor the system','Simple automatic equipment can effectively replace human labor','Partial automation must include automation of control operations'], correct:[2,3,4] },
-            { type:'B', text:'4. Choose the correct definitions:', items:['Unprecedented ','Manual','Monitor','Holistic','Managerial'], variants:['means relating to or done with the hands','means global, whole.','never done or known before','means to observe and check the progress or quality of (something) over a period of time','means relating to the work of a manager.'], correctMap:[[2],[0],[3],[1],[4]] },
-            { type:'B', text:'5. Choose the correct definitions:', items:['Scalability','Maintenance','Transfer','Eliminate','Shift'], variants:['is the process of keeping something in good condition','To move or change from one position, direction, or condition to another.','To move from one place, person, or thing to another','The ability of a system, network, or process to handle a growing amount of work',' To completely remove or get rid of something, especially something unwanted or undesirable'], correctMap:[[3],[0],[2],[4],[1]] }
-        ]
-    }],
-    'xdiak_2': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'A', text:'Sual 1 — XDIAK (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[0,1,4] },
-            { type:'A', text:'Sual 2 — XDIAK (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[2,3,4] },
-            { type:'A', text:'Sual 3 — XDIAK (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[0,2,3] },
-            { type:'B', text:'Sual 4 — XDIAK (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[4],[2],[1],[0],[3]] },
-            { type:'B', text:'Sual 5 — XDIAK (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[1],[4],[3],[2],[0]] }
-        ]
-    }],
-    'diferensial_tenlikler': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'IMG_B', img:'diferensial_1.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[4],[2],[3]] },
-            { type:'IMG_B', img:'diferensial_2.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[4],[3]] },
-            { type:'IMG_B', img:'diferensial_3.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[2],[4]] },
-            { type:'IMG_B', img:'diferensial_4.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[4],[2],[3]] },
-            { type:'IMG_B', img:'diferensial_5.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[2],[1]] }
-        ]
-    }],
-    'diferensial_tenlikler_2': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'STD', text:'Sual 1 — Diferensial tənliklər (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:1 },
-            { type:'STD', text:'Sual 2 — Diferensial tənliklər (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:3 },
-            { type:'STD', text:'Sual 3 — Diferensial tənliklər (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:0 },
-            { type:'STD', text:'Sual 4 — Diferensial tənliklər (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:2 },
-            { type:'STD', text:'Sual 5 — Diferensial tənliklər (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4 }
-        ]
-    }],
-    'sahibkarlik': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'A', text:'1. İstehsal sahibkarlığı - daxildir: ', statements:['Xidmətlərin göstərilməsi ','Marketinq tədqiqatı ','Vasitəçilər son istehlakçılarla məşğul olurlar ','Innovasiya, elmi-texniki, informasiya prosesləri ','Müxtəlif növ məhsulların istehsalı'], correct:[0,3,4] },
-            { type:'A', text:'2. Xidmət sektorunda digər daha geniş yayılmış sahibkarlıq növləri bunlardır: ', statements:['istehsal və istehlak sahibkarlığı ','istehsal sahibkarlığı ','kommersiya sahibkarlığı (ticarət, ticarət xidmətləri)','maliyyə sahibkarlığı (maliyyə - bank xidmətləri) ','məsləhətçi sahibkarlıq'], correct:[2,3,4] },
-            { type:'B', text:'3. Uyğunluğu müəyyən edin', items:['İnnovasiya Yaponiyada sahibkarlığın əsas xüsusiyyətlərindən biridir ','Müstəqil kiçik vençur firmalarının maliyyələşdirilməsi: ','İnnovasiya proseslərini həyata keçirən vençur firmaların digər növü: '], variants:['Daxili müəssisələrdir ','Kiçik firmaların strateji məqsədlərinə xidmət etmək ','Müxtəlif mənbələr hesabına həyata keçirilir ','Istehlakçı nəzarətinin gücləndirilməsi','iqtisadi fəaliyyətdə xarici kəşflərdən, ideyalardan, layihələrdən və s. geniş istifadə olunur'], correctMap:[[4],[2],[0]] },
-            { type:'B', text:'4. Uyğunluğu müəyyən edin', items:['Səhmdar cəmiyyəti ','İstehsal kooperativi ','Unitar müəssisə'], variants:['Ən azı bir ortaq və səhmdar tərəfindən təsis edilir. ','Təsərrüfat fəaliyyətini həyata keçirmək üçün səhmlər buraxmaqla nizamnamə fondunu formalaşdıran fiziki və ya hüquqi şəxslərin könüllü müqaviləsi əsasında yaradılan müəssisədir. ','birgə istehsal və ya digər təsərrüfat fəaliyyətini həyata keçirmək üçün üzvlük əsasında vətəndaşların könüllü birliyidir. ','Ən azı iki fiziki və hüquqi şəxs tərəfindən müqavilə əsasında yaradılır ','Ona həvalə edilmiş mülkiyyətçinin əmlakına mülkiyyət hüququ olmayan kommersiya təşkilatıdır.'], correctMap:[[1],[2],[4]] },
-            { type:'B', text:'5. Uyğunluğu müəyyən edin: ', items:['V. Zombart','Y. Şumpeter','D. Rikardo'], variants:['Sahibkarı "iqtisadçı", "təşkilatçı" və "ticarətçi" hesab edirdilər','Kapitalizmdə mücərrəd, sonsuz və təbii istehsal üsulu kimi sahibkarlıq fəaliyyəti; və onu əkinçiliyin mühüm elementi hesab edirdi. ','Sahibkarlıq fəaliyyəti kapitalizmdən doğan istismar alətidir ','Sahibkar istehsal amillərinin yeni kombinasiyasını həyata keçirir və bununla da iqtisadi inkişafı təmin edən şəxsi çağırıb. ','Öz kapitalı və sahibkarlıq məhsulları istehsal etmək təşəbbüsü bacarığı ilə risk edən insandır.'], correctMap:[[0],[3],[1]] }
-        ]
-    }],
-    'sahibkarlik_2': [{
-        title: 'İmtahan 1',
-        questions: [
-            { type:'A', text:'Sual 1 — Sahibkarlıq (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[2,3,4] },
-            { type:'A', text:'Sual 2 — Sahibkarlıq (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[0,2,4] },
-            { type:'A', text:'Sual 3 — Sahibkarlıq (II kollokvium)', statements:['Bənd 1','Bənd 2','Bənd 3','Bənd 4','Bənd 5'], correct:[1,2,3] },
-            { type:'B', text:'Sual 4 — Sahibkarlıq (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[2],[4],[1],[3],[0]] },
-            { type:'B', text:'Sual 5 — Sahibkarlıq (II kollokvium)', items:['Maddə 1','Maddə 2','Maddə 3','Maddə 4','Maddə 5'], variants:['Variant a','Variant b','Variant c','Variant d','Variant e'], correctMap:[[0],[3],[4],[2],[1]] }
-        ]
-    }]
-    };
-
-    let curPdf='', curKey='';
-    let quizAnswers=[];
-
-    function openSubject(name,knum,pdf,key){
-        document.getElementById('popTitle').textContent=name;
-        document.getElementById('popKbadge').textContent='Kollokvium '+knum;
-        curPdf=pdf; curKey=key;
-        document.getElementById('subjectPopup').classList.add('show');
-        document.body.style.overflow='hidden';
-    }
-    function openWords(){ window.open('englishwords.pdf','_blank'); }
-    function closeSubject(){ document.getElementById('subjectPopup').classList.remove('show'); document.body.style.overflow=''; }
-    function overlayClick(e){ if(e.target===document.getElementById('subjectPopup')) closeSubject(); }
-    function openPDF(type){
-        if(!type){
-            document.getElementById('pdfChoiceTitle').textContent=document.getElementById('popTitle').textContent;
-            document.getElementById('pdfChoiceKbadge').textContent=document.getElementById('popKbadge').textContent;
-            // XDIAK üçün "Sözlər və Qaydalar" düyməsini göstər
-            const isXdiak = curKey.startsWith('xdiak');
-            document.getElementById('pdfWordsBtn').style.display = isXdiak ? 'flex' : 'none';
-            document.getElementById('subjectPopup').classList.remove('show');
-            document.getElementById('pdfChoicePopup').classList.add('show');
-            return;
-        }
-        var base=curPdf.replace(/\.pdf$/i,'');
-        window.open(base+'_'+type+'.pdf','_blank');
-    }
-    function closePdfChoice(){ document.getElementById('pdfChoicePopup').classList.remove('show'); document.getElementById('subjectPopup').classList.add('show'); }
-    function pdfChoiceOverlayClick(e){ if(e.target===document.getElementById('pdfChoicePopup')) closePdfChoice(); }
-
-    function openQuiz(){
-        const data=QUIZ_DATA[curKey];
-        document.getElementById('quizTitle').textContent=document.getElementById('popTitle').textContent+' — Test';
-        closeSubject();
-        const tabsEl=document.getElementById('qtabs');
-        const panelsEl=document.getElementById('qpanels');
-        tabsEl.innerHTML=''; panelsEl.innerHTML='';
-        quizAnswers=data.map(e=>e.questions.map(q=>{
-            if(q.type==='A') return new Set();
-            if(q.type==='B'||q.type==='IMG_B') return q.items.map(()=>new Set());
-            if(q.type==='ORDER') return q.statements.map((_,i)=>i);
-            return -1;
-        }));
-        data.forEach((exam,ei)=>{
-            const tab=document.createElement('button');
-            tab.className='qtab'+(ei===0?' active':'');
-            tab.textContent=exam.title;
-            tab.onclick=()=>switchTab(ei);
-            tabsEl.appendChild(tab);
-            const panel=document.createElement('div');
-            panel.className='qpanel'+(ei===0?' active':'');
-            panel.id='qp-'+ei;
-            panel.innerHTML=buildPanel(ei);
-            panelsEl.appendChild(panel);
-            attachOrderDragListeners(ei);
+function buildSubjects() {
+    for(let koll of ['I','II']) {
+        const container = document.getElementById(`subjects${koll==='I'?'1':'2'}`);
+        if(!container) continue;
+        container.innerHTML = '';
+        subjectsData[koll].forEach((sub, idx) => {
+            const row = document.createElement('div');
+            row.className = 'subject-row';
+            row.setAttribute('onclick', `openSubject('${sub.name}','${koll}','${sub.pdf}','${sub.key}')`);
+            row.innerHTML = `<div class="subject-num">${idx+1}</div><div class="subject-info"><div class="subject-name">${sub.name}</div><div class="subject-hint">${koll === 'I' ? 'Mövzu sualları' : 'II kollokvium mövzuları'}</div></div><span class="pdf-badge">PDF</span>`;
+            container.appendChild(row);
         });
-        document.getElementById('quizOverlay').classList.add('show');
-        document.body.style.overflow='hidden';
-        startTimer();
     }
+}
+buildSubjects();
 
-    function buildPanel(ei){
-        const exam=QUIZ_DATA[curKey][ei];
-        const L=['A','B','C','D','E'];
-        let h='';
-        exam.questions.forEach((q,qi)=>{
-            if(q.type==='STD'){
-                h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-text">${q.text}</div><div class="options">`;
-                q.options.forEach((opt,oi)=>{ h+=`<div class="option" id="opt-${ei}-${qi}-${oi}" onclick="pickSTD('${curKey}',${ei},${qi},${oi})"><div class="opt-letter">${L[oi]}</div><div class="opt-text">${opt}</div></div>`; });
-                h+=`</div></div>`;
-            } else if(q.type==='A'){
-                h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge multi">✓ Çoxlu seçim — 3 düzgün cavab</span><div class="q-text">${q.text}</div><div class="options">`;
-                q.statements.forEach((st,si)=>{ h+=`<div class="option" id="optA-${ei}-${qi}-${si}" onclick="pickA('${curKey}',${ei},${qi},${si})"><div class="opt-check" id="chk-${ei}-${qi}-${si}"></div><div class="opt-text">${si+1}. ${st}</div></div>`; });
-                h+=`</div></div>`;
-            } else if(q.type==='B'){
-                h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Uyğunlaşdırma</span><div class="q-text">${q.text}</div><div class="match-wrap" id="match-${ei}-${qi}">`;
-                q.items.forEach((item,ii)=>{
-                    h+=`<div class="match-item" id="mi-${ei}-${qi}-${ii}"><div class="match-q">${ii+1}. ${item}</div><div class="match-variants">`;
-                    q.variants.forEach((v,vi)=>{ h+=`<div class="match-var" id="mv-${ei}-${qi}-${ii}-${vi}" onclick="pickB('${curKey}',${ei},${qi},${ii},${vi})">${String.fromCharCode(97+vi)}) ${v}</div>`; });
-                    h+=`</div></div>`;
+function toggle(idx) {
+    document.querySelectorAll('.exam-card').forEach((c,i) => { i===idx ? c.classList.toggle('open') : c.classList.remove('open'); });
+}
+document.querySelectorAll('.exam-card')[0].classList.add('open');
+
+// ==================== QUIZ DATA ====================
+const QUIZ_DATA = {
+    'diskret_riyaziyyat': [{title:'İmtahan 1', questions:[
+        {type:'IMG_B', img:'diskret_1.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[3],[0,1,2],[4]]},
+        {type:'IMG_B', img:'diskret_2.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[2],[3],[0]]},
+        {type:'IMG_B', img:'diskret_3.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[1],[2,4],[3]]},
+        {type:'IMG_B', img:'diskret_4.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[2],[4]]},
+        {type:'IMG_B', img:'diskret_5.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[1],[2,3],[0]]}
+    ]}],
+    'diskret_riyaziyyat_2': [{title:'İmtahan 1', questions:[
+        {type:'STD', text:'Sual 1 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:0},
+        {type:'STD', text:'Sual 2 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:1},
+        {type:'STD', text:'Sual 3 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:2},
+        {type:'STD', text:'Sual 4 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:3},
+        {type:'STD', text:'Sual 5 — Diskret riyaziyyat (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4}
+    ]}],
+    'proqramlasdirma': [{title:'İmtahan 1', questions:[
+        {type:'STD', text:'Sual 1 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:0},
+        {type:'STD', text:'Sual 2 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:1},
+        {type:'STD', text:'Sual 3 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:2},
+        {type:'STD', text:'Sual 4 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:3},
+        {type:'STD', text:'Sual 5 — Proqramlaşdırma (I kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4}
+    ]}],
+    'proqramlasdirma_2': [{title:'İmtahan 1', questions:[
+        {type:'STD', text:'Sual 1 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:0},
+        {type:'STD', text:'Sual 2 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:1},
+        {type:'STD', text:'Sual 3 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:2},
+        {type:'STD', text:'Sual 4 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:3},
+        {type:'STD', text:'Sual 5 — Proqramlaşdırma (II kollokvium)', options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:4}
+    ]}],
+    'informasiya_texnologiyalari': [{title:'İmtahan 1', questions:[
+        {type:'A', text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir?', statements:['Müəyyənlik','Kütləvilik','Nəticəvilik','İctimailik','Sonsuzluq'], correct:[0,1,2]},
+        {type:'ORDER', text:'2. Aşağıda Exceldə verilən funksiyaların hesablamalarını artma sirasina görə düzün:', statements:['z=2x+5 haradakı x=6','y=ax+b haradakı a=3; b=2; x=2','s=5y+10x haradakı y=3; x=2'], correct:[1,0,2]},
+        {type:'ORDER', text:'3. Aşağıda verilən variantlardan budaqlanan alqoritmin həll ardıcılığını göstərin:', statements:['Daxil etmə','Hesablama','Şərt bloku'], correct:[0,1,2]},
+        {type:'B', text:'4. Uyğunluğu müəyyən edin:', items:['MS EXCEL(2013) Görünüş (View-Вид)','MS EXCEL(2013) Data(Data-Данные)','MS EXCEL(2013) Daxil et( İnsert –Вставить)'], variants:['Formula sətri','Çeşidləmə','Diaqram','Orfoqrafiya','Proqressiya'], correctMap:[[0],[1],[2]]},
+        {type:'B', text:'5.Uyğunluğu müəyyən edin:', items:['Antivirus proqramları','Arxivləşdirmə proqramları','Tətbiqi proqramlar'], variants:['Dilmanc, Simulyasiya','Forex c – Kasperski','Linux','WinRar','Dr Web'], correctMap:[[4],[3],[0]]}
+    ]}],
+    'xdiak': [{title:'İmtahan 1', questions:[
+        {type:'A', text:'1. Choose the correct sentences with the correct tense forms.', statements:['They take into the consideration the reduced costs next year','The engineers distinguished three types of automation many years ago','The employees often override the warning about the weather','The owner of the company interconnects the conditions in the plant','The software workflows operate independently next year'], correct:[1,2,3]},
+        {type:'A', text:'2. Choose the correct sentences in the passive voice:', statements:['The control and monitoring functions were performed by employees previously','Conditions are formed for the optimum utilization of production resources','Mechanized production were improved by the scientists many years ago','Productivity will be brought to industry by automation next year','The parameters was set by the operators yesterday'], correct:[0,1,3]},
+        {type:'A', text:'3. Choose the correct sentences with the correct modal verb.', statements:['Integrated automation have to encompass the functions of the enterprise','Total automation must focus on the continuous improvement soon','The driver has to permanently monitor the system','Simple automatic equipment can effectively replace human labor','Partial automation must include automation of control operations'], correct:[2,3,4]},
+        {type:'B', text:'4. Choose the correct definitions:', items:['Unprecedented','Manual','Monitor','Holistic','Managerial'], variants:['means relating to or done with the hands','means global, whole.','never done or known before','means to observe and check the progress or quality of (something) over a period of time','means relating to the work of a manager.'], correctMap:[[2],[0],[3],[1],[4]]},
+        {type:'B', text:'5. Choose the correct definitions:', items:['Scalability','Maintenance','Transfer','Eliminate','Shift'], variants:['is the process of keeping something in good condition','To move or change from one position, direction, or condition to another.','To move from one place, person, or thing to another','The ability of a system, network, or process to handle a growing amount of work','To completely remove or get rid of something, especially something unwanted or undesirable'], correctMap:[[3],[0],[2],[4],[1]]}
+    ]}],
+    'diferensial_tenlikler': [{title:'İmtahan 1', questions:[
+        {type:'IMG_B', img:'diferensial_1.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[4],[2],[3]]},
+        {type:'IMG_B', img:'diferensial_2.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[4],[3]]},
+        {type:'IMG_B', img:'diferensial_3.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[2],[4]]},
+        {type:'IMG_B', img:'diferensial_4.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[4],[2],[3]]},
+        {type:'IMG_B', img:'diferensial_5.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[0],[2],[1]]}
+    ]}],
+    'sahibkarlik': [{title:'İmtahan 1', questions:[
+        {type:'A', text:'1. İstehsal sahibkarlığı - daxildir:', statements:['Xidmətlərin göstərilməsi','Marketinq tədqiqatı','Vasitəçilər son istehlakçılarla məşğul olurlar','Innovasiya, elmi-texniki, informasiya prosesləri','Müxtəlif növ məhsulların istehsalı'], correct:[0,3,4]},
+        {type:'A', text:'2. Xidmət sektorunda digər daha geniş yayılmış sahibkarlıq növləri bunlardır:', statements:['istehsal və istehlak sahibkarlığı','istehsal sahibkarlığı','kommersiya sahibkarlığı (ticarət, ticarət xidmətləri)','maliyyə sahibkarlığı (maliyyə - bank xidmətləri)','məsləhətçi sahibkarlıq'], correct:[2,3,4]},
+        {type:'B', text:'3. Uyğunluğu müəyyən edin', items:['İnnovasiya Yaponiyada sahibkarlığın əsas xüsusiyyətlərindən biridir','Müstəqil kiçik vençur firmalarının maliyyələşdirilməsi:','İnnovasiya proseslərini həyata keçirən vençur firmaların digər növü:'], variants:['Daxili müəssisələrdir','Kiçik firmaların strateji məqsədlərinə xidmət etmək','Müxtəlif mənbələr hesabına həyata keçirilir','Istehlakçı nəzarətinin gücləndirilməsi','iqtisadi fəaliyyətdə xarici kəşflərdən, ideyalardan, layihələrdən və s. geniş istifadə olunur'], correctMap:[[4],[2],[0]]},
+        {type:'B', text:'4. Uyğunluğu müəyyən edin', items:['Səhmdar cəmiyyəti','İstehsal kooperativi','Unitar müəssisə'], variants:['Ən azı bir ortaq və səhmdar tərəfindən təsis edilir.','Təsərrüfat fəaliyyətini həyata keçirmək üçün səhmlər buraxmaqla nizamnamə fondunu formalaşdıran fiziki və ya hüquqi şəxslərin könüllü müqaviləsi əsasında yaradılan müəssisədir.','birgə istehsal və ya digər təsərrüfat fəaliyyətini həyata keçirmək üçün üzvlük əsasında vətəndaşların könüllü birliyidir.','Ən azı iki fiziki və hüquqi şəxs tərəfindən müqavilə əsasında yaradılır','Ona həvalə edilmiş mülkiyyətçinin əmlakına mülkiyyət hüququ olmayan kommersiya təşkilatıdır.'], correctMap:[[1],[2],[4]]},
+        {type:'B', text:'5. Uyğunluğu müəyyən edin:', items:['V. Zombart','Y. Şumpeter','D. Rikardo'], variants:['Sahibkarı "iqtisadçı", "təşkilatçı" və "ticarətçi" hesab edirdilər','Kapitalizmdə mücərrəd, sonsuz və təbii istehsal üsulu kimi sahibkarlıq fəaliyyəti; və onu əkinçiliyin mühüm elementi hesab edirdi.','Sahibkarlıq fəaliyyəti kapitalizmdən doğan istismar alətidir','Sahibkar istehsal amillərinin yeni kombinasiyasını həyata keçirir və bununla da iqtisadi inkişafı təmin edən şəxsi çağırıb.','Öz kapitalı və sahibkarlıq məhsulları istehsal etmək təşəbbüsü bacarığı ilə risk edən insandır.'], correctMap:[[0],[3],[1]]}
+    ]}]
+};
+
+// Add remaining subjects with placeholder questions
+const additionalKeys = ['informasiya_texnologiyalari_2', 'xdiak_2', 'diferensial_tenlikler_2', 'sahibkarlik_2'];
+additionalKeys.forEach(key => {
+    if(!QUIZ_DATA[key]) {
+        QUIZ_DATA[key] = [{title:'İmtahan 1', questions: Array(5).fill().map((_,i) => ({
+            type:'STD', text:`Sual ${i+1} — ${key.replace('_2','')} (II kollokvium)`, 
+            options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:i
+        }))}];
+    }
+});
+
+// ==================== GLOBAL VARIABLES ====================
+let curPdf = '', curKey = '', curSubjectName = '', curKoll = '';
+let quizAnswers = [];
+let quizTimerInterval = null;
+const QUIZ_DURATION = 600;
+
+// ==================== SUBJECT POPUP FUNCTIONS ====================
+function openSubject(name, knum, pdf, key) {
+    curSubjectName = name;
+    curKoll = knum;
+    curPdf = pdf;
+    curKey = key;
+    document.getElementById('popTitle').textContent = name;
+    document.getElementById('popKbadge').textContent = 'Kollokvium ' + knum;
+    document.getElementById('subjectPopup').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSubject() {
+    document.getElementById('subjectPopup').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+function overlayClick(e) {
+    if(e.target === document.getElementById('subjectPopup')) closeSubject();
+}
+
+function openPDFChoice() {
+    document.getElementById('pdfChoiceTitle').textContent = curSubjectName;
+    document.getElementById('pdfChoiceKbadge').textContent = 'Kollokvium ' + curKoll;
+    const isXdiak = curKey.startsWith('xdiak');
+    document.getElementById('pdfWordsBtn').style.display = isXdiak ? 'flex' : 'none';
+    document.getElementById('subjectPopup').classList.remove('show');
+    document.getElementById('pdfChoicePopup').classList.add('show');
+}
+
+function closePdfChoice() {
+    document.getElementById('pdfChoicePopup').classList.remove('show');
+    document.getElementById('subjectPopup').classList.add('show');
+}
+
+function pdfChoiceOverlayClick(e) {
+    if(e.target === document.getElementById('pdfChoicePopup')) closePdfChoice();
+}
+
+function openPDF(type) {
+    const base = curPdf.replace(/\.pdf$/i, '');
+    window.open(base + '_' + type + '.pdf', '_blank');
+}
+
+function openWords() {
+    window.open('englishwords.pdf', '_blank');
+}
+
+// ==================== QUIZ FUNCTIONS ====================
+function openQuiz() {
+    const data = QUIZ_DATA[curKey];
+    if(!data) {
+        alert('Test sualları hazırlanır...');
+        return;
+    }
+    document.getElementById('quizTitle').textContent = curSubjectName + ' — Test';
+    document.getElementById('quizSubtitle').textContent = data[0].questions.length + ' sual';
+    closeSubject();
+    
+    // Initialize answers
+    quizAnswers = data.map(exam => exam.questions.map(q => {
+        if(q.type === 'A') return new Set();
+        if(q.type === 'B' || q.type === 'IMG_B') return q.items.map(() => new Set());
+        if(q.type === 'ORDER') return [...Array(q.statements.length).keys()];
+        return -1;
+    }));
+    
+    // Build UI
+    const tabsEl = document.getElementById('qtabs');
+    const panelsEl = document.getElementById('qpanels');
+    tabsEl.innerHTML = '';
+    panelsEl.innerHTML = '';
+    
+    data.forEach((exam, ei) => {
+        const tab = document.createElement('button');
+        tab.className = 'qtab' + (ei === 0 ? ' active' : '');
+        tab.textContent = exam.title;
+        tab.onclick = () => switchTab(ei);
+        tabsEl.appendChild(tab);
+        
+        const panel = document.createElement('div');
+        panel.className = 'qpanel' + (ei === 0 ? ' active' : '');
+        panel.id = 'qp-' + ei;
+        panel.innerHTML = buildPanel(ei);
+        panelsEl.appendChild(panel);
+    });
+    
+    document.getElementById('quizOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+    startTimer();
+    attachAllOrderDragListeners();
+}
+
+function buildPanel(ei) {
+    const exam = QUIZ_DATA[curKey][ei];
+    const letters = ['A','B','C','D','E'];
+    let html = '';
+    
+    exam.questions.forEach((q, qi) => {
+        if(q.type === 'STD') {
+            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-text">${q.text}</div><div class="options">`;
+            q.options.forEach((opt, oi) => {
+                html += `<div class="option" id="opt-${ei}-${qi}-${oi}" onclick="pickSTD(${ei},${qi},${oi})"><div class="opt-letter">${letters[oi]}</div><div class="opt-text">${opt}</div></div>`;
+            });
+            html += `</div></div>`;
+        } else if(q.type === 'A') {
+            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge multi">✓ Çoxlu seçim — 3 düzgün cavab</span><div class="q-text">${q.text}</div><div class="options">`;
+            q.statements.forEach((st, si) => {
+                html += `<div class="option" id="optA-${ei}-${qi}-${si}" onclick="pickA(${ei},${qi},${si})"><div class="opt-check" id="chk-${ei}-${qi}-${si}"></div><div class="opt-text">${si+1}. ${st}</div></div>`;
+            });
+            html += `</div></div>`;
+        } else if(q.type === 'B' || q.type === 'IMG_B') {
+            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Uyğunlaşdırma</span>`;
+            if(q.img) html += `<img class="q-img" src="${q.img}" alt="Sual ${qi+1}">`;
+            html += `<div class="q-text">${q.text || ''}</div><div class="match-wrap" id="match-${ei}-${qi}">`;
+            q.items.forEach((item, ii) => {
+                html += `<div class="match-item" id="mi-${ei}-${qi}-${ii}"><div class="match-q">${ii+1}. ${item}</div><div class="match-variants">`;
+                q.variants.forEach((v, vi) => {
+                    html += `<div class="match-var" id="mv-${ei}-${qi}-${ii}-${vi}" onclick="pickB(${ei},${qi},${ii},${vi})">${String.fromCharCode(97+vi)}) ${v}</div>`;
                 });
-                h+=`</div></div>`;
-            } else if(q.type==='IMG_B'){
-                h+=`<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Şəkilə bax · Uyğunlaşdır</span><img class="q-img" src="${q.img}" alt="Sual ${qi+1}">`;
-                q.items.forEach((item,ii)=>{
-                    h+=`<div class="img-match-item" id="mi-${ei}-${qi}-${ii}"><div class="img-match-label">${item}</div><div class="img-match-vars">`;
-                    q.variants.forEach((v,vi)=>{ h+=`<div class="match-var" id="mv-${ei}-${qi}-${ii}-${vi}" onclick="pickB('${curKey}',${ei},${qi},${ii},${vi})">${String.fromCharCode(97+vi)}</div>`; });
-                    h+=`</div></div>`;
-                });
-                h+=`</div>`;
-            } else if(q.type==='ORDER'){
-                // Statements-i qarışdırılmış şəkildə göstər (shuffle)
-                const shuffled = q.statements.map((_,i)=>i);
-                shuffleArray(shuffled);
-                // quizAnswers-ə shuffled vəziyyəti saxla
-                if(quizAnswers[ei] && quizAnswers[ei][qi]){
-                    quizAnswers[ei][qi] = [...shuffled];
+                html += `</div></div>`;
+            });
+            html += `</div></div>`;
+        } else if(q.type === 'ORDER') {
+            const shuffled = [...Array(q.statements.length).keys()];
+            for(let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            if(quizAnswers[ei] && quizAnswers[ei][qi]) quizAnswers[ei][qi] = [...shuffled];
+            
+            html += `<div class="q-card" id="qcard-order-${ei}-${qi}"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge order">↕ Ardıcıllıq — düzgün sıraya düz</span><div class="q-text">${q.text}</div><div class="order-hint">☰ Elementləri sürüşdürərək düzgün ardıcıllığa sal</div><div class="order-list" id="order-list-${ei}-${qi}" data-ei="${ei}" data-qi="${qi}">`;
+            shuffled.forEach((origIdx, pos) => {
+                html += `<div class="order-item" draggable="true" data-orig="${origIdx}" id="oi-${ei}-${qi}-${pos}"><div class="order-pos">${pos+1}</div><div class="order-text">${q.statements[origIdx]}</div><div class="order-drag-handle">⋮⋮</div></div>`;
+            });
+            html += `</div></div>`;
+        }
+    });
+    html += `<button class="btn-submit" id="sub-${ei}" onclick="submitExam(${ei})">Nəticəni gör</button><div class="result-box" id="res-${ei}"></div>`;
+    return html;
+}
+
+function switchTab(ei) {
+    document.querySelectorAll('.qtab').forEach((t, i) => t.classList.toggle('active', i === ei));
+    document.querySelectorAll('.qpanel').forEach((p, i) => p.classList.toggle('active', i === ei));
+}
+
+function pickSTD(ei, qi, oi) {
+    if(document.getElementById('sub-' + ei).disabled) return;
+    quizAnswers[ei][qi] = oi;
+    const exam = QUIZ_DATA[curKey][ei];
+    exam.questions[qi].options.forEach((_, o) => {
+        const el = document.getElementById(`opt-${ei}-${qi}-${o}`);
+        if(el) el.classList.toggle('selected', o === oi);
+    });
+}
+
+function pickA(ei, qi, si) {
+    if(document.getElementById('sub-' + ei).disabled) return;
+    const sel = quizAnswers[ei][qi];
+    if(sel.has(si)) sel.delete(si);
+    else sel.add(si);
+    const optEl = document.getElementById(`optA-${ei}-${qi}-${si}`);
+    const chkEl = document.getElementById(`chk-${ei}-${qi}-${si}`);
+    const on = sel.has(si);
+    optEl.classList.toggle('selected', on);
+    chkEl.textContent = on ? '✓' : '';
+}
+
+function pickB(ei, qi, ii, vi) {
+    if(document.getElementById('sub-' + ei).disabled) return;
+    const itemSel = quizAnswers[ei][qi][ii];
+    if(itemSel.has(vi)) itemSel.delete(vi);
+    else itemSel.add(vi);
+    const el = document.getElementById(`mv-${ei}-${qi}-${ii}-${vi}`);
+    if(el) el.classList.toggle('sel', itemSel.has(vi));
+}
+
+function gradeTypeA(q, chosen) {
+    const c = new Set(q.correct);
+    const nCorr = [...chosen].filter(x => c.has(x)).length;
+    const nWr = chosen.size - nCorr;
+    if(nCorr === 3 && nWr === 0) return 2;
+    if(nCorr >= 2 && nWr === 0) return 1;
+    if(nCorr >= 2 && nWr >= 1 && chosen.size <= 4) return 1;
+    return 0;
+}
+
+function gradeTypeB(q, chosenArr) {
+    let pts = 0;
+    q.items.forEach((_, ii) => {
+        const corr = new Set(q.correctMap[ii]);
+        const sel = chosenArr[ii];
+        const nCorr = [...sel].filter(v => corr.has(v)).length;
+        if(nCorr === corr.size) pts += 1;
+        else if(nCorr > 0) pts += 0.5;
+    });
+    return Math.min(2, Math.round((pts / q.items.length) * 2 * 10) / 10);
+}
+
+function gradeTypeOrder(q, chosenArr) {
+    if(!chosenArr || chosenArr.length !== q.correct.length) return 0;
+    for(let i = 0; i < q.correct.length; i++) {
+        if(chosenArr[i] !== q.correct[i]) return 0;
+    }
+    return 2;
+}
+
+function submitExam(ei) {
+    const exam = QUIZ_DATA[curKey][ei];
+    let totalScore = 0, maxScore = 0;
+    
+    exam.questions.forEach((q, qi) => {
+        let pts = 0, max = 2;
+        if(q.type === 'STD') {
+            const chosen = quizAnswers[ei][qi];
+            pts = chosen === q.correct ? 2 : 0;
+            q.options.forEach((_, oi) => {
+                const el = document.getElementById(`opt-${ei}-${qi}-${oi}`);
+                if(el) {
+                    el.classList.remove('selected');
+                    if(oi === q.correct) el.classList.add('correct');
+                    else if(oi === chosen && chosen !== q.correct) el.classList.add('wrong');
                 }
-                h+=`<div class="q-card" id="qcard-order-${ei}-${qi}">`;
-                h+=`<div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div>`;
-                h+=`<span class="q-type-badge order">↕ Ardıcıllıq — düzgün sıraya düz</span>`;
-                h+=`<div class="q-text">${q.text}</div>`;
-                h+=`<div class="order-hint">☰ Elementləri sürüşdürərək düzgün ardıcıllığa sal</div>`;
-                h+=`<div class="order-list" id="order-list-${ei}-${qi}" data-ei="${ei}" data-qi="${qi}">`;
-                shuffled.forEach((origIdx, pos)=>{
-                    h+=`<div class="order-item" draggable="true" data-orig="${origIdx}" id="oi-${ei}-${qi}-${pos}">`;
-                    h+=`<div class="order-pos">${pos+1}</div>`;
-                    h+=`<div class="order-text">${q.statements[origIdx]}</div>`;
-                    h+=`<div class="order-drag-handle">⋮⋮</div>`;
-                    h+=`</div>`;
+            });
+        } else if(q.type === 'A') {
+            pts = gradeTypeA(q, quizAnswers[ei][qi]);
+            const c = new Set(q.correct);
+            q.statements.forEach((_, si) => {
+                const optEl = document.getElementById(`optA-${ei}-${qi}-${si}`);
+                const chkEl = document.getElementById(`chk-${ei}-${qi}-${si}`);
+                if(optEl) {
+                    const wasSel = quizAnswers[ei][qi].has(si);
+                    const isCorr = c.has(si);
+                    optEl.classList.remove('selected');
+                    if(chkEl) chkEl.textContent = '';
+                    if(wasSel && isCorr) { optEl.classList.add('correct'); if(chkEl) chkEl.textContent = '✓'; }
+                    else if(wasSel && !isCorr) { optEl.classList.add('wrong'); if(chkEl) chkEl.textContent = '✗'; }
+                    else if(!wasSel && isCorr) optEl.classList.add('missed');
+                }
+            });
+        } else if(q.type === 'B' || q.type === 'IMG_B') {
+            pts = gradeTypeB(q, quizAnswers[ei][qi]);
+            q.items.forEach((_, ii) => {
+                const corr = new Set(q.correctMap[ii]);
+                const sel = quizAnswers[ei][qi][ii];
+                const allOk = [...sel].every(v => corr.has(v));
+                const miEl = document.getElementById(`mi-${ei}-${qi}-${ii}`);
+                q.variants.forEach((_, vi) => {
+                    const mvEl = document.getElementById(`mv-${ei}-${qi}-${ii}-${vi}`);
+                    if(mvEl) {
+                        const wasSel = sel.has(vi);
+                        const isCorr = corr.has(vi);
+                        mvEl.classList.remove('sel', 'corr', 'wrng', 'miss');
+                        if(wasSel && isCorr) mvEl.classList.add('corr');
+                        else if(wasSel && !isCorr) mvEl.classList.add('wrng');
+                        else if(!wasSel && isCorr) mvEl.classList.add('miss');
+                    }
                 });
-                h+=`</div></div>`;
-            }
-        });
-        h+=`<button class="btn-submit" id="sub-${ei}" onclick="submitExam('${curKey}',${ei})">Nəticəni gör</button><div class="result-box" id="res-${ei}"></div>`;
-        return h;
-    }
-
-    // Fisher-Yates shuffle
-    function shuffleArray(arr){
-        for(let i=arr.length-1;i>0;i--){
-            const j=Math.floor(Math.random()*(i+1));
-            [arr[i],arr[j]]=[arr[j],arr[i]];
-        }
-        return arr;
-    }
-
-    // Drag & Drop for ORDER type
-    function attachOrderDragListeners(ei){
-        const exam=QUIZ_DATA[curKey][ei];
-        exam.questions.forEach((q,qi)=>{
-            if(q.type!=='ORDER') return;
-            const listEl=document.getElementById(`order-list-${ei}-${qi}`);
-            if(!listEl) return;
-            setupOrderDragDrop(listEl, ei, qi);
-        });
-    }
-
-    function setupOrderDragDrop(listEl, ei, qi){
-        let dragSrc=null;
-
-        function onDragStart(e){
-            dragSrc=this;
-            this.classList.add('dragging');
-            e.dataTransfer.effectAllowed='move';
-            e.dataTransfer.setData('text/plain','');
-        }
-        function onDragEnd(e){
-            this.classList.remove('dragging');
-            listEl.querySelectorAll('.order-item').forEach(el=>el.classList.remove('drag-over'));
-            updateOrderAnswers(listEl,ei,qi);
-        }
-        function onDragOver(e){
-            e.preventDefault();
-            e.dataTransfer.dropEffect='move';
-            return false;
-        }
-        function onDragEnter(e){
-            this.classList.add('drag-over');
-        }
-        function onDragLeave(e){
-            this.classList.remove('drag-over');
-        }
-        function onDrop(e){
-            e.stopPropagation();
-            if(dragSrc!==this){
-                const items=[...listEl.querySelectorAll('.order-item')];
-                const srcIdx=items.indexOf(dragSrc);
-                const dstIdx=items.indexOf(this);
-                if(srcIdx<dstIdx){ listEl.insertBefore(dragSrc, this.nextSibling); }
-                else { listEl.insertBefore(dragSrc, this); }
-                updateOrderPositions(listEl);
-                updateOrderAnswers(listEl,ei,qi);
-            }
-            this.classList.remove('drag-over');
-            return false;
-        }
-
-        // Touch support — robust version
-        let touchItem=null, touchClone=null, touchOffsetY=0;
-
-        function getOrderItemFromPoint(x, y){
-            // Temporarily hide clone so elementFromPoint works correctly
-            if(touchClone) touchClone.style.display='none';
-            const el=document.elementFromPoint(x, y);
-            if(touchClone) touchClone.style.display='';
-            return el ? el.closest('.order-item') : null;
-        }
-
-        function onTouchStart(e){
-            if(document.getElementById('sub-'+ei).disabled) return;
-            touchItem=this;
-            const touch=e.touches[0];
-            const rect=touchItem.getBoundingClientRect();
-            touchOffsetY=touch.clientY - rect.top;
-            touchItem.classList.add('dragging');
-            touchClone=touchItem.cloneNode(true);
-            touchClone.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:0.85;z-index:9999;pointer-events:none;border-radius:13px;background:rgba(59,130,246,0.18);border:1.5px solid rgba(59,130,246,0.55);transition:none;`;
-            document.body.appendChild(touchClone);
-            // Prevent scroll on the overlay while dragging
-            document.getElementById('quizOverlay').style.overflowY='hidden';
-            e.preventDefault();
-        }
-        function onTouchMove(e){
-            if(!touchItem) return;
-            e.preventDefault();
-            const touch=e.touches[0];
-            if(touchClone){
-                touchClone.style.top=(touch.clientY - touchOffsetY)+'px';
-            }
-            const items=[...listEl.querySelectorAll('.order-item')];
-            items.forEach(el=>el.classList.remove('drag-over'));
-            const target=getOrderItemFromPoint(touch.clientX, touch.clientY);
-            if(target && target!==touchItem) target.classList.add('drag-over');
-        }
-        function onTouchEnd(e){
-            if(!touchItem) return;
-            touchItem.classList.remove('dragging');
-            if(touchClone){ touchClone.remove(); touchClone=null; }
-            document.getElementById('quizOverlay').style.overflowY='auto';
-            const touch=e.changedTouches[0];
-            const target=getOrderItemFromPoint(touch.clientX, touch.clientY);
-            if(target && target!==touchItem){
-                const items=[...listEl.querySelectorAll('.order-item')];
-                const srcIdx=items.indexOf(touchItem);
-                const dstIdx=items.indexOf(target);
-                if(srcIdx<dstIdx){ listEl.insertBefore(touchItem, target.nextSibling); }
-                else { listEl.insertBefore(touchItem, target); }
-                updateOrderPositions(listEl);
-                updateOrderAnswers(listEl,ei,qi);
-            }
-            listEl.querySelectorAll('.order-item').forEach(el=>el.classList.remove('drag-over'));
-            touchItem=null;
-        }
-
-        listEl.querySelectorAll('.order-item').forEach(item=>{
-            item.addEventListener('dragstart', onDragStart);
-            item.addEventListener('dragend', onDragEnd);
-            item.addEventListener('dragover', onDragOver);
-            item.addEventListener('dragenter', onDragEnter);
-            item.addEventListener('dragleave', onDragLeave);
-            item.addEventListener('drop', onDrop);
-            item.addEventListener('touchstart', onTouchStart, {passive:false});
-            item.addEventListener('touchmove', onTouchMove, {passive:false});
-            item.addEventListener('touchend', onTouchEnd, {passive:false});
-        });
-    }
-
-    function updateOrderPositions(listEl){
-        listEl.querySelectorAll('.order-item').forEach((el,pos)=>{
-            const posEl=el.querySelector('.order-pos');
-            if(posEl) posEl.textContent=pos+1;
-        });
-    }
-
-    function updateOrderAnswers(listEl, ei, qi){
-        const items=[...listEl.querySelectorAll('.order-item')];
-        quizAnswers[ei][qi]=items.map(el=>parseInt(el.dataset.orig));
-    }
-
-    function switchTab(ei){ document.querySelectorAll('.qtab').forEach((t,i)=>t.classList.toggle('active',i===ei)); document.querySelectorAll('.qpanel').forEach((p,i)=>p.classList.toggle('active',i===ei)); }
-
-    function pickSTD(key,ei,qi,oi){ if(document.getElementById('sub-'+ei).disabled) return; quizAnswers[ei][qi]=oi; QUIZ_DATA[key][ei].questions[qi].options.forEach((_,o)=>{ document.getElementById(`opt-${ei}-${qi}-${o}`).classList.toggle('selected',o===oi); }); }
-    function pickA(key,ei,qi,si){ if(document.getElementById('sub-'+ei).disabled) return; const sel=quizAnswers[ei][qi]; if(sel.has(si)) sel.delete(si); else sel.add(si); const optEl=document.getElementById(`optA-${ei}-${qi}-${si}`); const chkEl=document.getElementById(`chk-${ei}-${qi}-${si}`); const on=sel.has(si); optEl.classList.toggle('selected',on); chkEl.textContent=on?'✓':''; }
-    function pickB(key,ei,qi,ii,vi){ if(document.getElementById('sub-'+ei).disabled) return; const itemSel=quizAnswers[ei][qi][ii]; if(itemSel.has(vi)) itemSel.delete(vi); else itemSel.add(vi); document.getElementById(`mv-${ei}-${qi}-${ii}-${vi}`).classList.toggle('sel',itemSel.has(vi)); }
-
-    function gradeTypeA(q,chosen){ const c=new Set(q.correct); const nCh=chosen.size; const nCorr=[...chosen].filter(x=>c.has(x)).length; const nWr=nCh-nCorr; if(nCorr===3&&nWr===0) return 2; if(nCorr>=2&&nWr===0) return 1; if(nCorr>=2&&nWr>=1&&nCh<=4) return 1; return 0; }
-    function gradeTypeB(q,chosenArr){ let pts=0; q.items.forEach((_,ii)=>{ const corr=new Set(q.correctMap[ii]); const sel=chosenArr[ii]; const allOk=[...sel].every(v=>corr.has(v)); const nCorr=[...sel].filter(v=>corr.has(v)).length; if(!allOk) return; if(nCorr===corr.size) pts+=1; else if(nCorr>0) pts+=0.5; }); return Math.min(2,Math.round((pts/q.items.length)*2*10)/10); }
-
-    // ORDER grading: bütün 3 element dəqiq düzgün ardıcıllıqda olmalıdır — ya 2 bal, ya 0
-    function gradeTypeOrder(q, chosenArr){
-        if(!chosenArr || chosenArr.length !== q.correct.length) return 0;
-        for(let i=0;i<q.correct.length;i++){
-            if(chosenArr[i] !== q.correct[i]) return 0;
-        }
-        return 2;
-    }
-
-    function submitExam(key,ei){
-        const exam=QUIZ_DATA[key][ei];
-        let totalScore=0, maxScore=0;
-        const qScores=[];
-        exam.questions.forEach((q,qi)=>{
-            let pts=0, max=2;
-            if(q.type==='STD'){
-                const chosen=quizAnswers[ei][qi], correct=q.correct;
-                q.options.forEach((_,oi)=>{ const el=document.getElementById(`opt-${ei}-${qi}-${oi}`); el.classList.remove('selected'); if(oi===correct) el.classList.add('correct'); else if(oi===chosen&&chosen!==correct) el.classList.add('wrong'); });
-                pts=chosen===correct?2:0;
-            } else if(q.type==='A'){
-                const chosen=quizAnswers[ei][qi]; pts=gradeTypeA(q,chosen); const c=new Set(q.correct);
-                q.statements.forEach((_,si)=>{ const optEl=document.getElementById(`optA-${ei}-${qi}-${si}`); const chkEl=document.getElementById(`chk-${ei}-${qi}-${si}`); const wasSel=chosen.has(si); const isCorr=c.has(si); optEl.classList.remove('selected'); chkEl.textContent=''; if(wasSel&&isCorr){optEl.classList.add('correct');chkEl.textContent='✓';} else if(wasSel&&!isCorr){optEl.classList.add('wrong');chkEl.textContent='✗';} else if(!wasSel&&isCorr) optEl.classList.add('missed'); });
-            } else if(q.type==='B'||q.type==='IMG_B'){
-                const chosenArr=quizAnswers[ei][qi]; pts=gradeTypeB(q,chosenArr);
-                q.items.forEach((_,ii)=>{ const corr=new Set(q.correctMap[ii]); const sel=chosenArr[ii]; const allOk=[...sel].every(v=>corr.has(v)); const miEl=document.getElementById(`mi-${ei}-${qi}-${ii}`); q.variants.forEach((_,vi)=>{ const mvEl=document.getElementById(`mv-${ei}-${qi}-${ii}-${vi}`); const wasSel=sel.has(vi); const isCorr=corr.has(vi); mvEl.classList.remove('sel'); if(wasSel&&isCorr) mvEl.classList.add('corr'); else if(wasSel&&!isCorr) mvEl.classList.add('wrng'); else if(!wasSel&&isCorr) mvEl.classList.add('miss'); }); if(sel.size>0){miEl.classList.toggle('correct-item',allOk);miEl.classList.toggle('wrong-item',!allOk);} });
-            } else if(q.type==='ORDER'){
-                const chosenArr=quizAnswers[ei][qi];
-                pts=gradeTypeOrder(q, chosenArr);
-                // Hər elementi rənglə
-                const listEl=document.getElementById(`order-list-${ei}-${qi}`);
-                if(listEl){
-                    const items=[...listEl.querySelectorAll('.order-item')];
-                    const isAllCorrect = pts===2;
-                    items.forEach((el, pos)=>{
-                        el.draggable=false;
-                        el.style.cursor='default';
-                        if(isAllCorrect){
-                            el.classList.add('correct-order');
-                        } else {
-                            el.classList.add('wrong-order');
-                        }
-                    });
-                    // Düzgün cavabı göstər (sehv olduqda)
-                    if(!isAllCorrect){
-                        const cardEl=document.getElementById(`qcard-order-${ei}-${qi}`);
-                        if(cardEl){
-                            let answerHtml=`<div class="order-correct-answer"><div class="order-correct-answer-title">✅ Düzgün ardıcıllıq:</div>`;
-                            q.correct.forEach((origIdx,pos)=>{
-                                answerHtml+=`<div class="order-correct-row">${pos+1}. ${q.statements[origIdx]}</div>`;
-                            });
-                            answerHtml+=`</div>`;
-                            cardEl.insertAdjacentHTML('beforeend', answerHtml);
-                        }
+                if(miEl && sel.size > 0) {
+                    miEl.classList.toggle('correct-item', allOk);
+                    miEl.classList.toggle('wrong-item', !allOk);
+                }
+            });
+        } else if(q.type === 'ORDER') {
+            pts = gradeTypeOrder(q, quizAnswers[ei][qi]);
+            const listEl = document.getElementById(`order-list-${ei}-${qi}`);
+            if(listEl) {
+                const items = [...listEl.querySelectorAll('.order-item')];
+                items.forEach(el => {
+                    el.draggable = false;
+                    el.style.cursor = 'default';
+                    if(pts === 2) el.classList.add('correct-order');
+                    else el.classList.add('wrong-order');
+                });
+                if(pts !== 2) {
+                    const cardEl = document.getElementById(`qcard-order-${ei}-${qi}`);
+                    if(cardEl && !cardEl.querySelector('.order-correct-answer')) {
+                        let answerHtml = `<div class="order-correct-answer"><div class="order-correct-answer-title">✅ Düzgün ardıcıllıq:</div>`;
+                        q.correct.forEach((origIdx, pos) => {
+                            answerHtml += `<div class="order-correct-row">${pos+1}. ${q.statements[origIdx]}</div>`;
+                        });
+                        answerHtml += `</div>`;
+                        cardEl.insertAdjacentHTML('beforeend', answerHtml);
                     }
                 }
             }
-            qScores.push({pts,max}); totalScore+=pts; maxScore+=max;
-        });
-        document.getElementById('sub-'+ei).disabled=true;
-        const res=document.getElementById('res-'+ei);
-        const pass=totalScore/maxScore>=0.5;
-        const barsH=qScores.map(s=>`<div class="result-bar ${s.pts===s.max?'g':s.pts>0?'y':'r'}"></div>`).join('');
-        res.innerHTML=`<div class="result-score ${pass?'pass':'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div><div class="result-bars">${barsH}</div><button class="btn-retry" onclick="retryExam('${key}',${ei})">🔄 Yenidən cəhd et</button>`;
-        res.classList.add('show'); res.scrollIntoView({behavior:'smooth',block:'center'});
-
-        // Nəticəni tarixçəyə əlavə et
-        saveResult(key, ei, totalScore, maxScore, pass);
-
-        // Bütün imtahanlar bitibsə taymeri dayandır
-        const allDone=QUIZ_DATA[key].every((_,i)=>{ const b=document.getElementById('sub-'+i); return b&&b.disabled; });
-        if(allDone) stopTimer();
-    }
-
-    function retryExam(key,ei){
-        quizAnswers[ei]=QUIZ_DATA[key][ei].questions.map(q=>{
-            if(q.type==='A') return new Set();
-            if(q.type==='B'||q.type==='IMG_B') return q.items.map(()=>new Set());
-            if(q.type==='ORDER') return q.statements.map((_,i)=>i);
-            return -1;
-        });
-        document.getElementById('qp-'+ei).innerHTML=buildPanel(ei);
-        attachOrderDragListeners(ei);
-        startTimer();
-    }
-
-    function closeQuiz(){
-        stopTimer();
-        document.getElementById('quizOverlay').classList.remove('show');
-        document.getElementById('subjectPopup').classList.add('show');
-        document.body.style.overflow='hidden';
-    }
-
-    // ===================== TAYMER =====================
-    let quizTimerInterval=null;
-    const QUIZ_DURATION=600; // 10 dəqiqə (saniyə)
-
-    function startTimer(){
-        stopTimer();
-        let remaining=QUIZ_DURATION;
-        updateTimerDisplay(remaining);
-        const timerEl=document.getElementById('quizTimer');
-        timerEl.style.background='rgba(255,255,255,0.06)';
-        timerEl.style.color='var(--text)';
-        timerEl.style.borderColor='var(--border)';
-        quizTimerInterval=setInterval(()=>{
-            remaining--;
-            updateTimerDisplay(remaining);
-            // Son 60 saniyə — sarı
-            if(remaining<=60 && remaining>10){
-                timerEl.style.background='rgba(245,166,35,0.15)';
-                timerEl.style.color='#f5a623';
-                timerEl.style.borderColor='rgba(245,166,35,0.4)';
-            }
-            // Son 10 saniyə — qırmızı
-            if(remaining<=10){
-                timerEl.style.background='rgba(239,68,68,0.15)';
-                timerEl.style.color='#ef4444';
-                timerEl.style.borderColor='rgba(239,68,68,0.4)';
-            }
-            if(remaining<=0){
-                stopTimer();
-                autoSubmitAll();
-            }
-        },1000);
-    }
-
-    function stopTimer(){
-        if(quizTimerInterval){ clearInterval(quizTimerInterval); quizTimerInterval=null; }
-    }
-
-    function updateTimerDisplay(sec){
-        const m=Math.floor(sec/60);
-        const s=sec%60;
-        document.getElementById('quizTimer').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-    }
-
-    function autoSubmitAll(){
-        // Bütün aktiv panellərdəki bitməmiş imtahanları avtomatik təqdim et
-        const data=QUIZ_DATA[curKey];
-        data.forEach((_,ei)=>{
-            const subBtn=document.getElementById('sub-'+ei);
-            if(subBtn && !subBtn.disabled) submitExam(curKey,ei);
-        });
-        // İlk paneli göstər
-        document.querySelectorAll('.qpanel').forEach((p,i)=>p.classList.toggle('active',i===0));
-        document.querySelectorAll('.qtab').forEach((t,i)=>t.classList.toggle('active',i===0));
-        // Nəticəyə scroll et
-        const res=document.getElementById('res-0');
-        if(res) setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'center'}),200);
-    }
-
-    function toggleTheme(){ const isLight=document.body.classList.toggle('light'); document.getElementById('themeToggle').textContent=isLight?'🌑':'🌙'; localStorage.setItem('theme',isLight?'light':'dark'); }
-    (function(){ const saved=localStorage.getItem('theme'); if(saved==='light'){ document.body.classList.add('light'); document.getElementById('themeToggle').textContent='🌑'; } })();
-
-    // ===================== NƏTİCƏLƏR SİSTEMİ =====================
-
-    const SUBJECT_NAMES = {
-        'diskret_riyaziyyat': 'Diskret riyaz.',
-        'diskret_riyaziyyat_2': 'Diskret riyaz.',
-        'proqramlasdirma': 'Proqramlaşd.',
-        'proqramlasdirma_2': 'Proqramlaşd.',
-        'informasiya_texnologiyalari': 'İnf. tex.',
-        'informasiya_texnologiyalari_2': 'İnf. tex.',
-        'xdiak': 'XDIAK',
-        'xdiak_2': 'XDIAK',
-        'diferensial_tenlikler': 'Dif. tənliklər',
-        'diferensial_tenlikler_2': 'Dif. tənliklər',
-        'sahibkarlik': 'Sahibkarlıq',
-        'sahibkarlik_2': 'Sahibkarlıq'
-    };
-
-    const SUBJECT_GROUPS = [
-        { name:'Diskret riyaziyyat', keys:['diskret_riyaziyyat','diskret_riyaziyyat_2'] },
-        { name:'Proqramlaşdırma', keys:['proqramlasdirma','proqramlasdirma_2'] },
-        { name:'İnf. texnologiyaları', keys:['informasiya_texnologiyalari','informasiya_texnologiyalari_2'] },
-        { name:'XDIAK', keys:['xdiak','xdiak_2'] },
-        { name:'Diferensial tənliklər', keys:['diferensial_tenlikler','diferensial_tenlikler_2'] },
-        { name:'Sahibkarlıq', keys:['sahibkarlik','sahibkarlik_2'] }
-    ];
-
-    function getHistory(){ try{ return JSON.parse(localStorage.getItem('testHistory')||'[]'); } catch(e){ return []; } }
-    function setHistory(h){ try{ localStorage.setItem('testHistory', JSON.stringify(h)); } catch(e){} }
-
-    function saveResult(key, ei, score, max, pass){
-        const h=getHistory();
-        const now=new Date();
-        const pad=n=>String(n).padStart(2,'0');
-        const dateStr=`${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-        const koll = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
-        h.unshift({ key, ei, score, max, pass, date:dateStr, subj:SUBJECT_NAMES[key]||key, koll });
-        if(h.length>200) h.splice(200);
-        setHistory(h);
-        updateBadge();
-    }
-
-    function updateBadge(){
-        const h=getHistory();
-        const badge=document.getElementById('resultsBadge');
-        if(badge) badge.textContent = h.length===0 ? '0 nəticə' : h.length+' nəticə';
-    }
-
-    function openResultsOverlay(){
-        renderResults();
-        document.getElementById('resultsOverlay').classList.add('show');
-        document.body.style.overflow='hidden';
-    }
-
-    function closeResultsOverlay(){
-        document.getElementById('resultsOverlay').classList.remove('show');
-        document.body.style.overflow='';
-    }
-
-    function renderResults(){
-        const h=getHistory();
-        document.getElementById('resultCount').textContent = h.length===0 ? '0 test edilib' : h.length+' nəticə';
-
-        // Best per group
-        const bestGrid=document.getElementById('bestGrid');
-        bestGrid.innerHTML='';
-        SUBJECT_GROUPS.forEach(g=>{
-            const entries=h.filter(r=>g.keys.includes(r.key));
-            const card=document.createElement('div');
-            card.className='best-card';
-            if(entries.length===0){
-                card.innerHTML=`<div class="best-card-name">${g.name}</div><div class="best-card-score none">—</div><div class="best-card-koll">Test edilməyib</div>`;
-            } else {
-                const best=entries.reduce((a,b)=>((a.score/a.max)>=(b.score/b.max)?a:b));
-                const pct=Math.round(best.score/best.max*100);
-                card.innerHTML=`<div class="best-card-name">${g.name}</div><div class="best-card-score ${best.pass?'pass':'fail'}">${best.score}/${best.max}</div><div class="best-card-koll">${best.koll} · ${pct}%</div>`;
-            }
-            bestGrid.appendChild(card);
-        });
-
-        // History list
-        const histList=document.getElementById('histList');
-        if(h.length===0){
-            histList.innerHTML='<div class="hist-empty">Hələ heç bir test edilməyib</div>';
-            return;
         }
-        histList.innerHTML=h.map(r=>`
-            <div class="hist-item">
-                <div class="hist-dot ${r.pass?'pass':'fail'}"></div>
-                <div class="hist-info">
-                    <div class="hist-subj">${r.subj} — ${r.koll}</div>
-                    <div class="hist-meta">${r.date}</div>
-                </div>
-                <div class="hist-score ${r.pass?'pass':'fail'}">${r.score}/${r.max}</div>
-            </div>`).join('');
-    }
-
-    // Sil düyməsi — confirm yox, inline təsdiq
-    let clearPending=false;
-    document.getElementById('clearBtn').addEventListener('click', function(){
-        if(!clearPending){
-            clearPending=true;
-            this.textContent='❗ Əminsiniz? Yenidən bas';
-            this.style.background='rgba(239,68,68,0.25)';
-            setTimeout(()=>{ clearPending=false; this.textContent='🗑 Bütün nəticələri sil'; this.style.background=''; }, 3000);
-        } else {
-            clearPending=false;
-            setHistory([]);
-            updateBadge();
-            renderResults();
-            this.textContent='🗑 Bütün nəticələri sil';
-            this.style.background='';
-        }
+        totalScore += pts;
+        maxScore += max;
     });
+    
+    document.getElementById('sub-' + ei).disabled = true;
+    const res = document.getElementById('res-' + ei);
+    const pass = totalScore / maxScore >= 0.5;
+    res.innerHTML = `<div class="result-score ${pass ? 'pass' : 'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass ? '✅ Uğurlu nəticə!' : '❌ Daha çox çalışın'}</div><button class="btn-retry" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
+    res.classList.add('show');
+    
+    saveResult(curKey, ei, totalScore, maxScore, pass);
+    
+    const allDone = QUIZ_DATA[curKey].every((_, i) => {
+        const btn = document.getElementById('sub-' + i);
+        return btn && btn.disabled;
+    });
+    if(allDone) stopTimer();
+}
 
-    // İlkin badge yenilə
+function retryExam(ei) {
+    const exam = QUIZ_DATA[curKey][ei];
+    quizAnswers[ei] = exam.questions.map(q => {
+        if(q.type === 'A') return new Set();
+        if(q.type === 'B' || q.type === 'IMG_B') return q.items.map(() => new Set());
+        if(q.type === 'ORDER') return [...Array(q.statements.length).keys()];
+        return -1;
+    });
+    document.getElementById('qp-' + ei).innerHTML = buildPanel(ei);
+    attachOrderDragListeners(ei);
+    document.getElementById('sub-' + ei).disabled = false;
+    const res = document.getElementById('res-' + ei);
+    if(res) res.classList.remove('show');
+    startTimer();
+}
+
+function closeQuiz() {
+    stopTimer();
+    document.getElementById('quizOverlay').classList.remove('show');
+    document.getElementById('subjectPopup').classList.add('show');
+}
+
+// ==================== DRAG & DROP FOR ORDER ====================
+function attachAllOrderDragListeners() {
+    const data = QUIZ_DATA[curKey];
+    if(!data) return;
+    data.forEach((_, ei) => {
+        attachOrderDragListeners(ei);
+    });
+}
+
+function attachOrderDragListeners(ei) {
+    const exam = QUIZ_DATA[curKey][ei];
+    if(!exam) return;
+    exam.questions.forEach((q, qi) => {
+        if(q.type !== 'ORDER') return;
+        const listEl = document.getElementById(`order-list-${ei}-${qi}`);
+        if(listEl) setupOrderDragDrop(listEl, ei, qi);
+    });
+}
+
+function setupOrderDragDrop(listEl, ei, qi) {
+    let dragSrc = null;
+    
+    function onDragStart(e) {
+        dragSrc = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', '');
+    }
+    function onDragEnd(e) {
+        this.classList.remove('dragging');
+        listEl.querySelectorAll('.order-item').forEach(el => el.classList.remove('drag-over'));
+        updateOrderAnswers(listEl, ei, qi);
+    }
+    function onDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; return false; }
+    function onDragEnter(e) { this.classList.add('drag-over'); }
+    function onDragLeave(e) { this.classList.remove('drag-over'); }
+    function onDrop(e) {
+        e.stopPropagation();
+        if(dragSrc !== this) {
+            const items = [...listEl.querySelectorAll('.order-item')];
+            const srcIdx = items.indexOf(dragSrc);
+            const dstIdx = items.indexOf(this);
+            if(srcIdx < dstIdx) listEl.insertBefore(dragSrc, this.nextSibling);
+            else listEl.insertBefore(dragSrc, this);
+            updateOrderPositions(listEl);
+            updateOrderAnswers(listEl, ei, qi);
+        }
+        this.classList.remove('drag-over');
+        return false;
+    }
+    
+    listEl.querySelectorAll('.order-item').forEach(item => {
+        item.addEventListener('dragstart', onDragStart);
+        item.addEventListener('dragend', onDragEnd);
+        item.addEventListener('dragover', onDragOver);
+        item.addEventListener('dragenter', onDragEnter);
+        item.addEventListener('dragleave', onDragLeave);
+        item.addEventListener('drop', onDrop);
+    });
+}
+
+function updateOrderPositions(listEl) {
+    listEl.querySelectorAll('.order-item').forEach((el, pos) => {
+        const posEl = el.querySelector('.order-pos');
+        if(posEl) posEl.textContent = pos + 1;
+    });
+}
+
+function updateOrderAnswers(listEl, ei, qi) {
+    const items = [...listEl.querySelectorAll('.order-item')];
+    quizAnswers[ei][qi] = items.map(el => parseInt(el.dataset.orig));
+}
+
+// ==================== TIMER ====================
+function startTimer() {
+    stopTimer();
+    let remaining = QUIZ_DURATION;
+    updateTimerDisplay(remaining);
+    const timerEl = document.getElementById('quizTimer');
+    timerEl.style.background = 'rgba(255,255,255,0.06)';
+    timerEl.style.color = 'var(--text)';
+    quizTimerInterval = setInterval(() => {
+        remaining--;
+        updateTimerDisplay(remaining);
+        if(remaining <= 60 && remaining > 10) {
+            timerEl.style.background = 'rgba(245,166,35,0.15)';
+            timerEl.style.color = '#f5a623';
+        }
+        if(remaining <= 10) {
+            timerEl.style.background = 'rgba(239,68,68,0.15)';
+            timerEl.style.color = '#ef4444';
+        }
+        if(remaining <= 0) {
+            stopTimer();
+            autoSubmitAll();
+        }
+    }, 1000);
+}
+
+function stopTimer() {
+    if(quizTimerInterval) { clearInterval(quizTimerInterval); quizTimerInterval = null; }
+}
+
+function updateTimerDisplay(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    document.getElementById('quizTimer').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function autoSubmitAll() {
+    const data = QUIZ_DATA[curKey];
+    if(data) {
+        data.forEach((_, ei) => {
+            const btn = document.getElementById('sub-' + ei);
+            if(btn && !btn.disabled) submitExam(ei);
+        });
+    }
+}
+
+// ==================== RESULTS SYSTEM ====================
+const SUBJECT_NAMES = {
+    'diskret_riyaziyyat': 'Diskret riyaz.', 'diskret_riyaziyyat_2': 'Diskret riyaz.',
+    'proqramlasdirma': 'Proqramlaşd.', 'proqramlasdirma_2': 'Proqramlaşd.',
+    'informasiya_texnologiyalari': 'İnf. tex.', 'informasiya_texnologiyalari_2': 'İnf. tex.',
+    'xdiak': 'XDIAK', 'xdiak_2': 'XDIAK',
+    'diferensial_tenlikler': 'Dif. tənliklər', 'diferensial_tenlikler_2': 'Dif. tənliklər',
+    'sahibkarlik': 'Sahibkarlıq', 'sahibkarlik_2': 'Sahibkarlıq'
+};
+
+const SUBJECT_GROUPS = [
+    { name: 'Diskret riyaziyyat', keys: ['diskret_riyaziyyat', 'diskret_riyaziyyat_2'] },
+    { name: 'Proqramlaşdırma', keys: ['proqramlasdirma', 'proqramlasdirma_2'] },
+    { name: 'İnf. texnologiyaları', keys: ['informasiya_texnologiyalari', 'informasiya_texnologiyalari_2'] },
+    { name: 'XDIAK', keys: ['xdiak', 'xdiak_2'] },
+    { name: 'Diferensial tənliklər', keys: ['diferensial_tenlikler', 'diferensial_tenlikler_2'] },
+    { name: 'Sahibkarlıq', keys: ['sahibkarlik', 'sahibkarlik_2'] }
+];
+
+function getHistory() { try { return JSON.parse(localStorage.getItem('testHistory') || '[]'); } catch(e) { return []; } }
+function setHistory(h) { try { localStorage.setItem('testHistory', JSON.stringify(h)); } catch(e) {} }
+
+function saveResult(key, ei, score, max, pass) {
+    const h = getHistory();
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const dateStr = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const koll = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
+    h.unshift({ key, ei, score, max, pass, date: dateStr, subj: SUBJECT_NAMES[key] || key, koll, id: Date.now() + Math.random() });
+    if(h.length > 200) h.splice(200);
+    setHistory(h);
     updateBadge();
+}
+
+function updateBadge() {
+    const h = getHistory();
+    const badge = document.getElementById('resultsBadge');
+    if(badge) badge.textContent = h.length === 0 ? '0 nəticə' : h.length + ' nəticə';
+}
+
+function deleteSingleResult(id) {
+    let h = getHistory();
+    h = h.filter(item => item.id !== id);
+    setHistory(h);
+    updateBadge();
+    if(document.getElementById('resultsOverlay').classList.contains('show')) renderResults();
+}
+
+function renderResults() {
+    const h = getHistory();
+    document.getElementById('resultCount').textContent = h.length === 0 ? '0 test edilib' : h.length + ' nəticə';
+    
+    const bestGrid = document.getElementById('bestGrid');
+    bestGrid.innerHTML = '';
+    SUBJECT_GROUPS.forEach(g => {
+        const entries = h.filter(r => g.keys.includes(r.key));
+        const card = document.createElement('div');
+        card.className = 'best-card';
+        if(entries.length === 0) {
+            card.innerHTML = `<div class="best-card-name">${g.name}</div><div class="best-card-score none">—</div><div class="best-card-koll">Test edilməyib</div>`;
+        } else {
+            const best = entries.reduce((a,b) => ((a.score/a.max) >= (b.score/b.max) ? a : b));
+            const pct = Math.round(best.score/best.max*100);
+            card.innerHTML = `<div class="best-card-name">${g.name}</div><div class="best-card-score ${best.pass ? 'pass' : 'fail'}">${best.score}/${best.max}</div><div class="best-card-koll">${best.koll} · ${pct}%</div>`;
+        }
+        bestGrid.appendChild(card);
+    });
+    
+    const histList = document.getElementById('histList');
+    if(h.length === 0) {
+        histList.innerHTML = '<div class="hist-empty">Hələ heç bir test edilməyib</div>';
+        return;
+    }
+    histList.innerHTML = h.map(r => `
+        <div class="hist-item">
+            <div class="hist-dot ${r.pass ? 'pass' : 'fail'}"></div>
+            <div class="hist-info">
+                <div class="hist-subj">${r.subj} — ${r.koll}</div>
+                <div class="hist-meta">${r.date}</div>
+            </div>
+            <div class="hist-score ${r.pass ? 'pass' : 'fail'}">${r.score}/${r.max}</div>
+            <div class="hist-delete" data-id="${r.id}" onclick="deleteSingleResult(${r.id})">🗑</div>
+        </div>
+    `).join('');
+}
+
+function openResultsOverlay() {
+    renderResults();
+    document.getElementById('resultsOverlay').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeResultsOverlay() {
+    document.getElementById('resultsOverlay').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+let clearPending = false;
+document.getElementById('clearBtn').addEventListener('click', function() {
+    if(!clearPending) {
+        clearPending = true;
+        this.textContent = '❗ Əminsiniz? Yenidən bas';
+        this.style.background = 'rgba(239,68,68,0.25)';
+        setTimeout(() => { clearPending = false; this.textContent = '🗑 Bütün nəticələri sil'; this.style.background = ''; }, 3000);
+    } else {
+        clearPending = false;
+        setHistory([]);
+        updateBadge();
+        renderResults();
+        this.textContent = '🗑 Bütün nəticələri sil';
+        this.style.background = '';
+    }
+});
+
+// ==================== THEME ====================
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light');
+    document.getElementById('themeToggle').textContent = isLight ? '🌑' : '🌙';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+(function() {
+    const saved = localStorage.getItem('theme');
+    if(saved === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('themeToggle').textContent = '🌑';
+    }
+})();
+
+updateBadge();
 </script>
 </body>
 </html>
