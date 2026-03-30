@@ -6,20 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Yenilənmələr — Dərs Cədvəli</title>
     <link rel="icon" type="image/png" href="logo.png">
-    <script>
-        // Dinamik base href - Android app və online üçün
-        (function() {
-            var base = document.createElement('base');
-            if (window.location.protocol === 'file:') {
-                // Android app-də işləyir - assets qovluğundan oxuyur
-                base.href = 'file:///android_asset/';
-            } else {
-                // Online versiya - GitHub Pages və ya digər server
-                base.href = 'https://flexest.github.io/derscedveli/';
-            }
-            document.head.appendChild(base);
-        })();
-    </script>
     <style>
         :root {
             --bg1: #0d1117;
