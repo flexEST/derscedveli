@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="az">
 <head>
@@ -5,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Sərbəst İşlər — Aprel 2026</title>
     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         :root {
@@ -258,7 +261,7 @@
         </div>
     </div>
 
-    <!-- SAHİBKARLIQ -->
+    <!-- SAHİBKARLIQ (YENİ TARİXLƏR: 12 MAY VƏ 26 MAY) -->
     <div class="subj-card" data-idx="2" style="animation-delay:.14s">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(20,184,166,0.15);">💼</div>
@@ -267,22 +270,22 @@
                 <div class="badge-row">
                     <span class="badge purple">Slayt</span>
                     <span class="badge blue">15 mövzu</span>
-                    <span class="badge amber">📅 Bu ay</span>
+                    <span class="badge amber">📅 Bu semestr</span>
                 </div>
             </div>
         </div>
 
         <div class="task-goal">
             <div class="goal-label">Tapşırığın məqsədi</div>
-            <div class="goal-text">Aşağıdakı 15 mövzudan <strong>birini seçib</strong> ona aid slayt hazırla və öyrən. Slayt müəllimə təqdim olunacaq.</div>
+            <div class="goal-text">Aşağıdakı 15 mövzudan <strong>üçünü seçib</strong> ona aid slayt hazırla və öyrən. Slayt müəllimə qrup vəya tək şəkildə təqdim olunacaq.</div>
         </div>
 
         <div style="margin:0 14px 14px;">
             <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:13px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
                 <span style="font-size:1rem;">📚</span>
                 <div style="flex:1;">
-                    <div style="font-size:0.78rem;font-weight:700;color:#93c5fd;">Bu ay 2 dərs ərzində verilə bilər</div>
-                    <div style="font-size:0.7rem;color:var(--text3);opacity:0.6;margin-top:2px;">Mühazirə + seminar növbəli həftələrdə</div>
+                    <div style="font-size:0.78rem;font-weight:700;color:#93c5fd;">Bu semestr 3 dərs ərzində verilə bilər</div>
+                    <div style="font-size:0.7rem;color:var(--text3);opacity:0.6;margin-top:2px;">Mühazirə həftələrdə (Aprel + May)</div>
                 </div>
                 <button onclick="toggleSubjCal('sah')" style="background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);color:#5eead4;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button>
             </div>
@@ -315,7 +318,7 @@
                 <div class="topic-row"><div class="topic-num">15</div><div class="topic-info"><div class="topic-text">İnvestisiya anlayışı və biznesdə əhəmiyyəti</div></div></div>
                 <div class="deadline-banner">
                     <div class="dl-dot"></div>
-                    <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Əliyeva Günay / Mirzai Pərvin</div></div>
+                    <div><div class="dl-text">Təhvil müddəti: Bu semestr ərzində</div><div class="dl-sub">Müəllim: Əliyeva Günay</div></div>
                 </div>
             </div>
         </div>
@@ -359,17 +362,19 @@
 </div>
 
 <script>
-    // Həftənin günləri (düzgün Azərbaycan tərcüməsi)
-    // JavaScript-də getDay(): 0 = Bazar, 1 = Bazar ertəsi, 2 = Çərşənbə axşamı, 3 = Çərşənbə, 4 = Cümə axşamı, 5 = Cümə, 6 = Şənbə
+    // Həftənin günləri (Azərbaycan)
     const DAY_NAMES_FULL = ['Bazar', 'Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə'];
     const DAY_NAMES_SHORT = ['Bzr', 'B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şnb'];
     
-    // Dərs günləri (Aprel 2026)
+    // Dərs günləri: Sahibkarlıq üçün 28 Aprel + yeni 12 May, 26 May (May 2026)
     const SUBJ_DAYS = {
         it:   [2, 6, 9, 13, 16, 20, 23, 27, 30],
         proq: [6, 9, 13, 20, 23, 27],
-        sah:  [14, 28]
+        sah:  [28, 132, 146] // 28 aprel (Aprel), 12 may (132-ci gün index), 26 may (146-cı) - may ayını ayrıca handle edəcəyik
     };
+    
+    // May ayı üçün əlavə dərs günləri (12, 26)
+    const SAH_MAY_EXTRA = [12, 26];  // May ayı günləri
     
     const SUBJ_COLOR = {
         it:   '#3b82f6',
@@ -391,7 +396,7 @@
     
     let calOpenState = { it: false, proq: false, sah: false };
     
-    // Tarix məlumatları
+    // Tarix göstəricisi
     const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
     const d = new Date();
     document.getElementById('dateNow').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
@@ -403,7 +408,7 @@
     
     function getDayOfWeek(day, month, year) {
         const date = new Date(year, month, day);
-        return date.getDay(); // 0-6
+        return date.getDay();
     }
     
     function getDayNameShort(day, month, year) {
@@ -416,15 +421,22 @@
         return DAY_NAMES_FULL[dow];
     }
     
+    // Sahibkarlıq üçün xüsusi dərs günləri yoxlaması (Aprel + May)
+    function isSahLessonDay(day, month) {
+        // Aprel ayı (month=3): 28 aprel
+        if (month === 3 && day === 28) return true;
+        // May ayı (month=4): 12 və 26
+        if (month === 4 && (day === 12 || day === 26)) return true;
+        return false;
+    }
+    
+    // Ümumi kalendar qurma (aprel + may üçün ayrıca)
     function buildSubjCal(key) {
-        const days = SUBJ_DAYS[key];
-        const color = SUBJ_COLOR[key];
         const grid = document.getElementById('grid-' + key);
         if (!grid) return;
-        
         grid.innerHTML = '';
         
-        // Həftənin günləri başlığı (düzgün sıra: B.e, Ç.a, Çər, C.a, Cüm, Şnb, Bzr)
+        // Başlıq
         const weekdays = ['B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şnb', 'Bzr'];
         weekdays.forEach(function(dayName) {
             const el = document.createElement('div');
@@ -433,63 +445,130 @@
             grid.appendChild(el);
         });
         
-        // Aprel 2026: 1 aprel Çərşənbə günüdür (getDay() = 3)
-        // İndekslər: 0=B.e, 1=Ç.a, 2=Çər, 3=C.a, 4=Cüm, 5=Şnb, 6=Bzr
-        // 1 aprel Çərşənbə olduğu üçün 2-ci indeksə düşür, yəni offset = 2 (neçə boş xana)
-        const offset = 2; // 1 aprel 3-cü gün (Çərşənbə) olduğu üçün 2 boş xana (B.e, Ç.a)
-        
-        const today = new Date();
-        const isCurrentMonth = (today.getFullYear() === 2026 && today.getMonth() === 3);
-        const currentDay = today.getDate();
-        
-        // Əvvəlki aydan gələn günlər
-        for (let i = 0; i < offset; i++) {
-            const el = document.createElement('div');
-            el.className = 'subj-mini-cal-day';
-            el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
-            el.textContent = 29 + i;
-            grid.appendChild(el);
-        }
-        
-        // Aprel ayının günləri
-        for (let d = 1; d <= 30; d++) {
-            const col = (offset + d - 1) % 7;
-            const isWknd = (col === 5 || col === 6); // Şənbə=5, Bazar=6
-            const isLesson = days.indexOf(d) >= 0;
-            const isToday = isCurrentMonth && d === currentDay;
+        if (key === 'sah') {
+            // Sahibkarlıq: həm aprel (28), həm may (12,26) göstərilir
+            // Aprel 2026 üçün offset = 2 (1 aprel Çərşənbə)
+            const offsetApril = 2;
+            const today = new Date();
+            const isCurrentMonthApril = (today.getFullYear() === 2026 && today.getMonth() === 3);
+            const currentDay = today.getDate();
             
-            const el = document.createElement('div');
-            el.className = 'subj-mini-cal-day';
-            
-            let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;transition:opacity .15s;';
-            
-            if (isToday) {
-                cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
-            } else if (isLesson) {
-                cssText += `background:${color}30;border:1px solid ${color}70;color:var(--text);font-weight:700;cursor:pointer;`;
-                el.addEventListener('click', (function(day) {
-                    return function() { showSubjDayDetail(key, day); };
-                })(d));
-            } else if (isWknd) {
-                cssText += 'opacity:0.2;color:var(--text3);';
-            } else {
-                cssText += 'opacity:0.28;color:var(--text3);';
-            }
-            
-            el.style.cssText = cssText;
-            el.textContent = d;
-            grid.appendChild(el);
-        }
-        
-        // Sonrakı aydan gələn günlər
-        const filled = offset + 30;
-        const rem = filled % 7;
-        if (rem !== 0) {
-            for (let i = 1; i <= 7 - rem; i++) {
+            // 1) Aprel ayı günləri (1-30)
+            for (let i = 0; i < offsetApril; i++) {
                 const el = document.createElement('div');
                 el.className = 'subj-mini-cal-day';
                 el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
-                el.textContent = i;
+                el.textContent = 29 + i;
+                grid.appendChild(el);
+            }
+            for (let d = 1; d <= 30; d++) {
+                const isLesson = isSahLessonDay(d, 3);
+                const isToday = isCurrentMonthApril && d === currentDay;
+                const col = (offsetApril + d - 1) % 7;
+                const isWknd = (col === 5 || col === 6);
+                const el = document.createElement('div');
+                el.className = 'subj-mini-cal-day';
+                let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
+                if (isToday) {
+                    cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
+                } else if (isLesson) {
+                    cssText += `background:${SUBJ_COLOR.sah}30;border:1px solid ${SUBJ_COLOR.sah}70;color:var(--text);font-weight:700;cursor:pointer;`;
+                    el.addEventListener('click', (function(day, month) { return function() { showSahDayDetail(day, month); }; })(d, 3));
+                } else if (isWknd) {
+                    cssText += 'opacity:0.2;color:var(--text3);';
+                } else {
+                    cssText += 'opacity:0.28;color:var(--text3);';
+                }
+                el.style.cssText = cssText;
+                el.textContent = d;
+                grid.appendChild(el);
+            }
+            
+            // Apreldən sonra may ayı üçün ayrıca sətir əlavə edirik (ayrı bölmə kimi göstərmək daha aydındır)
+            // May ayı başlığı (kiçik separator)
+            const sepDiv = document.createElement('div');
+            sepDiv.style.gridColumn = 'span 7';
+            sepDiv.style.marginTop = '12px';
+            sepDiv.style.marginBottom = '6px';
+            sepDiv.style.fontSize = '0.7rem';
+            sepDiv.style.fontWeight = '600';
+            sepDiv.style.color = SUBJ_COLOR.sah;
+            sepDiv.style.borderTop = `1px solid ${SUBJ_COLOR.sah}40`;
+            sepDiv.style.paddingTop = '8px';
+            sepDiv.textContent = '📅 MAY 2026 (əlavə dərslər)';
+            grid.appendChild(sepDiv);
+            
+            // May ayı offset: 1 may 2026 Cümə günüdür? 1 may 2026 = Cümə (getDay=5), offset = 5 (B.e, Ç.a, Çər, C.a, Cüm -> 5 boş)
+            const offsetMay = 5;
+            const isCurrentMonthMay = (today.getFullYear() === 2026 && today.getMonth() === 4);
+            for (let i = 0; i < offsetMay; i++) {
+                const el = document.createElement('div');
+                el.className = 'subj-mini-cal-day';
+                el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
+                const prevMonthDays = 31 - (offsetMay - i) + 1;
+                el.textContent = prevMonthDays;
+                grid.appendChild(el);
+            }
+            for (let d = 1; d <= 31; d++) {
+                const isLesson = (d === 12 || d === 26);
+                const isToday = isCurrentMonthMay && d === currentDay;
+                const col = (offsetMay + d - 1) % 7;
+                const isWknd = (col === 5 || col === 6);
+                const el = document.createElement('div');
+                el.className = 'subj-mini-cal-day';
+                let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
+                if (isToday) {
+                    cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
+                } else if (isLesson) {
+                    cssText += `background:${SUBJ_COLOR.sah}30;border:1px solid ${SUBJ_COLOR.sah}70;color:var(--text);font-weight:700;cursor:pointer;`;
+                    el.addEventListener('click', (function(day, month) { return function() { showSahDayDetail(day, month); }; })(d, 4));
+                } else if (isWknd) {
+                    cssText += 'opacity:0.2;color:var(--text3);';
+                } else {
+                    cssText += 'opacity:0.28;color:var(--text3);';
+                }
+                el.style.cssText = cssText;
+                el.textContent = d;
+                grid.appendChild(el);
+            }
+            
+            // May sonrası artıq günlər yoxdur
+        } else {
+            // it və proq üçün standart aprel təqvimi
+            const offset = 2;
+            const today = new Date();
+            const isCurrentMonth = (today.getFullYear() === 2026 && today.getMonth() === 3);
+            const currentDay = today.getDate();
+            const daysArr = SUBJ_DAYS[key];
+            const color = SUBJ_COLOR[key];
+            
+            for (let i = 0; i < offset; i++) {
+                const el = document.createElement('div');
+                el.className = 'subj-mini-cal-day';
+                el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
+                el.textContent = 29 + i;
+                grid.appendChild(el);
+            }
+            for (let d = 1; d <= 30; d++) {
+                const isLesson = daysArr.indexOf(d) >= 0;
+                const isToday = isCurrentMonth && d === currentDay;
+                const col = (offset + d - 1) % 7;
+                const isWknd = (col === 5 || col === 6);
+                const el = document.createElement('div');
+                el.className = 'subj-mini-cal-day';
+                let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
+                if (isToday) {
+                    cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
+                } else if (isLesson) {
+                    cssText += `background:${color}30;border:1px solid ${color}70;color:var(--text);font-weight:700;cursor:pointer;`;
+                    el.addEventListener('click', (function(day) { return function() { showSubjDayDetail(key, day); }; })(d));
+                } else if (isWknd) {
+                    cssText += 'opacity:0.2;color:var(--text3);';
+                } else {
+                    cssText += 'opacity:0.28;color:var(--text3);';
+                }
+                el.style.cssText = cssText;
+                el.textContent = d;
                 grid.appendChild(el);
             }
         }
@@ -499,9 +578,8 @@
         const color = SUBJ_COLOR[key];
         const name = SUBJ_NAME[key];
         const time = SUBJ_TIME[key];
-        const dayName = getDayNameFull(day, 3, 2026); // Aprel = month 3
+        const dayName = getDayNameFull(day, 3, 2026);
         const det = document.getElementById('detail-' + key);
-        
         det.innerHTML = `
             <div style="background:${color}18;border:1px solid ${color}45;border-radius:10px;padding:9px 12px;margin-top:4px;">
                 <div style="font-size:0.78rem;font-weight:600;color:var(--text);">
@@ -512,6 +590,29 @@
                 </div>
                 <div style="font-size:0.7rem;color:var(--text2);margin-top:2px;">
                     📚 ${name} dərsi var
+                </div>
+            </div>
+        `;
+    }
+    
+    function showSahDayDetail(day, month) {
+        const color = SUBJ_COLOR.sah;
+        const name = SUBJ_NAME.sah;
+        const time = SUBJ_TIME.sah;
+        const monthName = month === 3 ? 'Aprel' : 'May';
+        const year = 2026;
+        const dayName = getDayNameFull(day, month, year);
+        const det = document.getElementById('detail-sah');
+        det.innerHTML = `
+            <div style="background:${color}18;border:1px solid ${color}45;border-radius:10px;padding:9px 12px;margin-top:4px;">
+                <div style="font-size:0.78rem;font-weight:600;color:var(--text);">
+                    📅 ${day} ${monthName} — ${dayName}
+                </div>
+                <div style="font-size:0.7rem;color:var(--text2);margin-top:4px;">
+                    🕒 ${time}
+                </div>
+                <div style="font-size:0.7rem;color:var(--text2);margin-top:2px;">
+                    📚 ${name} dərsi (tapşırıq təqdimatı üçün)
                 </div>
             </div>
         `;
@@ -533,7 +634,6 @@
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
     
-    // Tema yükləmə
     (function() {
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light');
@@ -541,24 +641,16 @@
         }
     })();
     
-    // Konsola dərs günlərinin həftə günlərini yazdır (yoxlama üçün)
-    console.log('=== İnformasiya texnologiyaları dərs günləri ===');
-    SUBJ_DAYS.it.forEach(day => {
-        const dayName = getDayNameFull(day, 3, 2026);
-        console.log(`${day} Aprel → ${dayName}`);
+    // Konsola yazdırma (yoxlama)
+    console.log('=== Sahibkarlıq yeni dərs günləri (May 12, May 26) ===');
+    [12,26].forEach(day => {
+        const dayName = getDayNameFull(day, 4, 2026);
+        console.log(`${day} May 2026 → ${dayName}`);
     });
     
-    console.log('\n=== Proqramlaşdırma dərs günləri ===');
-    SUBJ_DAYS.proq.forEach(day => {
-        const dayName = getDayNameFull(day, 3, 2026);
-        console.log(`${day} Aprel → ${dayName}`);
-    });
-    
-    console.log('\n=== Sahibkarlıq dərs günləri ===');
-    SUBJ_DAYS.sah.forEach(day => {
-        const dayName = getDayNameFull(day, 3, 2026);
-        console.log(`${day} Aprel → ${dayName}`);
-    });
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    window.toggleDetails = toggleDetails;
+    window.toggleSubjCal = toggleSubjCal;
 </script>
 </body>
 </html>
