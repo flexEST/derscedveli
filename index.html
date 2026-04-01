@@ -42,14 +42,8 @@
         @keyframes blobDrift{from{transform:translate(0,0) scale(1);}to{transform:translate(30px,40px) scale(1.08);}}
         @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
         @keyframes glowPulse {
-            0%, 100% {
-                box-shadow: 0 0 12px rgba(59, 130, 246, 0.6), 0 4px 12px rgba(59, 130, 246, 0.3);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.9), 0 4px 16px rgba(59, 130, 246, 0.5);
-                transform: scale(1.02);
-            }
+            0%, 100% { box-shadow: 0 0 12px rgba(59,130,246,0.6),0 4px 12px rgba(59,130,246,0.3); transform: scale(1); }
+            50% { box-shadow: 0 0 20px rgba(59,130,246,0.9),0 4px 16px rgba(59,130,246,0.5); transform: scale(1.02); }
         }
         .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
         .main-card{position:relative;z-index:1;width:100%;max-width:420px;background:var(--bg2);border:1px solid var(--glass-border);border-radius:36px;padding:24px 20px 20px;box-shadow:var(--shadow-card);animation:cardIn 0.5s cubic-bezier(0.16,1,0.3,1);transition:background 0.3s,border-color 0.3s;}
@@ -65,22 +59,11 @@
         .header-title span{color:var(--blue);}
         .header-sub{display:flex;align-items:center;gap:6px;}
         .est-badge{background:linear-gradient(135deg,#eab308,#f5a623);color:#0d1117;font-size:0.7rem;font-weight:800;padding:3px 10px;border-radius:30px;letter-spacing:1.5px;}
-        .theme-toggle{
-            background:var(--glass);border:1px solid var(--glass-border);
-            height:34px;border-radius:30px;padding:0 12px;
-            cursor:pointer;display:flex;align-items:center;gap:6px;
-            font-family:inherit;font-size:0.72rem;font-weight:700;
-            color:var(--text);letter-spacing:0.3px;
-            transition:background 0.2s,transform 0.2s,box-shadow 0.2s;
-            flex-shrink:0;white-space:nowrap;
-        }
+        .theme-toggle{background:var(--glass);border:1px solid var(--glass-border);height:34px;border-radius:30px;padding:0 12px;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;font-size:0.72rem;font-weight:700;color:var(--text);letter-spacing:0.3px;transition:background 0.2s,transform 0.2s,box-shadow 0.2s;flex-shrink:0;white-space:nowrap;}
         .theme-toggle:active{transform:scale(0.95);}
         .theme-toggle:hover{background:var(--glass-hover);box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-        .theme-toggle .t-dot{
-            width:8px;height:8px;border-radius:50%;flex-shrink:0;
-            transition:background 0.3s;
-        }
-        [data-theme="dark"]  .theme-toggle .t-dot{background:#94a3b8;}
+        .theme-toggle .t-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;transition:background 0.3s;}
+        [data-theme="dark"] .theme-toggle .t-dot{background:#94a3b8;}
         [data-theme="light"] .theme-toggle .t-dot{background:#f59e0b;}
 
         /* DATE BAR */
@@ -173,8 +156,6 @@
         .no-lesson{text-align:center;padding:32px 20px;color:var(--text-2);}
         .no-lesson-emoji{font-size:2.5rem;margin-bottom:10px;}
         .no-lesson-text{font-size:1.1rem;font-weight:600;}
-
-        /* tap hint */
         .tap-hint{position:absolute;top:14px;right:16px;font-size:0.62rem;color:var(--text-3);background:var(--surface);border:1px solid var(--glass-border);padding:3px 9px;border-radius:20px;pointer-events:none;opacity:0.8;}
 
         /* PROGRESS BAR */
@@ -228,19 +209,7 @@
         .building-code span{background:var(--glass);border:1px solid var(--glass-border);padding:4px 14px;border-radius:20px;color:var(--text-3);}
         .footer-note{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;}
         .footer-note span{background:var(--glass);border:1px solid var(--glass-border);padding:4px 12px;border-radius:30px;font-size:0.72rem;color:var(--text-3);letter-spacing:0.3px;}
-        .est-glow{
-            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
-            color: white;
-            font-weight: 800;
-            padding: 4px 16px;
-            border-radius: 30px;
-            font-size: 0.78rem;
-            letter-spacing: 4px;
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.6), 0 4px 12px rgba(59, 130, 246, 0.3);
-            animation: glowPulse 5s ease-in-out infinite;
-            align-items: center;
-            gap: 6px;
-        }
+        .est-glow{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:800;padding:4px 16px;border-radius:30px;font-size:0.78rem;letter-spacing:4px;box-shadow:0 0 12px rgba(59,130,246,0.6),0 4px 12px rgba(59,130,246,0.3);animation:glowPulse 5s ease-in-out infinite;align-items:center;gap:6px;}
 
         /* MODALS */
         .modal{display:none;position:fixed;inset:0;background:rgba(10,13,20,0.95);z-index:1000;overflow-y:auto;backdrop-filter:blur(8px);}
@@ -260,11 +229,24 @@
         .schedule-col{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-xl);padding:18px 16px;margin-bottom:14px;}
         .col-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
         .col-title span{font-size:0.75rem;font-weight:400;color:var(--text-3);background:var(--surface);padding:2px 10px;border-radius:20px;}
+
+        /* LESSON BLOCK — type-coloured left border */
         .lesson-block{background:var(--bg1);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;border-left:4px solid var(--blue);cursor:pointer;}
+        .lesson-block.type-seminar{border-left-color:#a855f7;}
+        .lesson-block.type-lab{border-left-color:#14b8a6;}
         .lesson-block:last-child{margin-bottom:0;}
         .lesson-block:active{filter:brightness(1.1);}
         .block-title{font-weight:600;font-size:0.95rem;color:var(--text);margin-bottom:4px;line-height:1.3;}
-        .lesson-type-badge{display:inline-block;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.2);color:#93c5fd;padding:1px 8px;border-radius:16px;font-size:0.68rem;font-weight:600;margin-left:6px;vertical-align:middle;}
+
+        /* TYPE BADGES — coloured */
+        .lesson-type-badge{display:inline-block;padding:1px 8px;border-radius:16px;font-size:0.68rem;font-weight:700;margin-left:6px;vertical-align:middle;}
+        .lesson-type-badge.muh{background:rgba(59,130,246,0.18);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;}
+        .lesson-type-badge.sem{background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.3);color:#c4b5fd;}
+        .lesson-type-badge.lab{background:rgba(20,184,166,0.18);border:1px solid rgba(20,184,166,0.3);color:#5eead4;}
+        [data-theme="light"] .lesson-type-badge.muh{background:rgba(37,99,235,0.1);border-color:rgba(37,99,235,0.25);color:#1d4ed8;}
+        [data-theme="light"] .lesson-type-badge.sem{background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.25);color:#7c3aed;}
+        [data-theme="light"] .lesson-type-badge.lab{background:rgba(15,118,110,0.1);border-color:rgba(15,118,110,0.25);color:#0f766e;}
+
         .block-teacher{font-size:0.8rem;color:var(--text-2);margin-bottom:8px;}
         .block-meta{display:flex;flex-wrap:wrap;gap:6px;}
         .block-meta span{background:var(--glass);border:1px solid var(--glass-border);padding:3px 10px;border-radius:30px;font-size:0.78rem;color:var(--text-2);}
@@ -300,11 +282,12 @@
         .subject-rule{font-size:0.82rem;color:var(--text-2);}
         .subject-rule strong{color:var(--amber);font-weight:700;}
         .subject-kesr{font-size:0.82rem;color:var(--red);font-weight:700;}
+
         /* SUBJECT POPUP */
         .subj-modal{display:none;position:fixed;inset:0;background:rgba(10,13,20,0.92);z-index:2000;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);}
         .subj-modal.open{display:flex;animation:smFade 0.18s ease;}
         @keyframes smFade{from{opacity:0;}to{opacity:1;}}
-        .subj-sheet{background:var(--bg2);border:1px solid var(--glass-border);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 36px;animation:sheetUp 0.28s cubic-bezier(0.16,1,0.3,1);}
+        .subj-sheet{background:var(--bg2);border:1px solid var(--glass-border);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 36px;animation:sheetUp 0.28s cubic-bezier(0.16,1,0.3,1);max-height:92vh;overflow-y:auto;}
         @keyframes sheetUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
         .subj-sheet-handle{width:36px;height:4px;background:var(--glass-border);border-radius:99px;margin:0 auto 18px;}
         .subj-sheet-name{font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:4px;line-height:1.3;}
@@ -322,6 +305,57 @@
         .subj-stat-val.amber{color:var(--amber);}
         .subj-stat-val.red{color:var(--red);}
         .subj-stat-lbl{font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;margin-top:3px;font-weight:600;}
+
+        /* ── MINI CALENDAR IN SUBJECT POPUP ── */
+        .subj-cal-section{margin-top:16px;background:var(--surface);border:1px solid var(--glass-border);border-radius:16px;padding:14px;}
+        .subj-cal-title{font-size:0.6rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-3);font-weight:700;margin-bottom:12px;}
+        .subj-cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+        .subj-cal-month{font-size:0.82rem;font-weight:700;color:var(--text);}
+        .subj-cal-nav{background:var(--surface);border:1px solid var(--glass-border);color:var(--text-2);width:26px;height:26px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:background 0.2s;flex-shrink:0;}
+        .subj-cal-nav:hover{background:var(--glass-hover);color:var(--text);}
+        .subj-cal-dows{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;}
+        .subj-cal-dow{text-align:center;font-size:0.55rem;font-weight:700;color:var(--text-3);text-transform:uppercase;padding:2px 0;}
+        .subj-cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+        .scd{text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;cursor:pointer;color:var(--text-2);position:relative;}
+        .scd.sc-other{color:var(--text-3);opacity:0.35;pointer-events:none;}
+        .scd.sc-today{background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;color:white!important;font-weight:700!important;border:none!important;box-shadow:0 3px 10px -2px rgba(59,130,246,0.5);}
+        /* Mühazirə — blue */
+        .scd.sc-muh{background:rgba(59,130,246,0.18);border:1px solid rgba(59,130,246,0.35);color:#93c5fd;font-weight:700;}
+        [data-theme="light"] .scd.sc-muh{color:#1d4ed8;background:rgba(37,99,235,0.1);border-color:rgba(37,99,235,0.3);}
+        /* Seminar — purple */
+        .scd.sc-sem{background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.35);color:#c4b5fd;font-weight:700;}
+        [data-theme="light"] .scd.sc-sem{color:#7c3aed;background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.3);}
+        /* Laboratoriya — teal */
+        .scd.sc-lab{background:rgba(20,184,166,0.18);border:1px solid rgba(20,184,166,0.35);color:#5eead4;font-weight:700;}
+        [data-theme="light"] .scd.sc-lab{color:#0f766e;background:rgba(15,118,110,0.1);border-color:rgba(15,118,110,0.3);}
+        /* Mix (multiple types same day) — amber */
+        .scd.sc-mix{background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);color:#fcd34d;font-weight:700;}
+        [data-theme="light"] .scd.sc-mix{color:#b45309;background:rgba(180,83,9,0.08);border-color:rgba(180,83,9,0.25);}
+        .scd:hover:not(.sc-other):not(.sc-today){opacity:0.75;}
+        .subj-cal-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--glass-border);}
+        .sc-leg{display:flex;align-items:center;gap:5px;font-size:0.62rem;color:var(--text-2);}
+        .sc-leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+        .sc-leg-dot.muh{background:rgba(59,130,246,0.5);border:1px solid rgba(59,130,246,0.6);}
+        .sc-leg-dot.sem{background:rgba(168,85,247,0.5);border:1px solid rgba(168,85,247,0.6);}
+        .sc-leg-dot.lab{background:rgba(20,184,166,0.5);border:1px solid rgba(20,184,166,0.6);}
+        .sc-leg-dot.mix{background:rgba(245,166,35,0.4);border:1px solid rgba(245,166,35,0.5);}
+        /* Day detail panel inside popup cal */
+        .subj-day-detail{margin-top:10px;padding:10px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;display:none;}
+        .subj-day-detail.show{display:block;animation:fadeSlide 0.18s ease;}
+        .subj-dd-date{font-size:0.6rem;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
+        .subj-dl{display:flex;align-items:center;gap:8px;padding:5px 0;}
+        .subj-dl+.subj-dl{border-top:1px solid var(--glass-border);}
+        .subj-dl-badge{font-size:0.6rem;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+        .subj-dl-badge.muh{background:rgba(59,130,246,0.2);color:#93c5fd;border:1px solid rgba(59,130,246,0.3);}
+        [data-theme="light"] .subj-dl-badge.muh{background:rgba(37,99,235,0.1);color:#1d4ed8;border-color:rgba(37,99,235,0.25);}
+        .subj-dl-badge.sem{background:rgba(168,85,247,0.2);color:#c4b5fd;border:1px solid rgba(168,85,247,0.3);}
+        [data-theme="light"] .subj-dl-badge.sem{background:rgba(124,58,237,0.1);color:#7c3aed;border-color:rgba(124,58,237,0.25);}
+        .subj-dl-badge.lab{background:rgba(20,184,166,0.2);color:#5eead4;border:1px solid rgba(20,184,166,0.3);}
+        [data-theme="light"] .subj-dl-badge.lab{background:rgba(15,118,110,0.1);color:#0f766e;border-color:rgba(15,118,110,0.25);}
+        .subj-dl-info{flex:1;}
+        .subj-dl-time{font-size:0.7rem;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;}
+        .subj-dl-room{font-size:0.62rem;color:var(--text-3);margin-top:1px;}
+
         .subj-close{display:block;width:100%;margin-top:16px;padding:13px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);color:var(--text-2);font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;text-align:center;}
         .subj-close:active{filter:brightness(0.9);}
 
@@ -336,7 +370,7 @@
     <div style="position:absolute;top:-38px;right:4px;z-index:10;">
         <a href="update.html" style="text-decoration:none;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);padding:6px 12px;border-radius:30px;box-shadow:0 4px 18px rgba(59,130,246,0.5);">
             <span style="width:6px;height:6px;background:white;border-radius:50%;display:inline-block;animation:pulse 1.8s ease-in-out infinite;flex-shrink:0;"></span>
-            <span style="font-size:0.68rem;font-weight:800;color:white;letter-spacing:0.3px;">v1.0.1</span>
+            <span style="font-size:0.68rem;font-weight:800;color:white;letter-spacing:0.3px;">v1.0.2</span>
             <span style="width:1px;height:9px;background:rgba(255,255,255,0.3);display:inline-block;"></span>
             <span style="font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.85);">Yenilənmələrə bax</span>
         </a>
@@ -418,12 +452,12 @@
             <span>10:30–11:50</span>
             <span>12:00–13:20</span>
         </div>
-        <div style="text-align: center; margin-top: 4px;">
+        <div style="text-align:center;margin-top:4px;">
             <span class="est-glow">E S T</span>
         </div>
     </div>
 </div>
-</div><!-- end wrapper -->
+</div>
 
 <!-- MODAL: CƏDVƏL -->
 <div id="scheduleModal" class="modal">
@@ -440,6 +474,12 @@
         <div style="display:flex;align-items:center;gap:6px;margin-top:6px;margin-bottom:14px;padding:9px 14px;background:var(--amber-dim);border:1px solid rgba(245,166,35,0.3);border-radius:var(--radius-md);">
             <span style="font-size:0.9rem;">💡</span>
             <span style="font-size:0.78rem;color:var(--amber);font-weight:600;">Fənnin üzərinə basanda ətraflı məlumat açılır</span>
+        </div>
+        <!-- TYPE LEGEND in schedule modal -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+            <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:rgba(59,130,246,0.5);border:1px solid rgba(59,130,246,0.6);"></span>Mühazirə</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:rgba(168,85,247,0.5);border:1px solid rgba(168,85,247,0.6);"></span>Seminar</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:rgba(20,184,166,0.5);border:1px solid rgba(20,184,166,0.6);"></span>Laboratoriya</span>
         </div>
         <div id="scheduleContainer"></div>
         <div class="exam-section">
@@ -575,14 +615,8 @@
         <div id="subjLimitBox" style="margin-top:12px;background:var(--surface);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;">
             <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);font-weight:700;margin-bottom:8px;">Qayıb limiti</div>
             <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;">
-                <div style="text-align:center;">
-                    <div style="font-size:1.5rem;font-weight:800;" id="subjLimitCount">—</div>
-                    <div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Limit</div>
-                </div>
-                <div style="text-align:center;">
-                    <div style="font-size:1.5rem;font-weight:800;" id="subjLimitHours">—</div>
-                    <div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Saat</div>
-                </div>
+                <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitCount">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Limit</div></div>
+                <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitHours">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Saat</div></div>
                 <div style="flex:1;font-size:0.78rem;color:var(--amber);font-weight:600;line-height:1.4;" id="subjLimitRule">—</div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:8px 10px;">
@@ -590,8 +624,31 @@
                 <span style="font-size:0.82rem;color:var(--red);font-weight:700;" id="subjKesrText">—</span>
             </div>
         </div>
+
+        <!-- ── MINI CALENDAR ── -->
+        <div class="subj-cal-section">
+            <div class="subj-cal-title">Bu fənnin cədvəldəki günləri</div>
+            <div class="subj-cal-header">
+                <button class="subj-cal-nav" id="subjCalPrev">‹</button>
+                <span class="subj-cal-month" id="subjCalMonth">—</span>
+                <button class="subj-cal-nav" id="subjCalNext">›</button>
+            </div>
+            <div class="subj-cal-dows" id="subjCalDows"></div>
+            <div class="subj-cal-days" id="subjCalDays"></div>
+            <div class="subj-cal-legend">
+                <div class="sc-leg"><div class="sc-leg-dot muh"></div>Mühazirə</div>
+                <div class="sc-leg"><div class="sc-leg-dot sem"></div>Seminar</div>
+                <div class="sc-leg"><div class="sc-leg-dot lab"></div>Laboratoriya</div>
+                <div class="sc-leg"><div class="sc-leg-dot mix"></div>Qarışıq</div>
+            </div>
+            <div class="subj-day-detail" id="subjDayDetail">
+                <div class="subj-dd-date" id="subjDdDate"></div>
+                <div id="subjDdList"></div>
+            </div>
+        </div>
+
         <div id="subjBookBox" style="display:none;margin-top:10px;">
-            <a id="subjBookBtn" href="book.pdf" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:var(--radius-lg);color:white;font-family:inherit;font-size:0.88rem;font-weight:700;text-decoration:none;box-shadow:0 6px 16px -3px rgba(168,85,247,0.4);transition:transform 0.15s,filter 0.15s;" ontouchstart="this.style.filter='brightness(0.9)'" ontouchend="this.style.filter=''">
+            <a id="subjBookBtn" href="book.pdf" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:var(--radius-lg);color:white;font-family:inherit;font-size:0.88rem;font-weight:700;text-decoration:none;box-shadow:0 6px 16px -3px rgba(168,85,247,0.4);transition:transform 0.15s,filter 0.15s;">
                 📖 Kitabı aç — book.pdf
             </a>
         </div>
@@ -603,9 +660,9 @@
     const LESSONS = [
         {name:'Proqramlaşdırmanın əsasları',type:'Mühazirə',teacher:'Talıbzadə Sərxan',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'both',room:'1315',day:1},
         {name:'İnformasiya texnologiyalarının əsasları',type:'Mühazirə',teacher:'Yunis Bədəlov',teacherEmoji:'👨‍🏫',start:630,end:710,weeks:'both',room:'1321',day:1},
-        {name:'İnformasiya texnologiyaları əsasları Laboratoriya',type:'',teacher:'Rəna Hüseynova',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'both',room:'1301',day:1},
+        {name:'İnformasiya texnologiyaları əsasları Laboratoriya',type:'Laboratoriya',teacher:'Rəna Hüseynova',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'both',room:'1301',day:1},
         {name:'XDIAK',type:'Seminar',teacher:'Fərzəliyeva Ədilə',teacherEmoji:'👩‍🏫',start:540,end:620,weeks:'both',room:'827',day:2},
-        {name:'Proqramlaşdırma Laboratoriya',type:'',teacher:'Talıbzadə Sərxan',teacherEmoji:'👩‍🏫',start:630,end:710,weeks:'both',room:'1317',day:2},
+        {name:'Proqramlaşdırma Laboratoriya',type:'Laboratoriya',teacher:'Talıbzadə Sərxan',teacherEmoji:'👩‍🏫',start:630,end:710,weeks:'both',room:'1317',day:2},
         {name:'Sahibkarlığın əsasları və biznesə giriş',type:'Mühazirə',teacher:'Əliyeva Günay',teacherEmoji:'👩‍🏫',start:720,end:800,weeks:'upper',room:'1215',day:2},
         {name:'Diferensial tənliklər',type:'Mühazirə',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:720,end:800,weeks:'lower',room:'1215',day:2},
         {name:'Diskret riyaziyyat',type:'Mühazirə',teacher:'Bəndəliyev Rövşən',teacherEmoji:'👨‍🏫',start:540,end:620,weeks:'upper',room:'1319',day:3},
@@ -625,11 +682,15 @@
 
     const MONTHS   = ['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
     const DOWS     = ['B.e','Ç.a','Çər','C.a','Cüm','Şnb','Bzr'];
+    const DOWS_SHORT = ['B.e','Ç.a','Çər','C.a','Cüm','Şnb','Bzr'];
     const DAYNAMES = ['','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı'];
 
     let currentWeekType = 'upper';
     let calViewYear, calViewMonth;
     let datePanelOpen = false;
+
+    // subject popup mini-cal state
+    var subjCalYear, subjCalMonth, subjCalKey;
 
     function getWeekTypeForDate(d) {
         const year = d.getFullYear();
@@ -687,10 +748,13 @@
         '2026-05-11','2026-05-27','2026-05-28','2026-05-29'
     ];
 
+    function dateStr(d){
+        return d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
+    }
+
     function isTodayHoliday(){
         var now=new Date();
-        var ds=now.getFullYear()+'-'+(now.getMonth()<9?'0':'')+(now.getMonth()+1)+'-'+(now.getDate()<10?'0':'')+now.getDate();
-        return HOLIDAYS.indexOf(ds)>=0;
+        return HOLIDAYS.indexOf(dateStr(now))>=0;
     }
 
     function getTodaysLessons(){
@@ -724,6 +788,27 @@
     }
 
     function fmt(m){ return Math.floor(m/60)+':'+(m%60<10?'0':'')+(m%60); }
+
+    // ── TYPE helpers ──
+    function typeBadgeClass(type){
+        if(!type||type==='Mühazirə') return 'muh';
+        if(type==='Seminar') return 'sem';
+        if(type.indexOf('Lab')>=0||type==='Laboratoriya') return 'lab';
+        return 'muh';
+    }
+    function blockClass(type){
+        if(type==='Seminar') return 'lesson-block type-seminar';
+        if(type&&(type.indexOf('Lab')>=0||type==='Laboratoriya')) return 'lesson-block type-lab';
+        return 'lesson-block';
+    }
+    // calendar day class for subject popup
+    function calDayClass(lessons){
+        if(!lessons||!lessons.length) return '';
+        var types=lessons.map(function(l){return typeBadgeClass(l.type||'Mühazirə');});
+        var uniq=[...new Set(types)];
+        if(uniq.length===1) return 'sc-'+uniq[0];
+        return 'sc-mix';
+    }
 
     // THEME
     var themeToggle=document.getElementById('themeToggle');
@@ -767,10 +852,6 @@
         document.getElementById('calLessonsPanel').classList.remove('open');
         renderCalendar(calViewYear,calViewMonth);
     });
-
-    function dateStr(d){
-        return d.getFullYear()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
-    }
 
     function renderCalendar(year,month){
         calViewYear=year; calViewMonth=month;
@@ -840,11 +921,10 @@
                 var isPastDay = date < now && !isToday;
                 listEl.innerHTML = lessons.map(function(l) {
                     var rowCls = 'cal-lesson-row';
-                    if(isPastDay) {
-                        rowCls += ' is-done';
-                    } else if(isToday) {
+                    if(isPastDay) rowCls += ' is-done';
+                    else if(isToday){
                         if(nowMin >= l.start && nowMin <= l.end) rowCls += ' is-current';
-                        else if(nowMin > l.end)                  rowCls += ' is-done';
+                        else if(nowMin > l.end) rowCls += ' is-done';
                     }
                     var typeStr = l.type ? ' · '+l.type : '';
                     return '<div class="'+rowCls+'">'
@@ -926,21 +1006,15 @@
         var lesson=findCurrentLesson();
         var semesterEnded = new Date() > new Date(2026,4,29);
 
-        // Reset click handler
         container.onclick = null;
         container.style.cursor = '';
 
         if(!lesson){
             var msg;
-            if(semesterEnded){
-                msg='<div class="no-lesson"><div class="no-lesson-emoji">🎓</div><div class="no-lesson-text">Semestr bitdi</div></div>';
-            } else if(isTodayHoliday()){
-                msg='<div class="no-lesson"><div class="no-lesson-emoji">🎉</div><div class="no-lesson-text">Bu gün tətildir</div></div>';
-            } else if(today>4){
-                msg='<div class="no-lesson"><div class="no-lesson-emoji">📭</div><div class="no-lesson-text">Bu gün dərs yoxdur</div></div>';
-            } else {
-                msg='<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Bugünki dərslər bitdi</div></div>';
-            }
+            if(semesterEnded) msg='<div class="no-lesson"><div class="no-lesson-emoji">🎓</div><div class="no-lesson-text">Semestr bitdi</div></div>';
+            else if(isTodayHoliday()) msg='<div class="no-lesson"><div class="no-lesson-emoji">🎉</div><div class="no-lesson-text">Bu gün tətildir</div></div>';
+            else if(today>4) msg='<div class="no-lesson"><div class="no-lesson-emoji">📭</div><div class="no-lesson-text">Bu gün dərs yoxdur</div></div>';
+            else msg='<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Bugünki dərslər bitdi</div></div>';
             container.innerHTML=msg;
             container.style.cursor='default';
             return;
@@ -972,11 +1046,11 @@
                 '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
                 progressHTML+
                 '<a href="imtahan.html" style="display:block;margin-top:12px;padding:11px;background:linear-gradient(135deg,#b45309,#f59e0b);border-radius:12px;color:white;font-weight:700;font-size:0.9rem;text-align:center;text-decoration:none;" onclick="event.stopPropagation();">📄 İmtahan suallarını aç</a>';
-            // Kollokvium taps open the imtahan page — no subject popup
             container.onclick = null;
             container.style.cursor = 'default';
         } else {
-            var typeHTML=lesson.type?'<span class="lesson-type-chip">'+lesson.type+'</span>':'';
+            var tc=typeBadgeClass(lesson.type);
+            var typeHTML=lesson.type?'<span class="lesson-type-chip '+tc+'">'+lesson.type+'</span>':'';
             container.innerHTML=
                 '<div class="tap-hint">👆 Klik et</div>'+
                 '<div class="lesson-name">'+lesson.name+typeHTML+'</div>'+
@@ -985,7 +1059,6 @@
                 '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
                 progressHTML;
 
-            // ── KEY CHANGE: make the card open the subject popup ──
             var lessonName = lesson.name;
             container.style.cursor = 'pointer';
             container.onclick = function(){ openSubjectPopup(lessonName); };
@@ -1011,7 +1084,13 @@
             var dersler=getLessonsForDay(g.day,wt).sort(function(a,b){return a.start-b.start;});
             var html='<div class="schedule-col"><div class="col-title">'+g.ad+' <span>'+g.saat+'</span></div>';
             if(!dersler.length){html+='<div style="color:var(--text-3);padding:16px 0;text-align:center;font-size:0.9rem;">Dərs yoxdur</div>';}
-            else{dersler.forEach(function(d){var badge=d.type?'<span class="lesson-type-badge">'+d.type+'</span>':'';html+='<div class="lesson-block"><div class="block-title">'+d.name+badge+'</div><div class="block-teacher">'+d.teacherEmoji+' '+d.teacher+'</div><div class="block-meta"><span>🕒 '+fmt(d.start)+'–'+fmt(d.end)+'</span><span>🚪 '+d.room+'</span></div></div>';});}
+            else{
+                dersler.forEach(function(d){
+                    var tc=typeBadgeClass(d.type);
+                    var badge=d.type?'<span class="lesson-type-badge '+tc+'">'+d.type+'</span>':'';
+                    html+='<div class="'+blockClass(d.type)+'"><div class="block-title">'+d.name+badge+'</div><div class="block-teacher">'+d.teacherEmoji+' '+d.teacher+'</div><div class="block-meta"><span>🕒 '+fmt(d.start)+'–'+fmt(d.end)+'</span><span>🚪 '+d.room+'</span></div></div>';
+                });
+            }
             html+='</div>'; c.innerHTML+=html;
         });
         addScheduleClickHandlers();
@@ -1030,7 +1109,10 @@
         if(e.target===weeksModal) weeksModal.style.display='none';
     };
 
-    // SUBJECT POPUP
+    // ══════════════════════════════════════════
+    //  SUBJECT POPUP + MINI CALENDAR
+    // ══════════════════════════════════════════
+
     var SEMESTER_START = new Date(2026,1,16);
     var SEMESTER_END   = new Date(2026,4,29);
 
@@ -1100,9 +1182,7 @@
                 if(onlyEnded) {
                     if(isPast) { count++; }
                     else if(isToday && nowMin > l.end) { count++; }
-                } else {
-                    count++;
-                }
+                } else { count++; }
             });
         }
         return count;
@@ -1111,8 +1191,88 @@
     function getSubjectCounts(subjKey) {
         var total  = countLessonsInRange(subjKey, SEMESTER_START, SEMESTER_END, false);
         var done   = countLessonsInRange(subjKey, SEMESTER_START, SEMESTER_END, true);
-        var remaining = total - done;
-        return { total: total, done: done, remaining: remaining };
+        return { total: total, done: done, remaining: total - done };
+    }
+
+    // Get lessons for a specific date filtered by subject key
+    function getLessonsForDateBySubject(date, subjKey){
+        var dow=date.getDay(), dayMap={1:1,2:2,3:3,4:4}, ld=dayMap[dow];
+        if(!ld) return [];
+        var wt=getWeekTypeForDate(date); if(!wt) return [];
+        if(date<SEMESTER_START||date>SEMESTER_END) return [];
+        return LESSONS.filter(function(l){
+            return l.day===ld&&(l.weeks==='both'||l.weeks===wt)&&normaliseSubject(l.name)===subjKey;
+        });
+    }
+
+    // ── MINI CALENDAR for subject popup ──
+    function renderSubjCal(year, month, subjKey){
+        subjCalYear=year; subjCalMonth=month; subjCalKey=subjKey;
+        document.getElementById('subjCalMonth').textContent=MONTHS[month]+' '+year;
+
+        // DOWs header
+        var dowsEl=document.getElementById('subjCalDows');
+        dowsEl.innerHTML='';
+        DOWS_SHORT.forEach(function(d){var el=document.createElement('div');el.className='subj-cal-dow';el.textContent=d;dowsEl.appendChild(el);});
+
+        var daysEl=document.getElementById('subjCalDays');
+        daysEl.innerHTML='';
+
+        var firstDay=new Date(year,month,1);
+        var startOffset=firstDay.getDay()-1; if(startOffset<0) startOffset=6;
+        var dim=new Date(year,month+1,0).getDate();
+        var prevDim=new Date(year,month,0).getDate();
+        var now=new Date();
+        var todayStr=dateStr(now);
+
+        for(var i=0;i<startOffset;i++){
+            var el=document.createElement('div');
+            el.className='scd sc-other';
+            el.textContent=prevDim-startOffset+1+i;
+            daysEl.appendChild(el);
+        }
+        for(var d=1;d<=dim;d++){
+            var date=new Date(year,month,d);
+            var dStr=dateStr(date);
+            var isToday=(dStr===todayStr);
+            var lessons=getLessonsForDateBySubject(date, subjKey);
+            var el=document.createElement('div');
+            el.textContent=d;
+            if(isToday){
+                el.className='scd sc-today';
+            } else if(lessons.length){
+                el.className='scd '+calDayClass(lessons);
+            } else {
+                el.className='scd';
+            }
+            (function(clickDate){ el.addEventListener('click',function(){ showSubjDayDetail(clickDate, subjKey); }); })(new Date(date));
+            daysEl.appendChild(el);
+        }
+        var rem=(startOffset+dim)%7;
+        if(rem!==0){for(var i=1;i<=7-rem;i++){var el=document.createElement('div');el.className='scd sc-other';el.textContent=i;daysEl.appendChild(el);}}
+
+        // hide detail panel on month change
+        document.getElementById('subjDayDetail').classList.remove('show');
+    }
+
+    function showSubjDayDetail(date, subjKey){
+        var lessons=getLessonsForDateBySubject(date, subjKey);
+        var det=document.getElementById('subjDayDetail');
+        var dayNamesAz=['Bazar','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə'];
+        document.getElementById('subjDdDate').textContent=date.getDate()+' '+MONTHS[date.getMonth()]+' — '+dayNamesAz[date.getDay()];
+        var listEl=document.getElementById('subjDdList');
+        if(!lessons.length){
+            listEl.innerHTML='<div style="font-size:0.75rem;color:var(--text-3);padding:4px 0;">Bu gün bu fənnin dərsi yoxdur</div>';
+        } else {
+            listEl.innerHTML=lessons.map(function(l){
+                var tc=typeBadgeClass(l.type||'Mühazirə');
+                return '<div class="subj-dl">'
+                    +'<span class="subj-dl-badge '+tc+'">'+(l.type||'Mühazirə')+'</span>'
+                    +'<div class="subj-dl-info"><div class="subj-dl-time">'+fmt(l.start)+'–'+fmt(l.end)+'</div><div class="subj-dl-room">🚪 '+l.room+'</div></div>'
+                    +'</div>';
+            }).join('');
+        }
+        det.classList.add('show');
     }
 
     var subjModal = document.getElementById('subjModal');
@@ -1137,12 +1297,8 @@
         document.getElementById('subjKesrText').textContent = meta.kesrText;
         var bookBox = document.getElementById('subjBookBox');
         var bookBtn = document.getElementById('subjBookBtn');
-        if(meta.bookPdf){
-            bookBox.style.display = 'block';
-            bookBtn.href = meta.bookPdf;
-        } else {
-            bookBox.style.display = 'none';
-        }
+        if(meta.bookPdf){ bookBox.style.display='block'; bookBtn.href=meta.bookPdf; }
+        else { bookBox.style.display='none'; }
         var limitColor = meta.limitCount >= 13 ? 'var(--red)' : meta.limitCount >= 11 ? 'var(--amber)' : 'var(--green)';
         lc.style.color = limitColor;
         lh.style.color = limitColor;
@@ -1157,8 +1313,27 @@
         if(c.remaining <= 3)       leftEl.className += ' red';
         else if(c.remaining <= 7)  leftEl.className += ' amber';
         else                       leftEl.className += ' green';
+
+        // render mini calendar for this subject, starting at current month
+        var now=new Date();
+        renderSubjCal(now.getFullYear(), now.getMonth(), key);
+
         subjModal.classList.add('open');
+        // scroll sheet to top
+        document.getElementById('subjSheet').scrollTop=0;
     }
+
+    // mini cal nav
+    document.getElementById('subjCalPrev').addEventListener('click',function(e){
+        e.stopPropagation();
+        subjCalMonth--; if(subjCalMonth<0){subjCalMonth=11;subjCalYear--;}
+        renderSubjCal(subjCalYear,subjCalMonth,subjCalKey);
+    });
+    document.getElementById('subjCalNext').addEventListener('click',function(e){
+        e.stopPropagation();
+        subjCalMonth++; if(subjCalMonth>11){subjCalMonth=0;subjCalYear++;}
+        renderSubjCal(subjCalYear,subjCalMonth,subjCalKey);
+    });
 
     document.getElementById('subjClose').onclick = function(){ subjModal.classList.remove('open'); };
     subjModal.addEventListener('click', function(e){
