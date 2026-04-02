@@ -21,7 +21,7 @@
         :root {
             --bg:#0d1117; --surface:#161b27; --card:#1c2333;
             --border:rgba(255,255,255,0.07);
-            --blue:#3b82f6; --amber:#f5a623; --green:#22c55e; --red:#ef4444;
+            --blue:#3b82f6; --amber:#f5a623; --green:#22c55e; --red:#ef4444; --purple:#8b5cf6;
             --text:#f1f5f9; --text2:#94a3b8; --text3:#475569;
             --r:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
         }
@@ -232,6 +232,63 @@
         .best-card-koll { font-size:0.68rem; color:var(--text3); margin-top:2px; }
         .hist-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; margin-top:16px; }
         .hist-empty { text-align:center; color:var(--text3); font-size:0.85rem; padding:20px 0; }
+
+        /* ===== AI BUTTON STYLES ===== */
+        .q-header-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
+        .q-header-row .q-text { margin-bottom:0; flex:1; }
+        .ai-btn {
+            flex-shrink:0;
+            display:flex;
+            align-items:center;
+            gap:5px;
+            padding:5px 11px;
+            background:rgba(139,92,246,0.12);
+            border:1px solid rgba(139,92,246,0.28);
+            border-radius:20px;
+            font-family:var(--r);
+            font-size:0.72rem;
+            font-weight:700;
+            color:#c084fc;
+            cursor:pointer;
+            transition:all .18s;
+            white-space:nowrap;
+            margin-top:2px;
+        }
+        .ai-btn:hover { background:rgba(139,92,246,0.22); border-color:rgba(139,92,246,0.45); color:#d8b4fe; }
+        .ai-btn:active { transform:scale(0.95); }
+        .ai-btn.submitted-wrong {
+            background:rgba(239,68,68,0.12);
+            border-color:rgba(239,68,68,0.3);
+            color:#fca5a5;
+        }
+        .ai-btn.submitted-correct {
+            background:rgba(34,197,94,0.10);
+            border-color:rgba(34,197,94,0.25);
+            color:#86efac;
+        }
+
+        /* Ask mistakes button */
+        .btn-ask-mistakes {
+            width:100%;
+            padding:13px 18px;
+            background:linear-gradient(135deg,#5b21b6,#8b5cf6);
+            border:none;
+            border-radius:15px;
+            color:white;
+            font-family:var(--r);
+            font-size:0.92rem;
+            font-weight:700;
+            cursor:pointer;
+            box-shadow:0 8px 20px -4px rgba(139,92,246,0.4);
+            transition:filter .15s, transform .15s;
+            margin-top:10px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+        }
+        .btn-ask-mistakes:hover { filter:brightness(1.1); }
+        .btn-ask-mistakes:active { transform:scale(0.98); }
     </style>
 </head>
 <body>
@@ -339,7 +396,6 @@
 const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
 document.getElementById('dateNow').textContent = new Date().getDate()+' '+months[new Date().getMonth()]+' '+new Date().getFullYear();
 
-// Subject data
 const subjectsData = {
     'I': [
         {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat.pdf', key:'diskret_riyaziyyat'},
@@ -440,7 +496,6 @@ const QUIZ_DATA = {
     ]}]
 };
 
-// Add remaining subjects with placeholder questions
 const additionalKeys = ['informasiya_texnologiyalari_2', 'xdiak_2', 'diferensial_tenlikler_2', 'sahibkarlik_2'];
 additionalKeys.forEach(key => {
     if(!QUIZ_DATA[key]) {
@@ -457,27 +512,23 @@ let quizAnswers = [];
 let quizTimerInterval = null;
 const QUIZ_DURATION = 600;
 
-// ==================== SUBJECT POPUP FUNCTIONS ====================
+// Track submission state and grades per exam panel
+let examSubmitted = {}; // ei -> bool
+let examQuestionGrades = {}; // ei -> {qi -> 'correct'|'wrong'|'partial'}
+
+// ==================== SUBJECT POPUP ====================
 function openSubject(name, knum, pdf, key) {
-    curSubjectName = name;
-    curKoll = knum;
-    curPdf = pdf;
-    curKey = key;
+    curSubjectName = name; curKoll = knum; curPdf = pdf; curKey = key;
     document.getElementById('popTitle').textContent = name;
     document.getElementById('popKbadge').textContent = 'Kollokvium ' + knum;
     document.getElementById('subjectPopup').classList.add('show');
     document.body.style.overflow = 'hidden';
 }
-
 function closeSubject() {
     document.getElementById('subjectPopup').classList.remove('show');
     document.body.style.overflow = '';
 }
-
-function overlayClick(e) {
-    if(e.target === document.getElementById('subjectPopup')) closeSubject();
-}
-
+function overlayClick(e) { if(e.target === document.getElementById('subjectPopup')) closeSubject(); }
 function openPDFChoice() {
     document.getElementById('pdfChoiceTitle').textContent = curSubjectName;
     document.getElementById('pdfChoiceKbadge').textContent = 'Kollokvium ' + curKoll;
@@ -486,37 +537,100 @@ function openPDFChoice() {
     document.getElementById('subjectPopup').classList.remove('show');
     document.getElementById('pdfChoicePopup').classList.add('show');
 }
-
 function closePdfChoice() {
     document.getElementById('pdfChoicePopup').classList.remove('show');
     document.getElementById('subjectPopup').classList.add('show');
 }
+function pdfChoiceOverlayClick(e) { if(e.target === document.getElementById('pdfChoicePopup')) closePdfChoice(); }
+function openPDF(type) { const base = curPdf.replace(/\.pdf$/i,''); window.open(base+'_'+type+'.pdf','_blank'); }
+function openWords() { window.open('englishwords.pdf','_blank'); }
 
-function pdfChoiceOverlayClick(e) {
-    if(e.target === document.getElementById('pdfChoicePopup')) closePdfChoice();
+// ==================== AI CONTEXT HELPERS ====================
+function getQuestionText(q, qi) {
+    if(q.type === 'STD') return q.text;
+    if(q.type === 'A') return q.text;
+    if(q.type === 'B' || q.type === 'IMG_B') return q.text || `Sual ${qi+1} (uyğunlaşdırma)`;
+    if(q.type === 'ORDER') return q.text;
+    return `Sual ${qi+1}`;
 }
 
-function openPDF(type) {
-    const base = curPdf.replace(/\.pdf$/i, '');
-    window.open(base + '_' + type + '.pdf', '_blank');
+function getAnswerText(q, type) {
+    const letters = ['a','b','c','d','e'];
+    if(type === 'correct') {
+        if(q.type === 'STD') return q.options[q.correct];
+        if(q.type === 'A') return q.correct.map(i => (i+1)+'. '+q.statements[i]).join(', ');
+        if(q.type === 'B' || q.type === 'IMG_B') return q.items.map((item,ii) => item+' → '+q.correctMap[ii].map(v=>letters[v]+') '+q.variants[v]).join(', ')).join('; ');
+        if(q.type === 'ORDER') return q.correct.map((origIdx,pos) => (pos+1)+'. '+q.statements[origIdx]).join(', ');
+    }
+    return null;
 }
 
-function openWords() {
-    window.open('englishwords.pdf', '_blank');
+function getUserAnswerText(q, ans) {
+    const letters = ['a','b','c','d','e'];
+    if(q.type === 'STD') return ans >= 0 ? q.options[ans] : 'Cavab verilməyib';
+    if(q.type === 'A') return ans && ans.size > 0 ? [...ans].map(i => (i+1)+'. '+q.statements[i]).join(', ') : 'Cavab verilməyib';
+    if(q.type === 'B' || q.type === 'IMG_B') {
+        if(!ans) return 'Cavab verilməyib';
+        return q.items.map((item,ii) => item+' → '+(ans[ii].size > 0 ? [...ans[ii]].map(v=>letters[v]+') '+q.variants[v]).join(', ') : '?')).join('; ');
+    }
+    if(q.type === 'ORDER') return ans ? ans.map((origIdx,pos) => (pos+1)+'. '+q.statements[origIdx]).join(', ') : 'Cavab verilməyib';
+    return 'Cavab verilməyib';
+}
+
+function openAIForQuestion(ei, qi, status) {
+    const exam = QUIZ_DATA[curKey][ei];
+    const q = exam.questions[qi];
+    const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
+
+    const ctx = {
+        questionText: getQuestionText(q, qi),
+        status: status, // 'pending', 'correct', 'wrong'
+        correctAnswer: getAnswerText(q, 'correct'),
+        yourAnswer: ans ? getUserAnswerText(q, ans) : null,
+        optionsText: q.type === 'STD' ? q.options.join(', ') : null
+    };
+
+    localStorage.setItem('aiContext', JSON.stringify(ctx));
+    window.open('ai.html', '_blank');
+}
+
+function openAIForMistakes(ei) {
+    const exam = QUIZ_DATA[curKey][ei];
+    const grades = examQuestionGrades[ei] || {};
+    const mistakes = [];
+
+    exam.questions.forEach((q, qi) => {
+        if(grades[qi] === 'wrong' || grades[qi] === 'partial') {
+            const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
+            mistakes.push({
+                questionText: getQuestionText(q, qi),
+                yourAnswer: ans ? getUserAnswerText(q, ans) : 'Cavab verilməyib',
+                correctAnswer: getAnswerText(q, 'correct')
+            });
+        }
+    });
+
+    if(mistakes.length === 0) {
+        alert('Bütün suallar düzgün cavablandı! 🎉');
+        return;
+    }
+
+    const ctx = { type: 'mistakes', mistakes };
+    localStorage.setItem('aiContext', JSON.stringify(ctx));
+    window.open('ai.html', '_blank');
 }
 
 // ==================== QUIZ FUNCTIONS ====================
 function openQuiz() {
     const data = QUIZ_DATA[curKey];
-    if(!data) {
-        alert('Test sualları hazırlanır...');
-        return;
-    }
+    if(!data) { alert('Test sualları hazırlanır...'); return; }
     document.getElementById('quizTitle').textContent = curSubjectName + ' — Test';
     document.getElementById('quizSubtitle').textContent = data[0].questions.length + ' sual';
     closeSubject();
     
-    // Initialize answers
+    examSubmitted = {};
+    examQuestionGrades = {};
+
     quizAnswers = data.map(exam => exam.questions.map(q => {
         if(q.type === 'A') return new Set();
         if(q.type === 'B' || q.type === 'IMG_B') return q.items.map(() => new Set());
@@ -524,11 +638,9 @@ function openQuiz() {
         return -1;
     }));
     
-    // Build UI
     const tabsEl = document.getElementById('qtabs');
     const panelsEl = document.getElementById('qpanels');
-    tabsEl.innerHTML = '';
-    panelsEl.innerHTML = '';
+    tabsEl.innerHTML = ''; panelsEl.innerHTML = '';
     
     data.forEach((exam, ei) => {
         const tab = document.createElement('button');
@@ -536,7 +648,6 @@ function openQuiz() {
         tab.textContent = exam.title;
         tab.onclick = () => switchTab(ei);
         tabsEl.appendChild(tab);
-        
         const panel = document.createElement('div');
         panel.className = 'qpanel' + (ei === 0 ? ' active' : '');
         panel.id = 'qp-' + ei;
@@ -550,26 +661,37 @@ function openQuiz() {
     attachAllOrderDragListeners();
 }
 
+function buildAIBtn(ei, qi, status) {
+    const cls = status === 'wrong' ? 'submitted-wrong' : status === 'correct' ? 'submitted-correct' : '';
+    const icon = status === 'wrong' ? '❌' : status === 'correct' ? '✅' : '🤖';
+    return `<button class="ai-btn ${cls}" onclick="openAIForQuestion(${ei},${qi},'${status}')" title="AI ilə soruş">${icon} AI</button>`;
+}
+
 function buildPanel(ei) {
     const exam = QUIZ_DATA[curKey][ei];
     const letters = ['A','B','C','D','E'];
+    const isSubmitted = examSubmitted[ei];
+    const grades = examQuestionGrades[ei] || {};
     let html = '';
     
     exam.questions.forEach((q, qi) => {
+        const status = isSubmitted ? (grades[qi] || 'wrong') : 'pending';
+        const aiBtn = buildAIBtn(ei, qi, status);
+
         if(q.type === 'STD') {
-            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-text">${q.text}</div><div class="options">`;
+            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-header-row"><div class="q-text">${q.text}</div>${aiBtn}</div><div class="options">`;
             q.options.forEach((opt, oi) => {
                 html += `<div class="option" id="opt-${ei}-${qi}-${oi}" onclick="pickSTD(${ei},${qi},${oi})"><div class="opt-letter">${letters[oi]}</div><div class="opt-text">${opt}</div></div>`;
             });
             html += `</div></div>`;
         } else if(q.type === 'A') {
-            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge multi">✓ Çoxlu seçim — 3 düzgün cavab</span><div class="q-text">${q.text}</div><div class="options">`;
+            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-header-row"><div><span class="q-type-badge multi">✓ Çoxlu seçim — 3 düzgün cavab</span><div class="q-text">${q.text}</div></div>${aiBtn}</div><div class="options">`;
             q.statements.forEach((st, si) => {
                 html += `<div class="option" id="optA-${ei}-${qi}-${si}" onclick="pickA(${ei},${qi},${si})"><div class="opt-check" id="chk-${ei}-${qi}-${si}"></div><div class="opt-text">${si+1}. ${st}</div></div>`;
             });
             html += `</div></div>`;
         } else if(q.type === 'B' || q.type === 'IMG_B') {
-            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge match">↔ Uyğunlaşdırma</span>`;
+            html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-header-row"><span class="q-type-badge match">↔ Uyğunlaşdırma</span>${aiBtn}</div>`;
             if(q.img) html += `<img class="q-img" src="${q.img}" alt="Sual ${qi+1}">`;
             html += `<div class="q-text">${q.text || ''}</div><div class="match-wrap" id="match-${ei}-${qi}">`;
             q.items.forEach((item, ii) => {
@@ -587,8 +709,7 @@ function buildPanel(ei) {
                 [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
             }
             if(quizAnswers[ei] && quizAnswers[ei][qi]) quizAnswers[ei][qi] = [...shuffled];
-            
-            html += `<div class="q-card" id="qcard-order-${ei}-${qi}"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><span class="q-type-badge order">↕ Ardıcıllıq — düzgün sıraya düz</span><div class="q-text">${q.text}</div><div class="order-hint">☰ Elementləri sürüşdürərək düzgün ardıcıllığa sal</div><div class="order-list" id="order-list-${ei}-${qi}" data-ei="${ei}" data-qi="${qi}">`;
+            html += `<div class="q-card" id="qcard-order-${ei}-${qi}"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-header-row"><span class="q-type-badge order">↕ Ardıcıllıq</span>${aiBtn}</div><div class="q-text">${q.text}</div><div class="order-hint">☰ Elementləri sürüşdürərək düzgün ardıcıllığa sal</div><div class="order-list" id="order-list-${ei}-${qi}" data-ei="${ei}" data-qi="${qi}">`;
             shuffled.forEach((origIdx, pos) => {
                 html += `<div class="order-item" draggable="true" data-orig="${origIdx}" id="oi-${ei}-${qi}-${pos}"><div class="order-pos">${pos+1}</div><div class="order-text">${q.statements[origIdx]}</div><div class="order-drag-handle">⋮⋮</div></div>`;
             });
@@ -600,25 +721,24 @@ function buildPanel(ei) {
 }
 
 function switchTab(ei) {
-    document.querySelectorAll('.qtab').forEach((t, i) => t.classList.toggle('active', i === ei));
-    document.querySelectorAll('.qpanel').forEach((p, i) => p.classList.toggle('active', i === ei));
+    document.querySelectorAll('.qtab').forEach((t,i) => t.classList.toggle('active', i===ei));
+    document.querySelectorAll('.qpanel').forEach((p,i) => p.classList.toggle('active', i===ei));
 }
 
 function pickSTD(ei, qi, oi) {
-    if(document.getElementById('sub-' + ei).disabled) return;
+    if(document.getElementById('sub-'+ei).disabled) return;
     quizAnswers[ei][qi] = oi;
     const exam = QUIZ_DATA[curKey][ei];
-    exam.questions[qi].options.forEach((_, o) => {
+    exam.questions[qi].options.forEach((_,o) => {
         const el = document.getElementById(`opt-${ei}-${qi}-${o}`);
-        if(el) el.classList.toggle('selected', o === oi);
+        if(el) el.classList.toggle('selected', o===oi);
     });
 }
 
 function pickA(ei, qi, si) {
-    if(document.getElementById('sub-' + ei).disabled) return;
+    if(document.getElementById('sub-'+ei).disabled) return;
     const sel = quizAnswers[ei][qi];
-    if(sel.has(si)) sel.delete(si);
-    else sel.add(si);
+    if(sel.has(si)) sel.delete(si); else sel.add(si);
     const optEl = document.getElementById(`optA-${ei}-${qi}-${si}`);
     const chkEl = document.getElementById(`chk-${ei}-${qi}-${si}`);
     const on = sel.has(si);
@@ -627,10 +747,9 @@ function pickA(ei, qi, si) {
 }
 
 function pickB(ei, qi, ii, vi) {
-    if(document.getElementById('sub-' + ei).disabled) return;
+    if(document.getElementById('sub-'+ei).disabled) return;
     const itemSel = quizAnswers[ei][qi][ii];
-    if(itemSel.has(vi)) itemSel.delete(vi);
-    else itemSel.add(vi);
+    if(itemSel.has(vi)) itemSel.delete(vi); else itemSel.add(vi);
     const el = document.getElementById(`mv-${ei}-${qi}-${ii}-${vi}`);
     if(el) el.classList.toggle('sel', itemSel.has(vi));
 }
@@ -647,34 +766,35 @@ function gradeTypeA(q, chosen) {
 
 function gradeTypeB(q, chosenArr) {
     let pts = 0;
-    q.items.forEach((_, ii) => {
+    q.items.forEach((_,ii) => {
         const corr = new Set(q.correctMap[ii]);
         const sel = chosenArr[ii];
         const nCorr = [...sel].filter(v => corr.has(v)).length;
         if(nCorr === corr.size) pts += 1;
         else if(nCorr > 0) pts += 0.5;
     });
-    return Math.min(2, Math.round((pts / q.items.length) * 2 * 10) / 10);
+    return Math.min(2, Math.round((pts/q.items.length)*2*10)/10);
 }
 
 function gradeTypeOrder(q, chosenArr) {
     if(!chosenArr || chosenArr.length !== q.correct.length) return 0;
-    for(let i = 0; i < q.correct.length; i++) {
-        if(chosenArr[i] !== q.correct[i]) return 0;
-    }
+    for(let i = 0; i < q.correct.length; i++) { if(chosenArr[i] !== q.correct[i]) return 0; }
     return 2;
 }
 
 function submitExam(ei) {
     const exam = QUIZ_DATA[curKey][ei];
     let totalScore = 0, maxScore = 0;
+    examSubmitted[ei] = true;
+    examQuestionGrades[ei] = {};
     
     exam.questions.forEach((q, qi) => {
         let pts = 0, max = 2;
         if(q.type === 'STD') {
             const chosen = quizAnswers[ei][qi];
             pts = chosen === q.correct ? 2 : 0;
-            q.options.forEach((_, oi) => {
+            examQuestionGrades[ei][qi] = pts === 2 ? 'correct' : 'wrong';
+            q.options.forEach((_,oi) => {
                 const el = document.getElementById(`opt-${ei}-${qi}-${oi}`);
                 if(el) {
                     el.classList.remove('selected');
@@ -684,8 +804,9 @@ function submitExam(ei) {
             });
         } else if(q.type === 'A') {
             pts = gradeTypeA(q, quizAnswers[ei][qi]);
+            examQuestionGrades[ei][qi] = pts >= 2 ? 'correct' : pts > 0 ? 'partial' : 'wrong';
             const c = new Set(q.correct);
-            q.statements.forEach((_, si) => {
+            q.statements.forEach((_,si) => {
                 const optEl = document.getElementById(`optA-${ei}-${qi}-${si}`);
                 const chkEl = document.getElementById(`chk-${ei}-${qi}-${si}`);
                 if(optEl) {
@@ -700,17 +821,18 @@ function submitExam(ei) {
             });
         } else if(q.type === 'B' || q.type === 'IMG_B') {
             pts = gradeTypeB(q, quizAnswers[ei][qi]);
-            q.items.forEach((_, ii) => {
+            examQuestionGrades[ei][qi] = pts >= 2 ? 'correct' : pts > 0 ? 'partial' : 'wrong';
+            q.items.forEach((_,ii) => {
                 const corr = new Set(q.correctMap[ii]);
                 const sel = quizAnswers[ei][qi][ii];
-                const allOk = [...sel].every(v => corr.has(v));
+                const allOk = [...sel].every(v => corr.has(v)) && sel.size === corr.size;
                 const miEl = document.getElementById(`mi-${ei}-${qi}-${ii}`);
-                q.variants.forEach((_, vi) => {
+                q.variants.forEach((_,vi) => {
                     const mvEl = document.getElementById(`mv-${ei}-${qi}-${ii}-${vi}`);
                     if(mvEl) {
                         const wasSel = sel.has(vi);
                         const isCorr = corr.has(vi);
-                        mvEl.classList.remove('sel', 'corr', 'wrng', 'miss');
+                        mvEl.classList.remove('sel','corr','wrng','miss');
                         if(wasSel && isCorr) mvEl.classList.add('corr');
                         else if(wasSel && !isCorr) mvEl.classList.add('wrng');
                         else if(!wasSel && isCorr) mvEl.classList.add('miss');
@@ -723,59 +845,76 @@ function submitExam(ei) {
             });
         } else if(q.type === 'ORDER') {
             pts = gradeTypeOrder(q, quizAnswers[ei][qi]);
+            examQuestionGrades[ei][qi] = pts === 2 ? 'correct' : 'wrong';
             const listEl = document.getElementById(`order-list-${ei}-${qi}`);
             if(listEl) {
                 const items = [...listEl.querySelectorAll('.order-item')];
                 items.forEach(el => {
-                    el.draggable = false;
-                    el.style.cursor = 'default';
+                    el.draggable = false; el.style.cursor = 'default';
                     if(pts === 2) el.classList.add('correct-order');
                     else el.classList.add('wrong-order');
                 });
                 if(pts !== 2) {
                     const cardEl = document.getElementById(`qcard-order-${ei}-${qi}`);
                     if(cardEl && !cardEl.querySelector('.order-correct-answer')) {
-                        let answerHtml = `<div class="order-correct-answer"><div class="order-correct-answer-title">✅ Düzgün ardıcıllıq:</div>`;
-                        q.correct.forEach((origIdx, pos) => {
-                            answerHtml += `<div class="order-correct-row">${pos+1}. ${q.statements[origIdx]}</div>`;
-                        });
-                        answerHtml += `</div>`;
-                        cardEl.insertAdjacentHTML('beforeend', answerHtml);
+                        let ansHtml = `<div class="order-correct-answer"><div class="order-correct-answer-title">✅ Düzgün ardıcıllıq:</div>`;
+                        q.correct.forEach((origIdx,pos) => { ansHtml += `<div class="order-correct-row">${pos+1}. ${q.statements[origIdx]}</div>`; });
+                        ansHtml += `</div>`;
+                        cardEl.insertAdjacentHTML('beforeend', ansHtml);
                     }
                 }
             }
         }
-        totalScore += pts;
-        maxScore += max;
+        totalScore += pts; maxScore += max;
     });
+
+    // Update AI buttons to reflect correct/wrong status
+    exam.questions.forEach((q, qi) => {
+        const grade = examQuestionGrades[ei][qi];
+        const status = grade === 'correct' ? 'correct' : 'wrong';
+        const btns = document.querySelectorAll(`#qp-${ei} .q-card`);
+        if(btns[qi]) {
+            const btn = btns[qi].querySelector('.ai-btn');
+            if(btn) {
+                btn.className = 'ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
+                btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI';
+                btn.onclick = () => openAIForQuestion(ei, qi, status);
+            }
+        }
+    });
+
+    document.getElementById('sub-'+ei).disabled = true;
+    const pass = totalScore/maxScore >= 0.5;
     
-    document.getElementById('sub-' + ei).disabled = true;
-    const res = document.getElementById('res-' + ei);
-    const pass = totalScore / maxScore >= 0.5;
-    res.innerHTML = `<div class="result-score ${pass ? 'pass' : 'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass ? '✅ Uğurlu nəticə!' : '❌ Daha çox çalışın'}</div><button class="btn-retry" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
+    // Count mistakes
+    const mistakeCount = Object.values(examQuestionGrades[ei]).filter(g => g !== 'correct').length;
+    const mistakesBtn = mistakeCount > 0 
+        ? `<button class="btn-ask-mistakes" onclick="openAIForMistakes(${ei})">🤖 ${mistakeCount} yanlışı AI-yə soruş</button>` 
+        : `<button class="btn-ask-mistakes" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.35);" onclick="openAIForMistakes(${ei})">🤖 AI ilə bütün sualları analiz et</button>`;
+
+    const res = document.getElementById('res-'+ei);
+    res.innerHTML = `<div class="result-score ${pass?'pass':'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div>${mistakesBtn}<button class="btn-retry" style="margin-top:8px;" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
     res.classList.add('show');
     
     saveResult(curKey, ei, totalScore, maxScore, pass);
-    
-    const allDone = QUIZ_DATA[curKey].every((_, i) => {
-        const btn = document.getElementById('sub-' + i);
-        return btn && btn.disabled;
-    });
+    const allDone = QUIZ_DATA[curKey].every((_,i) => { const b = document.getElementById('sub-'+i); return b && b.disabled; });
     if(allDone) stopTimer();
 }
 
 function retryExam(ei) {
     const exam = QUIZ_DATA[curKey][ei];
+    examSubmitted[ei] = false;
+    examQuestionGrades[ei] = {};
     quizAnswers[ei] = exam.questions.map(q => {
         if(q.type === 'A') return new Set();
         if(q.type === 'B' || q.type === 'IMG_B') return q.items.map(() => new Set());
         if(q.type === 'ORDER') return [...Array(q.statements.length).keys()];
         return -1;
     });
-    document.getElementById('qp-' + ei).innerHTML = buildPanel(ei);
+    document.getElementById('qp-'+ei).innerHTML = buildPanel(ei);
     attachOrderDragListeners(ei);
-    document.getElementById('sub-' + ei).disabled = false;
-    const res = document.getElementById('res-' + ei);
+    document.getElementById('sub-'+ei).disabled = false;
+    const res = document.getElementById('res-'+ei);
     if(res) res.classList.remove('show');
     startTimer();
 }
@@ -786,19 +925,17 @@ function closeQuiz() {
     document.getElementById('subjectPopup').classList.add('show');
 }
 
-// ==================== DRAG & DROP FOR ORDER ====================
+// ==================== DRAG & DROP ====================
 function attachAllOrderDragListeners() {
     const data = QUIZ_DATA[curKey];
     if(!data) return;
-    data.forEach((_, ei) => {
-        attachOrderDragListeners(ei);
-    });
+    data.forEach((_,ei) => attachOrderDragListeners(ei));
 }
 
 function attachOrderDragListeners(ei) {
     const exam = QUIZ_DATA[curKey][ei];
     if(!exam) return;
-    exam.questions.forEach((q, qi) => {
+    exam.questions.forEach((q,qi) => {
         if(q.type !== 'ORDER') return;
         const listEl = document.getElementById(`order-list-${ei}-${qi}`);
         if(listEl) setupOrderDragDrop(listEl, ei, qi);
@@ -807,215 +944,140 @@ function attachOrderDragListeners(ei) {
 
 function setupOrderDragDrop(listEl, ei, qi) {
     let dragSrc = null;
-    
-    function onDragStart(e) {
-        dragSrc = this;
-        this.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', '');
-    }
-    function onDragEnd(e) {
-        this.classList.remove('dragging');
-        listEl.querySelectorAll('.order-item').forEach(el => el.classList.remove('drag-over'));
-        updateOrderAnswers(listEl, ei, qi);
-    }
-    function onDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; return false; }
+    function onDragStart(e) { dragSrc = this; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain',''); }
+    function onDragEnd(e) { this.classList.remove('dragging'); listEl.querySelectorAll('.order-item').forEach(el => el.classList.remove('drag-over')); updateOrderAnswers(listEl,ei,qi); }
+    function onDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect='move'; return false; }
     function onDragEnter(e) { this.classList.add('drag-over'); }
     function onDragLeave(e) { this.classList.remove('drag-over'); }
     function onDrop(e) {
         e.stopPropagation();
         if(dragSrc !== this) {
             const items = [...listEl.querySelectorAll('.order-item')];
-            const srcIdx = items.indexOf(dragSrc);
-            const dstIdx = items.indexOf(this);
+            const srcIdx = items.indexOf(dragSrc), dstIdx = items.indexOf(this);
             if(srcIdx < dstIdx) listEl.insertBefore(dragSrc, this.nextSibling);
             else listEl.insertBefore(dragSrc, this);
-            updateOrderPositions(listEl);
-            updateOrderAnswers(listEl, ei, qi);
+            updateOrderPositions(listEl); updateOrderAnswers(listEl,ei,qi);
         }
-        this.classList.remove('drag-over');
-        return false;
+        this.classList.remove('drag-over'); return false;
     }
-    
     listEl.querySelectorAll('.order-item').forEach(item => {
-        item.addEventListener('dragstart', onDragStart);
-        item.addEventListener('dragend', onDragEnd);
-        item.addEventListener('dragover', onDragOver);
-        item.addEventListener('dragenter', onDragEnter);
-        item.addEventListener('dragleave', onDragLeave);
-        item.addEventListener('drop', onDrop);
+        item.addEventListener('dragstart', onDragStart); item.addEventListener('dragend', onDragEnd);
+        item.addEventListener('dragover', onDragOver); item.addEventListener('dragenter', onDragEnter);
+        item.addEventListener('dragleave', onDragLeave); item.addEventListener('drop', onDrop);
     });
 }
 
 function updateOrderPositions(listEl) {
-    listEl.querySelectorAll('.order-item').forEach((el, pos) => {
-        const posEl = el.querySelector('.order-pos');
-        if(posEl) posEl.textContent = pos + 1;
-    });
+    listEl.querySelectorAll('.order-item').forEach((el,pos) => { const p = el.querySelector('.order-pos'); if(p) p.textContent = pos+1; });
 }
 
 function updateOrderAnswers(listEl, ei, qi) {
-    const items = [...listEl.querySelectorAll('.order-item')];
-    quizAnswers[ei][qi] = items.map(el => parseInt(el.dataset.orig));
+    quizAnswers[ei][qi] = [...listEl.querySelectorAll('.order-item')].map(el => parseInt(el.dataset.orig));
 }
 
 // ==================== TIMER ====================
 function startTimer() {
-    stopTimer();
-    let remaining = QUIZ_DURATION;
-    updateTimerDisplay(remaining);
+    stopTimer(); let remaining = QUIZ_DURATION; updateTimerDisplay(remaining);
     const timerEl = document.getElementById('quizTimer');
-    timerEl.style.background = 'rgba(255,255,255,0.06)';
-    timerEl.style.color = 'var(--text)';
+    timerEl.style.background = 'rgba(255,255,255,0.06)'; timerEl.style.color = 'var(--text)';
     quizTimerInterval = setInterval(() => {
-        remaining--;
-        updateTimerDisplay(remaining);
-        if(remaining <= 60 && remaining > 10) {
-            timerEl.style.background = 'rgba(245,166,35,0.15)';
-            timerEl.style.color = '#f5a623';
-        }
-        if(remaining <= 10) {
-            timerEl.style.background = 'rgba(239,68,68,0.15)';
-            timerEl.style.color = '#ef4444';
-        }
-        if(remaining <= 0) {
-            stopTimer();
-            autoSubmitAll();
-        }
+        remaining--; updateTimerDisplay(remaining);
+        if(remaining <= 60 && remaining > 10) { timerEl.style.background='rgba(245,166,35,0.15)'; timerEl.style.color='#f5a623'; }
+        if(remaining <= 10) { timerEl.style.background='rgba(239,68,68,0.15)'; timerEl.style.color='#ef4444'; }
+        if(remaining <= 0) { stopTimer(); autoSubmitAll(); }
     }, 1000);
 }
 
-function stopTimer() {
-    if(quizTimerInterval) { clearInterval(quizTimerInterval); quizTimerInterval = null; }
-}
+function stopTimer() { if(quizTimerInterval) { clearInterval(quizTimerInterval); quizTimerInterval = null; } }
 
 function updateTimerDisplay(sec) {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    document.getElementById('quizTimer').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    const m = Math.floor(sec/60), s = sec%60;
+    document.getElementById('quizTimer').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
 }
 
 function autoSubmitAll() {
     const data = QUIZ_DATA[curKey];
-    if(data) {
-        data.forEach((_, ei) => {
-            const btn = document.getElementById('sub-' + ei);
-            if(btn && !btn.disabled) submitExam(ei);
-        });
-    }
+    if(data) data.forEach((_,ei) => { const b = document.getElementById('sub-'+ei); if(b && !b.disabled) submitExam(ei); });
 }
 
 // ==================== RESULTS SYSTEM ====================
 const SUBJECT_NAMES = {
-    'diskret_riyaziyyat': 'Diskret riyaz.', 'diskret_riyaziyyat_2': 'Diskret riyaz.',
-    'proqramlasdirma': 'Proqramlaşd.', 'proqramlasdirma_2': 'Proqramlaşd.',
-    'informasiya_texnologiyalari': 'İnf. tex.', 'informasiya_texnologiyalari_2': 'İnf. tex.',
-    'xdiak': 'XDIAK', 'xdiak_2': 'XDIAK',
-    'diferensial_tenlikler': 'Dif. tənliklər', 'diferensial_tenlikler_2': 'Dif. tənliklər',
-    'sahibkarlik': 'Sahibkarlıq', 'sahibkarlik_2': 'Sahibkarlıq'
+    'diskret_riyaziyyat':'Diskret riyaz.','diskret_riyaziyyat_2':'Diskret riyaz.',
+    'proqramlasdirma':'Proqramlaşd.','proqramlasdirma_2':'Proqramlaşd.',
+    'informasiya_texnologiyalari':'İnf. tex.','informasiya_texnologiyalari_2':'İnf. tex.',
+    'xdiak':'XDIAK','xdiak_2':'XDIAK',
+    'diferensial_tenlikler':'Dif. tənliklər','diferensial_tenlikler_2':'Dif. tənliklər',
+    'sahibkarlik':'Sahibkarlıq','sahibkarlik_2':'Sahibkarlıq'
 };
 
 const SUBJECT_GROUPS = [
-    { name: 'Diskret riyaziyyat', keys: ['diskret_riyaziyyat', 'diskret_riyaziyyat_2'] },
-    { name: 'Proqramlaşdırma', keys: ['proqramlasdirma', 'proqramlasdirma_2'] },
-    { name: 'İnf. texnologiyaları', keys: ['informasiya_texnologiyalari', 'informasiya_texnologiyalari_2'] },
-    { name: 'XDIAK', keys: ['xdiak', 'xdiak_2'] },
-    { name: 'Diferensial tənliklər', keys: ['diferensial_tenlikler', 'diferensial_tenlikler_2'] },
-    { name: 'Sahibkarlıq', keys: ['sahibkarlik', 'sahibkarlik_2'] }
+    {name:'Diskret riyaziyyat',keys:['diskret_riyaziyyat','diskret_riyaziyyat_2']},
+    {name:'Proqramlaşdırma',keys:['proqramlasdirma','proqramlasdirma_2']},
+    {name:'İnf. texnologiyaları',keys:['informasiya_texnologiyalari','informasiya_texnologiyalari_2']},
+    {name:'XDIAK',keys:['xdiak','xdiak_2']},
+    {name:'Diferensial tənliklər',keys:['diferensial_tenlikler','diferensial_tenlikler_2']},
+    {name:'Sahibkarlıq',keys:['sahibkarlik','sahibkarlik_2']}
 ];
 
-function getHistory() { try { return JSON.parse(localStorage.getItem('testHistory') || '[]'); } catch(e) { return []; } }
+function getHistory() { try { return JSON.parse(localStorage.getItem('testHistory')||'[]'); } catch(e) { return []; } }
 function setHistory(h) { try { localStorage.setItem('testHistory', JSON.stringify(h)); } catch(e) {} }
 
 function saveResult(key, ei, score, max, pass) {
     const h = getHistory();
     const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
+    const pad = n => String(n).padStart(2,'0');
     const dateStr = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
     const koll = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
-    h.unshift({ key, ei, score, max, pass, date: dateStr, subj: SUBJECT_NAMES[key] || key, koll, id: Date.now() + Math.random() });
+    h.unshift({key,ei,score,max,pass,date:dateStr,subj:SUBJECT_NAMES[key]||key,koll,id:Date.now()+Math.random()});
     if(h.length > 200) h.splice(200);
-    setHistory(h);
-    updateBadge();
+    setHistory(h); updateBadge();
 }
 
 function updateBadge() {
     const h = getHistory();
     const badge = document.getElementById('resultsBadge');
-    if(badge) badge.textContent = h.length === 0 ? '0 nəticə' : h.length + ' nəticə';
+    if(badge) badge.textContent = h.length === 0 ? '0 nəticə' : h.length+' nəticə';
 }
 
 function deleteSingleResult(id) {
-    let h = getHistory();
-    h = h.filter(item => item.id !== id);
-    setHistory(h);
-    updateBadge();
+    let h = getHistory(); h = h.filter(item => item.id !== id);
+    setHistory(h); updateBadge();
     if(document.getElementById('resultsOverlay').classList.contains('show')) renderResults();
 }
 
 function renderResults() {
     const h = getHistory();
-    document.getElementById('resultCount').textContent = h.length === 0 ? '0 test edilib' : h.length + ' nəticə';
-    
+    document.getElementById('resultCount').textContent = h.length === 0 ? '0 test edilib' : h.length+' nəticə';
     const bestGrid = document.getElementById('bestGrid');
     bestGrid.innerHTML = '';
     SUBJECT_GROUPS.forEach(g => {
         const entries = h.filter(r => g.keys.includes(r.key));
-        const card = document.createElement('div');
-        card.className = 'best-card';
+        const card = document.createElement('div'); card.className = 'best-card';
         if(entries.length === 0) {
             card.innerHTML = `<div class="best-card-name">${g.name}</div><div class="best-card-score none">—</div><div class="best-card-koll">Test edilməyib</div>`;
         } else {
-            const best = entries.reduce((a,b) => ((a.score/a.max) >= (b.score/b.max) ? a : b));
+            const best = entries.reduce((a,b) => ((a.score/a.max)>=(b.score/b.max)?a:b));
             const pct = Math.round(best.score/best.max*100);
-            card.innerHTML = `<div class="best-card-name">${g.name}</div><div class="best-card-score ${best.pass ? 'pass' : 'fail'}">${best.score}/${best.max}</div><div class="best-card-koll">${best.koll} · ${pct}%</div>`;
+            card.innerHTML = `<div class="best-card-name">${g.name}</div><div class="best-card-score ${best.pass?'pass':'fail'}">${best.score}/${best.max}</div><div class="best-card-koll">${best.koll} · ${pct}%</div>`;
         }
         bestGrid.appendChild(card);
     });
-    
     const histList = document.getElementById('histList');
-    if(h.length === 0) {
-        histList.innerHTML = '<div class="hist-empty">Hələ heç bir test edilməyib</div>';
-        return;
-    }
-    histList.innerHTML = h.map(r => `
-        <div class="hist-item">
-            <div class="hist-dot ${r.pass ? 'pass' : 'fail'}"></div>
-            <div class="hist-info">
-                <div class="hist-subj">${r.subj} — ${r.koll}</div>
-                <div class="hist-meta">${r.date}</div>
-            </div>
-            <div class="hist-score ${r.pass ? 'pass' : 'fail'}">${r.score}/${r.max}</div>
-            <div class="hist-delete" data-id="${r.id}" onclick="deleteSingleResult(${r.id})">🗑</div>
-        </div>
-    `).join('');
+    if(h.length === 0) { histList.innerHTML = '<div class="hist-empty">Hələ heç bir test edilməyib</div>'; return; }
+    histList.innerHTML = h.map(r => `<div class="hist-item"><div class="hist-dot ${r.pass?'pass':'fail'}"></div><div class="hist-info"><div class="hist-subj">${r.subj} — ${r.koll}</div><div class="hist-meta">${r.date}</div></div><div class="hist-score ${r.pass?'pass':'fail'}">${r.score}/${r.max}</div><div class="hist-delete" data-id="${r.id}" onclick="deleteSingleResult(${r.id})">🗑</div></div>`).join('');
 }
 
-function openResultsOverlay() {
-    renderResults();
-    document.getElementById('resultsOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeResultsOverlay() {
-    document.getElementById('resultsOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-}
+function openResultsOverlay() { renderResults(); document.getElementById('resultsOverlay').classList.add('show'); document.body.style.overflow='hidden'; }
+function closeResultsOverlay() { document.getElementById('resultsOverlay').classList.remove('show'); document.body.style.overflow=''; }
 
 let clearPending = false;
 document.getElementById('clearBtn').addEventListener('click', function() {
     if(!clearPending) {
-        clearPending = true;
-        this.textContent = '❗ Əminsiniz? Yenidən bas';
-        this.style.background = 'rgba(239,68,68,0.25)';
-        setTimeout(() => { clearPending = false; this.textContent = '🗑 Bütün nəticələri sil'; this.style.background = ''; }, 3000);
+        clearPending = true; this.textContent = '❗ Əminsiniz? Yenidən bas'; this.style.background='rgba(239,68,68,0.25)';
+        setTimeout(() => { clearPending=false; this.textContent='🗑 Bütün nəticələri sil'; this.style.background=''; }, 3000);
     } else {
-        clearPending = false;
-        setHistory([]);
-        updateBadge();
-        renderResults();
-        this.textContent = '🗑 Bütün nəticələri sil';
-        this.style.background = '';
+        clearPending = false; setHistory([]); updateBadge(); renderResults();
+        this.textContent='🗑 Bütün nəticələri sil'; this.style.background='';
     }
 });
 
@@ -1027,10 +1089,7 @@ function toggleTheme() {
 }
 (function() {
     const saved = localStorage.getItem('theme');
-    if(saved === 'light') {
-        document.body.classList.add('light');
-        document.getElementById('themeToggle').textContent = '🌑';
-    }
+    if(saved === 'light') { document.body.classList.add('light'); document.getElementById('themeToggle').textContent = '🌑'; }
 })();
 
 updateBadge();
