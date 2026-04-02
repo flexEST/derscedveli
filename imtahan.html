@@ -457,7 +457,7 @@ document.querySelectorAll('.exam-card')[0].classList.add('open');
 // ==================== EST AI ====================
 function openESTAI() {
     localStorage.removeItem('aiContext');
-    window.open('ai.html', '_blank');
+    window.location.href = 'ai.html';
 }
 
 // ==================== QUIZ DATA ====================
@@ -615,7 +615,7 @@ function openAIForQuestion(ei, qi, status) {
     };
 
     localStorage.setItem('aiContext', JSON.stringify(ctx));
-    window.open('ai.html', '_blank');
+    window.location.href = 'ai.html';
 }
 
 // NEW FUNCTION: Send ALL questions (both correct and wrong) to AI
@@ -647,7 +647,7 @@ function openAIForAllQuestions(ei) {
     };
     
     localStorage.setItem('aiContext', JSON.stringify(ctx));
-    window.open('ai.html', '_blank');
+    window.location.href = 'ai.html';
 }
 
 // ==================== QUIZ FUNCTIONS ====================
