@@ -265,7 +265,7 @@
             background:linear-gradient(135deg,#059669,#10b981);
         }
 
-        /* Ask mistakes button */
+        /* Ask mistakes button - now shows ALL questions */
         .btn-ask-mistakes {
             width:100%;
             padding:13px 18px;
@@ -618,28 +618,34 @@ function openAIForQuestion(ei, qi, status) {
     window.open('ai.html', '_blank');
 }
 
-function openAIForMistakes(ei) {
+// NEW FUNCTION: Send ALL questions (both correct and wrong) to AI
+function openAIForAllQuestions(ei) {
     const exam = QUIZ_DATA[curKey][ei];
     const grades = examQuestionGrades[ei] || {};
-    const mistakes = [];
+    const allQuestions = [];
 
     exam.questions.forEach((q, qi) => {
-        if(grades[qi] === 'wrong' || grades[qi] === 'partial') {
-            const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
-            mistakes.push({
-                questionText: getQuestionText(q, qi),
-                yourAnswer: ans ? getUserAnswerText(q, ans) : 'Cavab verilməyib',
-                correctAnswer: getAnswerText(q, 'correct')
-            });
-        }
+        const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
+        const grade = grades[qi] || 'pending';
+        allQuestions.push({
+            questionNumber: qi + 1,
+            questionText: getQuestionText(q, qi),
+            yourAnswer: ans ? getUserAnswerText(q, ans) : 'Cavab verilməyib',
+            correctAnswer: getAnswerText(q, 'correct'),
+            isCorrect: grade === 'correct'
+        });
     });
 
-    if(mistakes.length === 0) {
-        alert('Bütün suallar düzgün cavablandı! 🎉');
-        return;
-    }
-
-    const ctx = { type: 'mistakes', mistakes };
+    const ctx = { 
+        type: 'all_questions',
+        questions: allQuestions,
+        summary: {
+            total: allQuestions.length,
+            correct: allQuestions.filter(q => q.isCorrect).length,
+            wrong: allQuestions.filter(q => !q.isCorrect).length
+        }
+    };
+    
     localStorage.setItem('aiContext', JSON.stringify(ctx));
     window.open('ai.html', '_blank');
 }
@@ -910,14 +916,16 @@ function submitExam(ei) {
     document.getElementById('sub-'+ei).disabled = true;
     const pass = totalScore/maxScore >= 0.5;
     
-    // Count mistakes
-    const mistakeCount = Object.values(examQuestionGrades[ei]).filter(g => g !== 'correct').length;
-    const mistakesBtn = mistakeCount > 0 
-        ? `<button class="btn-ask-mistakes" onclick="openAIForMistakes(${ei})">🤖 ${mistakeCount} yanlışı EST AI-ya soruş</button>` 
-        : `<button class="btn-ask-mistakes" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.35);" onclick="openAIForMistakes(${ei})">🤖 EST AI ilə bütün sualları analiz et</button>`;
+    // Count total questions
+    const totalQuestions = exam.questions.length;
+    const correctCount = Object.values(examQuestionGrades[ei]).filter(g => g === 'correct').length;
+    const wrongCount = totalQuestions - correctCount;
+    
+    // NEW: Button shows ALL questions analysis (not just wrong ones)
+    const analyzeBtn = `<button class="btn-ask-mistakes" onclick="openAIForAllQuestions(${ei})">🤖 EST AI - Bütün sualları analiz et (${correctCount}✅ ${wrongCount}❌)</button>`;
 
     const res = document.getElementById('res-'+ei);
-    res.innerHTML = `<div class="result-score ${pass?'pass':'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div>${mistakesBtn}<button class="btn-retry" style="margin-top:8px;" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
+    res.innerHTML = `<div class="result-score ${pass?'pass':'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div>${analyzeBtn}<button class="btn-retry" style="margin-top:8px;" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
     res.classList.add('show');
     
     saveResult(curKey, ei, totalScore, maxScore, pass);
