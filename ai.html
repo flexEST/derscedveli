@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>AI Köməkçi — Sual Analizi</title>
+    <title>EST AI Köməkçi — Sual Analizi</title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -106,7 +106,7 @@
     <div class="header">
         <div class="back-btn" onclick="goBack()">←</div>
         <div class="header-text">
-            <h1>🤖 AI Köməkçi</h1>
+            <h1>🤖 EST AI Köməkçi</h1>
             <p>Sualları anla, cavabları öyrən</p>
         </div>
         <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
@@ -114,8 +114,8 @@
 
     <div class="ai-badge">
         <div class="ai-badge-dot"></div>
-        <div class="ai-badge-text">GPT-4o-mini — Sualı izah edir</div>
-        <span class="ai-badge-model">OpenAI</span>
+        <div class="ai-badge-text">EST AI — Sualı izah edir</div>
+        <span class="ai-badge-model">EST AI</span>
     </div>
 
     <div class="error-card" id="errorCard">
@@ -131,7 +131,7 @@
     <div class="chat-box" id="chatBox">
         <div class="chat-empty" id="chatEmpty">
             <div class="chat-empty-icon">🎓</div>
-            <div>AI avtomatik olaraq sualınızı izah edəcək...</div>
+            <div>EST AI avtomatik olaraq sualınızı izah edəcək...</div>
         </div>
     </div>
 
@@ -157,9 +157,9 @@
 // ─────────────────────────────────────────────────────────────
 // SERVER URL — change port here if you used a different one
 // ─────────────────────────────────────────────────────────────
-const SERVER_URL = "https://estai-1qe9.vercel.app/api/chat";
+const SERVER_URL = "http://localhost:3000/api/chat";
 
-const SYSTEM_PROMPT = `Sən Azərbaycan dilində imtahan suallarını izah edən bir müəllim köməkçisisin.
+const SYSTEM_PROMPT = `Sən EST AI adlı Azərbaycan dilində imtahan suallarını izah edən bir müəllim köməkçisisən.
 Tələbə sənə imtahan sualları, cavablar, və öz cəhdlərini göstərəcək.
 Qaydalar:
 - Həmişə Azərbaycan dilində cavab ver
@@ -238,11 +238,13 @@ function buildInitialPrompt(ctx) {
 
     let p = `İmtahan sualı: ${ctx.questionText}\n`;
     if(ctx.optionsText) p += `Variantlar: ${ctx.optionsText}\n`;
+    if(ctx.correctAnswer) p += `Düzgün cavab: ${ctx.correctAnswer}\n`;
+    if(ctx.yourAnswer && ctx.status !== 'pending') p += `Mənim cavabım: ${ctx.yourAnswer}\n`;
 
     if(ctx.status === 'wrong') {
-        p += `\nMən bu suala YANLIŞ cavab verdim.\nMənim cavabım: ${ctx.yourAnswer || 'seçilməyib'}\nDüzgün cavab: ${ctx.correctAnswer || '?'}\n\nNiyə yanlış olduğumu izah et və düzgün cavabı öyrədir.`;
+        p += `\nMən bu suala YANLIŞ cavab verdim.\nNiyə yanlış olduğumu izah et və düzgün cavabı öyrədir.`;
     } else if(ctx.status === 'correct') {
-        p += `\nMən bu suala DÜZGÜN cavab verdim: ${ctx.yourAnswer}.\n\nBu mövzunu daha dərindən izah et ki, daha yaxşı anlayım.`;
+        p += `\nMən bu suala DÜZGÜN cavab verdim.\n\nBu mövzunu daha dərindən izah et ki, daha yaxşı anlayım.`;
     } else {
         p += `\nBu sualı izah et və düzgün cavabı öyrədir.`;
     }
