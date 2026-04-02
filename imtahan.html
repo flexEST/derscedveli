@@ -90,6 +90,8 @@
         .subject-name { font-size:0.92rem; font-weight:600; color:var(--text); line-height:1.3; }
         .subject-hint { font-size:0.75rem; color:var(--text3); margin-top:2px; }
         .pdf-badge { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
+        .est-ai-badge { background:linear-gradient(135deg,#6d28d9,#8b5cf6); color:white; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; cursor:pointer; transition:transform .15s,filter .15s; }
+        .est-ai-badge:hover { filter:brightness(1.1); transform:scale(1.02); }
         .footer-back { text-align:center; margin-top:30px; }
         .footer-back a { color:var(--text3); text-decoration:none; font-size:0.85rem; background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:10px 22px; border-radius:40px; display:inline-block; transition:color .2s,background .2s; }
         .footer-back a:hover { color:var(--text); background:rgba(255,255,255,0.08); }
@@ -233,38 +235,34 @@
         .hist-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; margin-top:16px; }
         .hist-empty { text-align:center; color:var(--text3); font-size:0.85rem; padding:20px 0; }
 
-        /* ===== AI BUTTON STYLES ===== */
+        /* ===== EST AI BUTTON STYLES ===== */
         .q-header-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
         .q-header-row .q-text { margin-bottom:0; flex:1; }
-        .ai-btn {
+        .est-ai-btn {
             flex-shrink:0;
             display:flex;
             align-items:center;
             gap:5px;
             padding:5px 11px;
-            background:rgba(139,92,246,0.12);
-            border:1px solid rgba(139,92,246,0.28);
+            background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+            border:none;
             border-radius:20px;
             font-family:var(--r);
-            font-size:0.72rem;
+            font-size:0.7rem;
             font-weight:700;
-            color:#c084fc;
+            color:white;
             cursor:pointer;
             transition:all .18s;
             white-space:nowrap;
             margin-top:2px;
         }
-        .ai-btn:hover { background:rgba(139,92,246,0.22); border-color:rgba(139,92,246,0.45); color:#d8b4fe; }
-        .ai-btn:active { transform:scale(0.95); }
-        .ai-btn.submitted-wrong {
-            background:rgba(239,68,68,0.12);
-            border-color:rgba(239,68,68,0.3);
-            color:#fca5a5;
+        .est-ai-btn:hover { filter:brightness(1.1); transform:scale(1.02); }
+        .est-ai-btn:active { transform:scale(0.96); }
+        .est-ai-btn.submitted-wrong {
+            background:linear-gradient(135deg,#dc2626,#ef4444);
         }
-        .ai-btn.submitted-correct {
-            background:rgba(34,197,94,0.10);
-            border-color:rgba(34,197,94,0.25);
-            color:#86efac;
+        .est-ai-btn.submitted-correct {
+            background:linear-gradient(135deg,#059669,#10b981);
         }
 
         /* Ask mistakes button */
@@ -289,6 +287,25 @@
         }
         .btn-ask-mistakes:hover { filter:brightness(1.1); }
         .btn-ask-mistakes:active { transform:scale(0.98); }
+        
+        /* EST AI Header Button */
+        .est-ai-header-btn {
+            background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+            color:white;
+            font-weight:700;
+            padding:8px 16px;
+            border-radius:20px;
+            font-size:0.8rem;
+            display:flex;
+            align-items:center;
+            gap:6px;
+            cursor:pointer;
+            transition:transform .15s,filter .15s;
+            border:none;
+            font-family:var(--r);
+        }
+        .est-ai-header-btn:hover { filter:brightness(1.1); transform:scale(1.02); }
+        .est-ai-header-btn:active { transform:scale(0.96); }
     </style>
 </head>
 <body>
@@ -299,6 +316,7 @@
             <h1>İmtahan Mövzuları</h1>
             <p>Fənn üzrə suallar və materiallar</p>
         </div>
+        <button class="est-ai-header-btn" onclick="openESTAI()">🤖 EST AI</button>
         <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Tema dəyiş">🌙</button>
     </div>
     <div class="date-strip">
@@ -436,6 +454,12 @@ function toggle(idx) {
 }
 document.querySelectorAll('.exam-card')[0].classList.add('open');
 
+// ==================== EST AI ====================
+function openESTAI() {
+    localStorage.removeItem('aiContext');
+    window.open('ai.html', '_blank');
+}
+
 // ==================== QUIZ DATA ====================
 const QUIZ_DATA = {
     'diskret_riyaziyyat': [{title:'İmtahan 1', questions:[
@@ -545,7 +569,7 @@ function pdfChoiceOverlayClick(e) { if(e.target === document.getElementById('pdf
 function openPDF(type) { const base = curPdf.replace(/\.pdf$/i,''); window.open(base+'_'+type+'.pdf','_blank'); }
 function openWords() { window.open('englishwords.pdf','_blank'); }
 
-// ==================== AI CONTEXT HELPERS ====================
+// ==================== EST AI CONTEXT HELPERS ====================
 function getQuestionText(q, qi) {
     if(q.type === 'STD') return q.text;
     if(q.type === 'A') return q.text;
@@ -584,7 +608,7 @@ function openAIForQuestion(ei, qi, status) {
 
     const ctx = {
         questionText: getQuestionText(q, qi),
-        status: status, // 'pending', 'correct', 'wrong'
+        status: status,
         correctAnswer: getAnswerText(q, 'correct'),
         yourAnswer: ans ? getUserAnswerText(q, ans) : null,
         optionsText: q.type === 'STD' ? q.options.join(', ') : null
@@ -664,7 +688,7 @@ function openQuiz() {
 function buildAIBtn(ei, qi, status) {
     const cls = status === 'wrong' ? 'submitted-wrong' : status === 'correct' ? 'submitted-correct' : '';
     const icon = status === 'wrong' ? '❌' : status === 'correct' ? '✅' : '🤖';
-    return `<button class="ai-btn ${cls}" onclick="openAIForQuestion(${ei},${qi},'${status}')" title="AI ilə soruş">${icon} AI</button>`;
+    return `<button class="est-ai-btn ${cls}" onclick="openAIForQuestion(${ei},${qi},'${status}')">${icon} AI-dan soruş</button>`;
 }
 
 function buildPanel(ei) {
@@ -868,16 +892,16 @@ function submitExam(ei) {
         totalScore += pts; maxScore += max;
     });
 
-    // Update AI buttons to reflect correct/wrong status
+    // Update EST AI buttons to reflect correct/wrong status
     exam.questions.forEach((q, qi) => {
         const grade = examQuestionGrades[ei][qi];
         const status = grade === 'correct' ? 'correct' : 'wrong';
         const btns = document.querySelectorAll(`#qp-${ei} .q-card`);
         if(btns[qi]) {
-            const btn = btns[qi].querySelector('.ai-btn');
+            const btn = btns[qi].querySelector('.est-ai-btn');
             if(btn) {
-                btn.className = 'ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
-                btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI';
+                btn.className = 'est-ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
+                btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI-dan soruş';
                 btn.onclick = () => openAIForQuestion(ei, qi, status);
             }
         }
@@ -889,8 +913,8 @@ function submitExam(ei) {
     // Count mistakes
     const mistakeCount = Object.values(examQuestionGrades[ei]).filter(g => g !== 'correct').length;
     const mistakesBtn = mistakeCount > 0 
-        ? `<button class="btn-ask-mistakes" onclick="openAIForMistakes(${ei})">🤖 ${mistakeCount} yanlışı AI-yə soruş</button>` 
-        : `<button class="btn-ask-mistakes" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.35);" onclick="openAIForMistakes(${ei})">🤖 AI ilə bütün sualları analiz et</button>`;
+        ? `<button class="btn-ask-mistakes" onclick="openAIForMistakes(${ei})">🤖 ${mistakeCount} yanlışı EST AI-ya soruş</button>` 
+        : `<button class="btn-ask-mistakes" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.35);" onclick="openAIForMistakes(${ei})">🤖 EST AI ilə bütün sualları analiz et</button>`;
 
     const res = document.getElementById('res-'+ei);
     res.innerHTML = `<div class="result-score ${pass?'pass':'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div>${mistakesBtn}<button class="btn-retry" style="margin-top:8px;" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
