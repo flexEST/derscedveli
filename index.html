@@ -319,16 +319,12 @@
         .scd{text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;cursor:pointer;color:var(--text-2);position:relative;}
         .scd.sc-other{color:var(--text-3);opacity:0.35;pointer-events:none;}
         .scd.sc-today{background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;color:white!important;font-weight:700!important;border:none!important;box-shadow:0 3px 10px -2px rgba(59,130,246,0.5);}
-        /* Mühazirə — blue */
         .scd.sc-muh{background:rgba(59,130,246,0.18);border:1px solid rgba(59,130,246,0.35);color:#93c5fd;font-weight:700;}
         [data-theme="light"] .scd.sc-muh{color:#1d4ed8;background:rgba(37,99,235,0.1);border-color:rgba(37,99,235,0.3);}
-        /* Seminar — purple */
         .scd.sc-sem{background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.35);color:#c4b5fd;font-weight:700;}
         [data-theme="light"] .scd.sc-sem{color:#7c3aed;background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.3);}
-        /* Laboratoriya — teal */
         .scd.sc-lab{background:rgba(20,184,166,0.18);border:1px solid rgba(20,184,166,0.35);color:#5eead4;font-weight:700;}
         [data-theme="light"] .scd.sc-lab{color:#0f766e;background:rgba(15,118,110,0.1);border-color:rgba(15,118,110,0.3);}
-        /* Mix (multiple types same day) — amber */
         .scd.sc-mix{background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);color:#fcd34d;font-weight:700;}
         [data-theme="light"] .scd.sc-mix{color:#b45309;background:rgba(180,83,9,0.08);border-color:rgba(180,83,9,0.25);}
         .scd:hover:not(.sc-other):not(.sc-today){opacity:0.75;}
@@ -339,7 +335,6 @@
         .sc-leg-dot.sem{background:rgba(168,85,247,0.5);border:1px solid rgba(168,85,247,0.6);}
         .sc-leg-dot.lab{background:rgba(20,184,166,0.5);border:1px solid rgba(20,184,166,0.6);}
         .sc-leg-dot.mix{background:rgba(245,166,35,0.4);border:1px solid rgba(245,166,35,0.5);}
-        /* Day detail panel inside popup cal */
         .subj-day-detail{margin-top:10px;padding:10px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;display:none;}
         .subj-day-detail.show{display:block;animation:fadeSlide 0.18s ease;}
         .subj-dd-date{font-size:0.6rem;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
@@ -358,6 +353,82 @@
 
         .subj-close{display:block;width:100%;margin-top:16px;padding:13px;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-lg);color:var(--text-2);font-family:inherit;font-size:0.9rem;font-weight:600;cursor:pointer;text-align:center;}
         .subj-close:active{filter:brightness(0.9);}
+
+        /* ── AI FLOATING BUTTON ── */
+        .ai-fab{
+            position:fixed;
+            bottom:28px;
+            right:20px;
+            z-index:999;
+            width:58px;
+            height:58px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);
+            border:none;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow:0 8px 32px rgba(99,102,241,0.55),0 2px 8px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.1) inset;
+            text-decoration:none;
+            transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;
+            animation:fabIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+        }
+        @keyframes fabIn{
+            from{opacity:0;transform:scale(0) rotate(-180deg);}
+            to{opacity:1;transform:scale(1) rotate(0deg);}
+        }
+        .ai-fab:hover{
+            transform:scale(1.1);
+            box-shadow:0 12px 40px rgba(99,102,241,0.7),0 2px 12px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.15) inset;
+        }
+        .ai-fab:active{
+            transform:scale(0.95);
+        }
+        /* Pulsing ring */
+        .ai-fab::before{
+            content:'';
+            position:absolute;
+            inset:-4px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6);
+            opacity:0;
+            animation:fabRing 2.5s ease-in-out infinite;
+            z-index:-1;
+        }
+        @keyframes fabRing{
+            0%{opacity:0;transform:scale(1);}
+            50%{opacity:0.35;transform:scale(1.18);}
+            100%{opacity:0;transform:scale(1.35);}
+        }
+        /* AI icon SVG inside */
+        .ai-fab-icon{
+            width:28px;
+            height:28px;
+            flex-shrink:0;
+        }
+        /* Tooltip label */
+        .ai-fab-label{
+            position:absolute;
+            right:68px;
+            background:var(--bg2);
+            border:1px solid var(--glass-border);
+            color:var(--text);
+            font-size:0.75rem;
+            font-weight:700;
+            padding:6px 12px;
+            border-radius:20px;
+            white-space:nowrap;
+            opacity:0;
+            pointer-events:none;
+            transform:translateX(8px);
+            transition:opacity 0.18s,transform 0.18s;
+            box-shadow:0 4px 16px rgba(0,0,0,0.3);
+        }
+        .ai-fab:hover .ai-fab-label{
+            opacity:1;
+            transform:translateX(0);
+        }
 
         ::-webkit-scrollbar{width:4px;}
         ::-webkit-scrollbar-track{background:transparent;}
@@ -459,6 +530,17 @@
 </div>
 </div>
 
+<!-- ── AI FLOATING ACTION BUTTON ── -->
+<a href="ai.html" class="ai-fab" aria-label="AI Köməkçi">
+    <span class="ai-fab-label">✨ AI Köməkçi</span>
+    <svg class="ai-fab-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Sparkle / AI star icon -->
+        <path d="M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z" fill="white" opacity="0.95"/>
+        <path d="M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z" fill="white" opacity="0.8"/>
+        <path d="M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z" fill="white" opacity="0.65"/>
+    </svg>
+</a>
+
 <!-- MODAL: CƏDVƏL -->
 <div id="scheduleModal" class="modal">
     <div class="modal-content">
@@ -475,7 +557,6 @@
             <span style="font-size:0.9rem;">💡</span>
             <span style="font-size:0.78rem;color:var(--amber);font-weight:600;">Fənnin üzərinə basanda ətraflı məlumat açılır</span>
         </div>
-        <!-- TYPE LEGEND in schedule modal -->
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
             <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:rgba(59,130,246,0.5);border:1px solid rgba(59,130,246,0.6);"></span>Mühazirə</span>
             <span style="display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:rgba(168,85,247,0.5);border:1px solid rgba(168,85,247,0.6);"></span>Seminar</span>
@@ -625,7 +706,6 @@
             </div>
         </div>
 
-        <!-- ── MINI CALENDAR ── -->
         <div class="subj-cal-section">
             <div class="subj-cal-title">Bu fənnin cədvəldəki günləri</div>
             <div class="subj-cal-header">
@@ -689,7 +769,6 @@
     let calViewYear, calViewMonth;
     let datePanelOpen = false;
 
-    // subject popup mini-cal state
     var subjCalYear, subjCalMonth, subjCalKey;
 
     function getWeekTypeForDate(d) {
@@ -789,7 +868,6 @@
 
     function fmt(m){ return Math.floor(m/60)+':'+(m%60<10?'0':'')+(m%60); }
 
-    // ── TYPE helpers ──
     function typeBadgeClass(type){
         if(!type||type==='Mühazirə') return 'muh';
         if(type==='Seminar') return 'sem';
@@ -801,7 +879,6 @@
         if(type&&(type.indexOf('Lab')>=0||type==='Laboratoriya')) return 'lesson-block type-lab';
         return 'lesson-block';
     }
-    // calendar day class for subject popup
     function calDayClass(lessons){
         if(!lessons||!lessons.length) return '';
         var types=lessons.map(function(l){return typeBadgeClass(l.type||'Mühazirə');});
@@ -1109,10 +1186,7 @@
         if(e.target===weeksModal) weeksModal.style.display='none';
     };
 
-    // ══════════════════════════════════════════
-    //  SUBJECT POPUP + MINI CALENDAR
-    // ══════════════════════════════════════════
-
+    // SUBJECT POPUP + MINI CALENDAR
     var SEMESTER_START = new Date(2026,1,16);
     var SEMESTER_END   = new Date(2026,4,29);
 
@@ -1194,7 +1268,6 @@
         return { total: total, done: done, remaining: total - done };
     }
 
-    // Get lessons for a specific date filtered by subject key
     function getLessonsForDateBySubject(date, subjKey){
         var dow=date.getDay(), dayMap={1:1,2:2,3:3,4:4}, ld=dayMap[dow];
         if(!ld) return [];
@@ -1205,12 +1278,10 @@
         });
     }
 
-    // ── MINI CALENDAR for subject popup ──
     function renderSubjCal(year, month, subjKey){
         subjCalYear=year; subjCalMonth=month; subjCalKey=subjKey;
         document.getElementById('subjCalMonth').textContent=MONTHS[month]+' '+year;
 
-        // DOWs header
         var dowsEl=document.getElementById('subjCalDows');
         dowsEl.innerHTML='';
         DOWS_SHORT.forEach(function(d){var el=document.createElement('div');el.className='subj-cal-dow';el.textContent=d;dowsEl.appendChild(el);});
@@ -1251,7 +1322,6 @@
         var rem=(startOffset+dim)%7;
         if(rem!==0){for(var i=1;i<=7-rem;i++){var el=document.createElement('div');el.className='scd sc-other';el.textContent=i;daysEl.appendChild(el);}}
 
-        // hide detail panel on month change
         document.getElementById('subjDayDetail').classList.remove('show');
     }
 
@@ -1314,16 +1384,13 @@
         else if(c.remaining <= 7)  leftEl.className += ' amber';
         else                       leftEl.className += ' green';
 
-        // render mini calendar for this subject, starting at current month
         var now=new Date();
         renderSubjCal(now.getFullYear(), now.getMonth(), key);
 
         subjModal.classList.add('open');
-        // scroll sheet to top
         document.getElementById('subjSheet').scrollTop=0;
     }
 
-    // mini cal nav
     document.getElementById('subjCalPrev').addEventListener('click',function(e){
         e.stopPropagation();
         subjCalMonth--; if(subjCalMonth<0){subjCalMonth=11;subjCalYear--;}
