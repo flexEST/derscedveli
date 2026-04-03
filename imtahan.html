@@ -265,7 +265,7 @@
             background:linear-gradient(135deg,#059669,#10b981);
         }
 
-        /* Ask mistakes button - now shows ALL questions */
+        /* Ask mistakes button */
         .btn-ask-mistakes {
             width:100%;
             padding:13px 18px;
@@ -306,6 +306,71 @@
         }
         .est-ai-header-btn:hover { filter:brightness(1.1); transform:scale(1.02); }
         .est-ai-header-btn:active { transform:scale(0.96); }
+
+        /* ── AI FLOATING BUTTON ── */
+        .ai-fab {
+            position:fixed;
+            bottom:28px;
+            right:20px;
+            z-index:999;
+            width:58px;
+            height:58px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);
+            border:none;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow:0 8px 32px rgba(99,102,241,0.55),0 2px 8px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.1) inset;
+            text-decoration:none;
+            transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;
+            animation:fabIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+        }
+        @keyframes fabIn {
+            from{opacity:0;transform:scale(0) rotate(-180deg);}
+            to{opacity:1;transform:scale(1) rotate(0deg);}
+        }
+        .ai-fab:hover {
+            transform:scale(1.1);
+            box-shadow:0 12px 40px rgba(99,102,241,0.7),0 2px 12px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.15) inset;
+        }
+        .ai-fab:active { transform:scale(0.95); }
+        .ai-fab::before {
+            content:'';
+            position:absolute;
+            inset:-4px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6);
+            opacity:0;
+            animation:fabRing 2.5s ease-in-out infinite;
+            z-index:-1;
+        }
+        @keyframes fabRing {
+            0%{opacity:0;transform:scale(1);}
+            50%{opacity:0.35;transform:scale(1.18);}
+            100%{opacity:0;transform:scale(1.35);}
+        }
+        .ai-fab-icon { width:28px; height:28px; flex-shrink:0; }
+        .ai-fab-label {
+            position:absolute;
+            right:68px;
+            background:#161b27;
+            border:1px solid rgba(255,255,255,0.07);
+            color:#f1f5f9;
+            font-size:0.75rem;
+            font-weight:700;
+            padding:6px 12px;
+            border-radius:20px;
+            white-space:nowrap;
+            opacity:0;
+            pointer-events:none;
+            transform:translateX(8px);
+            transition:opacity 0.18s,transform 0.18s;
+            box-shadow:0 4px 16px rgba(0,0,0,0.3);
+        }
+        body.light .ai-fab-label { background:#ffffff; border-color:rgba(0,0,0,0.09); color:#0f172a; }
+        .ai-fab:hover .ai-fab-label { opacity:1; transform:translateX(0); }
     </style>
 </head>
 <body>
@@ -358,6 +423,16 @@
     </div>
     <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
 </div>
+
+<!-- ── AI FLOATING ACTION BUTTON ── -->
+<a href="ai.html" class="ai-fab" aria-label="AI Köməkçi">
+    <span class="ai-fab-label">✨ AI Köməkçi</span>
+    <svg class="ai-fab-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z" fill="white" opacity="0.95"/>
+        <path d="M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z" fill="white" opacity="0.8"/>
+        <path d="M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z" fill="white" opacity="0.65"/>
+    </svg>
+</a>
 
 <!-- POPUPS -->
 <div class="popup-overlay" id="subjectPopup" onclick="overlayClick(event)">
@@ -536,9 +611,8 @@ let quizAnswers = [];
 let quizTimerInterval = null;
 const QUIZ_DURATION = 600;
 
-// Track submission state and grades per exam panel
-let examSubmitted = {}; // ei -> bool
-let examQuestionGrades = {}; // ei -> {qi -> 'correct'|'wrong'|'partial'}
+let examSubmitted = {};
+let examQuestionGrades = {};
 
 // ==================== SUBJECT POPUP ====================
 function openSubject(name, knum, pdf, key) {
@@ -618,7 +692,6 @@ function openAIForQuestion(ei, qi, status) {
     window.location.replace('ai.html');
 }
 
-// NEW FUNCTION: Send ALL questions (both correct and wrong) to AI
 function openAIForAllQuestions(ei) {
     const exam = QUIZ_DATA[curKey][ei];
     const grades = examQuestionGrades[ei] || {};
@@ -898,7 +971,6 @@ function submitExam(ei) {
         totalScore += pts; maxScore += max;
     });
 
-    // Update EST AI buttons to reflect correct/wrong status
     exam.questions.forEach((q, qi) => {
         const grade = examQuestionGrades[ei][qi];
         const status = grade === 'correct' ? 'correct' : 'wrong';
@@ -916,12 +988,10 @@ function submitExam(ei) {
     document.getElementById('sub-'+ei).disabled = true;
     const pass = totalScore/maxScore >= 0.5;
     
-    // Count total questions
     const totalQuestions = exam.questions.length;
     const correctCount = Object.values(examQuestionGrades[ei]).filter(g => g === 'correct').length;
     const wrongCount = totalQuestions - correctCount;
     
-    // NEW: Button shows ALL questions analysis (not just wrong ones)
     const analyzeBtn = `<button class="btn-ask-mistakes" onclick="openAIForAllQuestions(${ei})">🤖 EST AI - Bütün sualları analiz et (${correctCount}✅ ${wrongCount}❌)</button>`;
 
     const res = document.getElementById('res-'+ei);
