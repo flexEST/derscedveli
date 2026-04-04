@@ -102,6 +102,9 @@
         
         .site-context-badge { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:0.75rem; color:var(--text2); display:flex; align-items:center; gap:8px; }
         .site-context-badge span { font-weight:600; color:#60a5fa; }
+        
+        .ctx-info { background:rgba(139,92,246,0.08); border-radius:8px; padding:6px 10px; font-size:0.7rem; color:var(--text3); margin-bottom:8px; display:flex; gap:8px; align-items:center; }
+        .ctx-dot { width:6px; height:6px; border-radius:50%; background:#22c55e; }
     </style>
 </head>
 <body>
@@ -127,7 +130,12 @@
     </div>
 
     <div id="siteContextBadge" class="site-context-badge" style="display:none;">
-        <span>🌐</span> Səhifə konteksti aktivdir
+        <span>🌐</span> Səhifə konteksti aktivdir (HTML + Script)
+    </div>
+    
+    <div id="ctxInfo" class="ctx-info" style="display:none;">
+        <div class="ctx-dot"></div>
+        <span id="ctxLength">—</span> simvol HTML struktur (+ script) yadda saxlanılıb
     </div>
 
     <div class="context-card" id="contextCard" style="display:none;">
@@ -166,15 +174,25 @@
 // ─────────────────────────────────────────────────────────────
 const SERVER_URL = "https://estai-1qe9.vercel.app/api/chat";
 
-// ── Read pageContext from sessionStorage (from FAB) ─────────
+// ── Read pageContext from sessionStorage (HTML + SCRIPT, only style removed)
 let pageCtx = '';
-try { pageCtx = sessionStorage.getItem('pageContext') || ''; } catch(e) { console.warn('sessionStorage error', e); }
+try { 
+    pageCtx = sessionStorage.getItem('pageContext') || ''; 
+    if(pageCtx && pageCtx.length > 0) {
+        document.getElementById('ctxInfo').style.display = 'flex';
+        document.getElementById('ctxLength').textContent = pageCtx.length;
+        console.log('📄 PageContext loaded, length:', pageCtx.length);
+        console.log('📄 First 500 chars:', pageCtx.substring(0, 500));
+    }
+} catch(e) { console.warn('sessionStorage error', e); }
 
 // ── Check if query needs site context ───────────────────────
 function needsSiteContext(query) {
     var keywords = ['cədvəl','dərs','fənn','qayıb','imtahan','sayt','səhifə',
                     'düymə','açılmır','işləmir','schedule','lesson','site','page',
-                    'button','click','works','error','problem','məlumat','cədvəldə'];
+                    'button','click','works','error','problem','məlumat','cədvəldə',
+                    'bugün','sabah','həftə','limit','müəllim','sinif','oda','vaxt',
+                    'başlayır','bitir','neçədə','saat','dərs var'];
     return keywords.some(function(k){ return query.toLowerCase().includes(k); });
 }
 
@@ -185,9 +203,18 @@ function getSystemPrompt(userMessage) {
         // Show badge that site context is active
         const badge = document.getElementById('siteContextBadge');
         if(badge) badge.style.display = 'flex';
-        // Truncated context (pageCtx is already ~12k chars from FAB)
-        prompt += '\n\nSəhifənin HTML strukturu (istifadəçinin saxladığı səhifə konteksti):\n' + pageCtx;
-        prompt += '\n\nBu struktura əsasən istifadəçinin sualını cavablandır. Elementlərin ID, class, mətn məzmunu, düymələr və s. haqqında məlumat ver.';
+        
+        prompt += '\n\n=== SƏHİFƏNİN TAM HTML VƏ SCRIPT KONTEKSTİ ===\n';
+        prompt += 'Aşağıdakı kod istifadəçinin saxladığı səhifənin HTML strukturunu və JavaScript kodunu ehtiva edir.\n';
+        prompt += 'Bu kodu analiz edərək istifadəçinin sualını cavablandır.\n';
+        prompt += 'Elementlərin ID, class, mətn məzmunu, düymələr, FUNKSİYALAR və DƏRS MƏLUMATLARI haqqında məlumat ver.\n';
+        prompt += 'Əgər sual dərs cədvəli ilə bağlıdırsa, LESSONS massivindən və digər script məlumatlarından istifadə et.\n';
+        prompt += 'Məsələn: "bugün hansı dərslər var?" sualına getTodaysLessons() funksiyasının məntiqinə əsasən cavab ver.\n';
+        prompt += 'JavaScript kodunu oxuyub anlaya bilərsən!\n';
+        prompt += '=============================================\n\n';
+        prompt += pageCtx;
+        prompt += '\n\n=============================================\n';
+        prompt += 'Yuxarıdakı kontekstə əsasən istifadəçinin sualını cavablandır.';
     }
     return prompt;
 }
@@ -210,11 +237,6 @@ window.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('aiContext');
             setTimeout(() => autoAsk(contextData), 400);
         } catch(e) {}
-    }
-    
-    // Log if pageContext is available
-    if(pageCtx && pageCtx.length > 0) {
-        console.log('📄 PageContext loaded, length:', pageCtx.length);
     }
 });
 
