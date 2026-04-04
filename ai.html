@@ -99,6 +99,9 @@
         .error-card { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:16px; padding:14px 16px; margin-bottom:14px; font-size:0.82rem; color:#fca5a5; line-height:1.6; display:none; }
         .error-card.show { display:block; }
         .error-card strong { display:block; margin-bottom:4px; font-size:0.85rem; }
+        
+        .site-context-badge { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:0.75rem; color:var(--text2); display:flex; align-items:center; gap:8px; }
+        .site-context-badge span { font-weight:600; color:#60a5fa; }
     </style>
 </head>
 <body>
@@ -121,6 +124,10 @@
     <div class="error-card" id="errorCard">
         <strong>⚠️ Serverə qoşulmaq olmadı</strong>
         Server işləmir. Terminal açıb yazın: <code style="background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">node server.js</code>
+    </div>
+
+    <div id="siteContextBadge" class="site-context-badge" style="display:none;">
+        <span>🌐</span> Səhifə konteksti aktivdir
     </div>
 
     <div class="context-card" id="contextCard" style="display:none;">
@@ -155,20 +162,35 @@
 
 <script>
 // ─────────────────────────────────────────────────────────────
-// SERVER URL — change port here if you used a different one
+// SERVER URL
 // ─────────────────────────────────────────────────────────────
 const SERVER_URL = "https://estai-1qe9.vercel.app/api/chat";
 
-const SYSTEM_PROMPT = `Sən EST AI adlı Azərbaycan dilində imtahan suallarını izah edən bir müəllim köməkçisisən.
-Tələbə sənə imtahan sualları, cavablar, və öz cəhdlərini göstərəcək.
-Qaydalar:
-- Həmişə Azərbaycan dilində cavab ver
-- Qısa, aydın və anlayışlı izahatlar ver
-- Düzgün cavabı mütləq göstər
-- Yanlış cavabı seçmişsə, niyə yanlış olduğunu izah et
-- Mövzunu daha yaxşı anlamaq üçün faydalı ipucları ver
-- **qalın** mətn mühüm məlumatlar üçün istifadə et
-- Həvəsləndirici ol, ancaq dəqiq məlumat ver`;
+// ── Read pageContext from sessionStorage (from FAB) ─────────
+let pageCtx = '';
+try { pageCtx = sessionStorage.getItem('pageContext') || ''; } catch(e) { console.warn('sessionStorage error', e); }
+
+// ── Check if query needs site context ───────────────────────
+function needsSiteContext(query) {
+    var keywords = ['cədvəl','dərs','fənn','qayıb','imtahan','sayt','səhifə',
+                    'düymə','açılmır','işləmir','schedule','lesson','site','page',
+                    'button','click','works','error','problem','məlumat','cədvəldə'];
+    return keywords.some(function(k){ return query.toLowerCase().includes(k); });
+}
+
+// ── Build dynamic system prompt with context when needed ────
+function getSystemPrompt(userMessage) {
+    let prompt = 'Sən AZMIU EST platformasının AI köməkçisisən. Azərbaycanca cavab ver.';
+    if(pageCtx && pageCtx.length > 0 && needsSiteContext(userMessage)) {
+        // Show badge that site context is active
+        const badge = document.getElementById('siteContextBadge');
+        if(badge) badge.style.display = 'flex';
+        // Truncated context (pageCtx is already ~12k chars from FAB)
+        prompt += '\n\nSəhifənin HTML strukturu (istifadəçinin saxladığı səhifə konteksti):\n' + pageCtx;
+        prompt += '\n\nBu struktura əsasən istifadəçinin sualını cavablandır. Elementlərin ID, class, mətn məzmunu, düymələr və s. haqqında məlumat ver.';
+    }
+    return prompt;
+}
 
 let conversationHistory = [];
 let contextData = null;
@@ -188,6 +210,11 @@ window.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('aiContext');
             setTimeout(() => autoAsk(contextData), 400);
         } catch(e) {}
+    }
+    
+    // Log if pageContext is available
+    if(pageCtx && pageCtx.length > 0) {
+        console.log('📄 PageContext loaded, length:', pageCtx.length);
     }
 });
 
@@ -283,7 +310,7 @@ async function sendMessage() {
     await sendToAI(text, true);
 }
 
-// ── Core: call proxy server ──────────────────────────────────
+// ── Core: call proxy server with DYNAMIC system prompt ──────
 async function sendToAI(text, showUserMsg) {
     const chatBox = document.getElementById('chatBox');
     const sendBtn = document.getElementById('sendBtn');
@@ -306,10 +333,13 @@ async function sendToAI(text, showUserMsg) {
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
+        // Get dynamic system prompt based on current user message
+        const dynamicSystemPrompt = getSystemPrompt(text);
+        
         const res = await fetch(SERVER_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ system: SYSTEM_PROMPT, messages: conversationHistory })
+            body: JSON.stringify({ system: dynamicSystemPrompt, messages: conversationHistory })
         });
 
         document.getElementById('typing-msg')?.remove();
