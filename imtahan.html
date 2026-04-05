@@ -258,14 +258,9 @@
         }
         .est-ai-btn:hover { filter:brightness(1.1); transform:scale(1.02); }
         .est-ai-btn:active { transform:scale(0.96); }
-        .est-ai-btn.submitted-wrong {
-            background:linear-gradient(135deg,#dc2626,#ef4444);
-        }
-        .est-ai-btn.submitted-correct {
-            background:linear-gradient(135deg,#059669,#10b981);
-        }
+        .est-ai-btn.submitted-wrong { background:linear-gradient(135deg,#dc2626,#ef4444); }
+        .est-ai-btn.submitted-correct { background:linear-gradient(135deg,#059669,#10b981); }
 
-        /* Ask mistakes button */
         .btn-ask-mistakes {
             width:100%;
             padding:13px 18px;
@@ -288,7 +283,6 @@
         .btn-ask-mistakes:hover { filter:brightness(1.1); }
         .btn-ask-mistakes:active { transform:scale(0.98); }
         
-        /* EST AI Header Button */
         .est-ai-header-btn {
             background:linear-gradient(135deg,#6d28d9,#8b5cf6);
             color:white;
@@ -326,6 +320,7 @@
             text-decoration:none;
             transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;
             animation:fabIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+            overflow:hidden;
         }
         @keyframes fabIn {
             from{opacity:0;transform:scale(0) rotate(-180deg);}
@@ -351,7 +346,17 @@
             50%{opacity:0.35;transform:scale(1.18);}
             100%{opacity:0;transform:scale(1.35);}
         }
-        .ai-fab-icon { width:28px; height:28px; flex-shrink:0; }
+        /* Icon covers full button */
+        .ai-fab-icon {
+            position:absolute;
+            inset:0;
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            border-radius:50%;
+            pointer-events:none;
+        }
+        /* Tooltip */
         .ai-fab-label {
             position:absolute;
             right:68px;
@@ -366,11 +371,16 @@
             opacity:0;
             pointer-events:none;
             transform:translateX(8px);
-            transition:opacity 0.18s,transform 0.18s;
+            transition:opacity 0.25s,transform 0.25s;
             box-shadow:0 4px 16px rgba(0,0,0,0.3);
         }
         body.light .ai-fab-label { background:#ffffff; border-color:rgba(0,0,0,0.09); color:#0f172a; }
         .ai-fab:hover .ai-fab-label { opacity:1; transform:translateX(0); }
+        /* Force-show via JS */
+        .ai-fab.fab-label-show .ai-fab-label {
+            opacity:1 !important;
+            transform:translateX(0) !important;
+        }
     </style>
 </head>
 <body>
@@ -425,13 +435,23 @@
 </div>
 
 <!-- ── AI FLOATING ACTION BUTTON ── -->
-<a href="ai.html" class="ai-fab" aria-label="AI Köməkçi">
-    <span class="ai-fab-label">✨ AI Köməkçi</span>
-    <svg class="ai-fab-icon" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z" fill="white" opacity="0.95"/>
-        <path d="M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z" fill="white" opacity="0.8"/>
-        <path d="M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z" fill="white" opacity="0.65"/>
-    </svg>
+<a href="ai.html" id="aiFab" class="ai-fab" aria-label="AI Köməkçi">
+    <span class="ai-fab-label" id="aiFabLabel">✨ AI Köməkçi</span>
+    <img
+        src="ai-icon.png"
+        class="ai-fab-icon"
+        alt="AI"
+        onerror="
+            this.style.display='none';
+            this.insertAdjacentHTML('afterend',
+                '<svg style=\'position:absolute;inset:0;width:100%;height:100%;padding:15px;\' viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'>' +
+                '<path d=\'M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z\' fill=\'white\' opacity=\'0.95\'/>' +
+                '<path d=\'M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z\' fill=\'white\' opacity=\'0.8\'/>' +
+                '<path d=\'M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z\' fill=\'white\' opacity=\'0.65\'/>' +
+                '</svg>'
+            );
+        "
+    >
 </a>
 
 <!-- POPUPS -->
@@ -532,6 +552,7 @@ document.querySelectorAll('.exam-card')[0].classList.add('open');
 // ==================== EST AI ====================
 function openESTAI() {
     localStorage.removeItem('aiContext');
+    sessionStorage.removeItem('pageContext');
     window.location.replace('ai.html');
 }
 
@@ -1195,6 +1216,56 @@ function toggleTheme() {
 })();
 
 updateBadge();
+
+// ── AI FAB: Save page HTML context (no CSS/scripts) to sessionStorage ──
+document.getElementById('aiFab').addEventListener('click', function(e) {
+    e.preventDefault();
+    try {
+        var clone = document.documentElement.cloneNode(true);
+        clone.querySelectorAll('style, link[rel="stylesheet"]').forEach(function(s){ s.remove(); });
+        clone.querySelectorAll('script').forEach(function(s){ s.remove(); });
+        clone.querySelectorAll('[style]').forEach(function(el){ el.removeAttribute('style'); });
+        var html = clone.outerHTML;
+        if(html.length > 12000) html = html.substring(0, 12000) + '...[truncated]';
+        sessionStorage.setItem('pageContext', html);
+        sessionStorage.setItem('pageUrl', window.location.href);
+    } catch(err) {}
+    window.location.href = 'ai.html';
+});
+
+// ── AI FAB: Auto-show "EST AI" tooltip after 5s, then loop 5s on / 5s off ──
+(function(){
+    var fab   = document.getElementById('aiFab');
+    var label = document.getElementById('aiFabLabel');
+    var loopTimer = null;
+    var inLoop = false;
+
+    function showEstAI(){
+        label.textContent = '⭐ EST AI';
+        fab.classList.add('fab-label-show');
+        loopTimer = setTimeout(function(){
+            fab.classList.remove('fab-label-show');
+            loopTimer = setTimeout(showEstAI, 5000);
+        }, 5000);
+    }
+
+    fab.addEventListener('mouseenter', function(){
+        if(loopTimer){ clearTimeout(loopTimer); loopTimer = null; }
+        fab.classList.remove('fab-label-show');
+        label.textContent = '✨ AI Köməkçi';
+    });
+
+    fab.addEventListener('mouseleave', function(){
+        if(inLoop){
+            loopTimer = setTimeout(showEstAI, 3000);
+        }
+    });
+
+    setTimeout(function(){
+        inLoop = true;
+        showEstAI();
+    }, 5000);
+})();
 </script>
 </body>
 </html>
