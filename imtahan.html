@@ -238,13 +238,15 @@
         /* ===== EST AI BUTTON STYLES ===== */
         .q-header-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
         .q-header-row .q-text { margin-bottom:0; flex:1; }
+
+        /* ── Per-question AI button: same style as FAB tooltip / badge ── */
         .est-ai-btn {
             flex-shrink:0;
-            display:flex;
+            display:inline-flex;
             align-items:center;
             gap:5px;
             padding:5px 11px;
-            background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);
             border:none;
             border-radius:20px;
             font-family:var(--r);
@@ -252,14 +254,47 @@
             font-weight:700;
             color:white;
             cursor:pointer;
-            transition:all .18s;
+            text-decoration:none;
+            transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, filter 0.15s;
             white-space:nowrap;
             margin-top:2px;
+            box-shadow:0 4px 14px rgba(99,102,241,0.45), 0 0 0 1px rgba(255,255,255,0.08) inset;
+            position:relative;
+            overflow:hidden;
         }
-        .est-ai-btn:hover { filter:brightness(1.1); transform:scale(1.02); }
-        .est-ai-btn:active { transform:scale(0.96); }
-        .est-ai-btn.submitted-wrong { background:linear-gradient(135deg,#dc2626,#ef4444); }
-        .est-ai-btn.submitted-correct { background:linear-gradient(135deg,#059669,#10b981); }
+        .est-ai-btn::before {
+            content:'';
+            position:absolute;
+            inset:-3px;
+            border-radius:20px;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6);
+            opacity:0;
+            animation:aiBtnRing 2.5s ease-in-out infinite;
+            z-index:-1;
+        }
+        @keyframes aiBtnRing {
+            0%{opacity:0;transform:scale(1);}
+            50%{opacity:0.3;transform:scale(1.12);}
+            100%{opacity:0;transform:scale(1.25);}
+        }
+        .est-ai-btn:hover {
+            transform:scale(1.07);
+            box-shadow:0 6px 20px rgba(99,102,241,0.65), 0 0 0 1px rgba(255,255,255,0.12) inset;
+            filter:brightness(1.08);
+        }
+        .est-ai-btn:active { transform:scale(0.95); }
+        .est-ai-btn.submitted-wrong {
+            background:linear-gradient(135deg,#dc2626,#ef4444);
+            box-shadow:0 4px 14px rgba(239,68,68,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset;
+            animation:none;
+        }
+        .est-ai-btn.submitted-wrong::before { display:none; }
+        .est-ai-btn.submitted-correct {
+            background:linear-gradient(135deg,#059669,#10b981);
+            box-shadow:0 4px 14px rgba(16,185,129,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset;
+            animation:none;
+        }
+        .est-ai-btn.submitted-correct::before { display:none; }
 
         .btn-ask-mistakes {
             width:100%;
@@ -284,7 +319,7 @@
         .btn-ask-mistakes:active { transform:scale(0.98); }
         
         .est-ai-header-btn {
-            background:linear-gradient(135deg,#6d28d9,#8b5cf6);
+            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);
             color:white;
             font-weight:700;
             padding:8px 16px;
@@ -294,11 +329,16 @@
             align-items:center;
             gap:6px;
             cursor:pointer;
-            transition:transform .15s,filter .15s;
+            transition:transform .2s cubic-bezier(0.34,1.56,0.64,1), filter .15s, box-shadow .2s;
             border:none;
             font-family:var(--r);
+            box-shadow:0 4px 14px rgba(99,102,241,0.45);
         }
-        .est-ai-header-btn:hover { filter:brightness(1.1); transform:scale(1.02); }
+        .est-ai-header-btn:hover {
+            filter:brightness(1.1);
+            transform:scale(1.05);
+            box-shadow:0 6px 20px rgba(99,102,241,0.6);
+        }
         .est-ai-header-btn:active { transform:scale(0.96); }
 
         /* ── AI FLOATING BUTTON ── */
@@ -346,7 +386,6 @@
             50%{opacity:0.35;transform:scale(1.18);}
             100%{opacity:0;transform:scale(1.35);}
         }
-        /* Icon covers full button */
         .ai-fab-icon {
             position:absolute;
             inset:0;
@@ -356,7 +395,6 @@
             border-radius:50%;
             pointer-events:none;
         }
-        /* Tooltip */
         .ai-fab-label {
             position:absolute;
             right:68px;
@@ -376,7 +414,6 @@
         }
         body.light .ai-fab-label { background:#ffffff; border-color:rgba(0,0,0,0.09); color:#0f172a; }
         .ai-fab:hover .ai-fab-label { opacity:1; transform:translateX(0); }
-        /* Force-show via JS */
         .ai-fab.fab-label-show .ai-fab-label {
             opacity:1 !important;
             transform:translateX(0) !important;
@@ -553,7 +590,7 @@ document.querySelectorAll('.exam-card')[0].classList.add('open');
 function openESTAI() {
     localStorage.removeItem('aiContext');
     sessionStorage.removeItem('pageContext');
-    window.location.replace('ai.html');
+    window.location.href = 'ai.html';
 }
 
 // ==================== QUIZ DATA ====================
@@ -696,6 +733,7 @@ function getUserAnswerText(q, ans) {
     return 'Cavab verilməyib';
 }
 
+// ── Core: set context then navigate ──
 function openAIForQuestion(ei, qi, status) {
     const exam = QUIZ_DATA[curKey][ei];
     const q = exam.questions[qi];
@@ -710,7 +748,7 @@ function openAIForQuestion(ei, qi, status) {
     };
 
     localStorage.setItem('aiContext', JSON.stringify(ctx));
-    window.location.replace('ai.html');
+    window.location.href = 'ai.html';
 }
 
 function openAIForAllQuestions(ei) {
@@ -741,7 +779,7 @@ function openAIForAllQuestions(ei) {
     };
     
     localStorage.setItem('aiContext', JSON.stringify(ctx));
-    window.location.replace('ai.html');
+    window.location.href = 'ai.html';
 }
 
 // ==================== QUIZ FUNCTIONS ====================
@@ -785,10 +823,11 @@ function openQuiz() {
     attachAllOrderDragListeners();
 }
 
+// ── Build AI button as <a href> tag (works on Android WebView) ──
 function buildAIBtn(ei, qi, status) {
     const cls = status === 'wrong' ? 'submitted-wrong' : status === 'correct' ? 'submitted-correct' : '';
     const icon = status === 'wrong' ? '❌' : status === 'correct' ? '✅' : '🤖';
-    return `<button class="est-ai-btn ${cls}" onclick="openAIForQuestion(${ei},${qi},'${status}')">${icon} AI-dan soruş</button>`;
+    return `<a href="ai.html" class="est-ai-btn ${cls}" data-ei="${ei}" data-qi="${qi}" data-status="${status}">${icon} AI-dan soruş</a>`;
 }
 
 function buildPanel(ei) {
@@ -992,16 +1031,23 @@ function submitExam(ei) {
         totalScore += pts; maxScore += max;
     });
 
+    // ── Update AI buttons after submit (update data-status + class + text) ──
     exam.questions.forEach((q, qi) => {
         const grade = examQuestionGrades[ei][qi];
         const status = grade === 'correct' ? 'correct' : 'wrong';
-        const btns = document.querySelectorAll(`#qp-${ei} .q-card`);
-        if(btns[qi]) {
-            const btn = btns[qi].querySelector('.est-ai-btn');
-            if(btn) {
-                btn.className = 'est-ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
-                btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI-dan soruş';
-                btn.onclick = () => openAIForQuestion(ei, qi, status);
+        const panel = document.getElementById('qp-' + ei);
+        if(panel) {
+            const cards = panel.querySelectorAll('.q-card');
+            if(cards[qi]) {
+                const btn = cards[qi].querySelector('.est-ai-btn');
+                if(btn) {
+                    btn.className = 'est-ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
+                    btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI-dan soruş';
+                    btn.dataset.ei = ei;
+                    btn.dataset.qi = qi;
+                    btn.dataset.status = status;
+                    btn.href = 'ai.html';
+                }
             }
         }
     });
@@ -1217,7 +1263,7 @@ function toggleTheme() {
 
 updateBadge();
 
-// ── AI FAB: Save page HTML context (no CSS/scripts) to sessionStorage ──
+// ── FAB: Save page HTML context to sessionStorage ──
 document.getElementById('aiFab').addEventListener('click', function(e) {
     e.preventDefault();
     try {
@@ -1233,7 +1279,20 @@ document.getElementById('aiFab').addEventListener('click', function(e) {
     window.location.href = 'ai.html';
 });
 
-// ── AI FAB: Auto-show "EST AI" tooltip after 5s, then loop 5s on / 5s off ──
+// ── Delegated click handler for all .est-ai-btn anchors ──
+// This works on Android WebView because we intercept before navigation,
+// set localStorage context, then do window.location.href (same as FAB).
+document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.est-ai-btn');
+    if(!btn) return;
+    e.preventDefault();
+    var ei = parseInt(btn.dataset.ei);
+    var qi = parseInt(btn.dataset.qi);
+    var status = btn.dataset.status || 'pending';
+    openAIForQuestion(ei, qi, status);
+});
+
+// ── AI FAB: Auto-show "EST AI" tooltip loop ──
 (function(){
     var fab   = document.getElementById('aiFab');
     var label = document.getElementById('aiFabLabel');
