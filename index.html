@@ -284,10 +284,11 @@
         .subject-kesr{font-size:0.82rem;color:var(--red);font-weight:700;}
 
         /* SUBJECT POPUP */
-        .subj-modal{display:none;position:fixed;inset:0;background:rgba(10,13,20,0.92);z-index:2000;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px);}
-        .subj-modal.open{display:flex;animation:smFade 0.18s ease;}
+        .subj-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:rgba(10,13,20,0.92);z-index:2000;backdrop-filter:blur(6px);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+        .subj-modal.open{display:block;animation:smFade 0.18s ease;}
         @keyframes smFade{from{opacity:0;}to{opacity:1;}}
-        .subj-sheet{background:var(--bg2);border:1px solid var(--glass-border);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 36px;animation:sheetUp 0.28s cubic-bezier(0.16,1,0.3,1);max-height:92vh;overflow-y:auto;}
+        .subj-modal-inner{min-height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-top:60px;}
+        .subj-sheet{background:var(--bg2);border:1px solid var(--glass-border);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:20px 20px 36px;animation:sheetUp 0.28s cubic-bezier(0.16,1,0.3,1);}
         @keyframes sheetUp{from{transform:translateY(60px);opacity:0;}to{transform:translateY(0);opacity:1;}}
         .subj-sheet-handle{width:36px;height:4px;background:var(--glass-border);border-radius:99px;margin:0 auto 18px;}
         .subj-sheet-name{font-size:1.15rem;font-weight:800;color:var(--text);margin-bottom:4px;line-height:1.3;}
@@ -456,98 +457,98 @@
         </a>
     </div>
 
-<div class="main-card">
+    <div class="main-card">
 
-    <div class="app-header">
-        <div class="header-logo">
-            <img src="logo.png" alt="logo" onerror="this.style.display='none';this.parentElement.innerHTML='📘';">
-        </div>
-        <div class="header-right">
-            <div class="header-top-row">
-                <div class="header-title">Dərs<span> Cədvəli</span></div>
-                <button class="theme-toggle" id="themeToggle"><span class="t-dot"></span><span id="themeLabel">Tünd tema</span></button>
+        <div class="app-header">
+            <div class="header-logo">
+                <img src="logo.png" alt="logo" onerror="this.style.display='none';this.parentElement.innerHTML='📘';">
             </div>
-            <div class="header-sub">
-                <span class="est-badge">AZMIU</span>
+            <div class="header-right">
+                <div class="header-top-row">
+                    <div class="header-title">Dərs<span> Cədvəli</span></div>
+                    <button class="theme-toggle" id="themeToggle"><span class="t-dot"></span><span id="themeLabel">Tünd tema</span></button>
+                </div>
+                <div class="header-sub">
+                    <span class="est-badge">AZMIU</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="date-bar" id="dateBar">
+            <span id="todayDate">— <span class="date-caret" id="dateCaret">▼</span></span>
+            <span class="week-pill" id="weekType">Üst həftə</span>
+            <span class="clock-pill" id="liveClock">00:00</span>
+        </div>
+
+        <div class="date-panel" id="datePanel">
+            <div class="cal-header">
+                <button class="cal-nav" id="calPrev">‹</button>
+                <span class="cal-month-label" id="calMonthLabel">—</span>
+                <button class="cal-nav" id="calNext">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div class="cal-lessons-panel" id="calLessonsPanel">
+                <div class="cal-lessons-date" id="calLessonsDate"></div>
+                <div id="calLessonsList"></div>
+            </div>
+            <div class="panel-divider"></div>
+            <div class="summary-title">Bu həftənin xülasəsi <span class="s-badge" id="summaryWeekBadge">Üst</span></div>
+            <div class="summary-stats">
+                <div class="stat-box"><div class="stat-value" id="statTotalLessons">—</div><div class="stat-label">Dərs</div></div>
+                <div class="stat-box"><div class="stat-value" id="statTotalHours">—</div><div class="stat-label">Saat</div></div>
+                <div class="stat-box"><div class="stat-value" id="statSubjects">—</div><div class="stat-label">Fənn</div></div>
+            </div>
+            <div class="next-day-box">
+                <div class="next-day-label" id="nextDayLabel">Sabahkı dərslər</div>
+                <div id="nextDayLessons"></div>
+            </div>
+        </div>
+
+        <div class="section-label">Cari / Növbəti dərs</div>
+        <div id="lessonCard" class="lesson-container"></div>
+
+        <div class="todays-bar">
+            <div class="todays-bar-header" id="todaysBarToggle">
+                <div class="todays-bar-title">📋 Bugünkü dərslər <span class="todays-count" id="todaysCount">0</span></div>
+                <span class="todays-bar-chevron" id="todaysBarChevron">▼</span>
+            </div>
+            <div class="todays-bar-body" id="todaysBarBody"></div>
+        </div>
+
+        <div class="button-row">
+            <button class="action-btn schedule" id="showScheduleBtn">📅 Cədvəl</button>
+            <button class="action-btn weeks" id="showWeeksBtn">📊 Qayıb limitləri</button>
+        </div>
+        <div class="button-row" style="margin-top:-6px;">
+            <a href="imtahan.html" class="action-btn" style="background:linear-gradient(135deg,#b45309,#f59e0b);box-shadow:0 8px 20px -4px rgba(245,158,11,0.4);text-decoration:none;">📝 İmtahan sualları - pdf</a>
+        </div>
+        <div class="button-row" style="margin-top:-6px;">
+            <a href="serbestisler.html" class="action-btn" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.4);text-decoration:none;">📋 Sərbəst işlər</a>
+        </div>
+
+        <div class="footer-area">
+            <div class="building-code"><span>🏛️ 845A5</span></div>
+            <div class="footer-note">
+                <span>09:00–10:20</span>
+                <span>10:30–11:50</span>
+                <span>12:00–13:20</span>
+            </div>
+            <div style="text-align:center;margin-top:4px;">
+                <span class="est-glow">E S T</span>
             </div>
         </div>
     </div>
-
-    <div class="date-bar" id="dateBar">
-        <span id="todayDate">— <span class="date-caret" id="dateCaret">▼</span></span>
-        <span class="week-pill" id="weekType">Üst həftə</span>
-        <span class="clock-pill" id="liveClock">00:00</span>
-    </div>
-
-    <div class="date-panel" id="datePanel">
-        <div class="cal-header">
-            <button class="cal-nav" id="calPrev">‹</button>
-            <span class="cal-month-label" id="calMonthLabel">—</span>
-            <button class="cal-nav" id="calNext">›</button>
-        </div>
-        <div class="cal-grid" id="calGrid"></div>
-        <div class="cal-lessons-panel" id="calLessonsPanel">
-            <div class="cal-lessons-date" id="calLessonsDate"></div>
-            <div id="calLessonsList"></div>
-        </div>
-        <div class="panel-divider"></div>
-        <div class="summary-title">Bu həftənin xülasəsi <span class="s-badge" id="summaryWeekBadge">Üst</span></div>
-        <div class="summary-stats">
-            <div class="stat-box"><div class="stat-value" id="statTotalLessons">—</div><div class="stat-label">Dərs</div></div>
-            <div class="stat-box"><div class="stat-value" id="statTotalHours">—</div><div class="stat-label">Saat</div></div>
-            <div class="stat-box"><div class="stat-value" id="statSubjects">—</div><div class="stat-label">Fənn</div></div>
-        </div>
-        <div class="next-day-box">
-            <div class="next-day-label" id="nextDayLabel">Sabahkı dərslər</div>
-            <div id="nextDayLessons"></div>
-        </div>
-    </div>
-
-    <div class="section-label">Cari / Növbəti dərs</div>
-    <div id="lessonCard" class="lesson-container"></div>
-
-    <div class="todays-bar">
-        <div class="todays-bar-header" id="todaysBarToggle">
-            <div class="todays-bar-title">📋 Bugünkü dərslər <span class="todays-count" id="todaysCount">0</span></div>
-            <span class="todays-bar-chevron" id="todaysBarChevron">▼</span>
-        </div>
-        <div class="todays-bar-body" id="todaysBarBody"></div>
-    </div>
-
-    <div class="button-row">
-        <button class="action-btn schedule" id="showScheduleBtn">📅 Cədvəl</button>
-        <button class="action-btn weeks" id="showWeeksBtn">📊 Qayıb limitləri</button>
-    </div>
-    <div class="button-row" style="margin-top:-6px;">
-        <a href="imtahan.html" class="action-btn" style="background:linear-gradient(135deg,#b45309,#f59e0b);box-shadow:0 8px 20px -4px rgba(245,158,11,0.4);text-decoration:none;">📝 İmtahan sualları - pdf</a>
-    </div>
-    <div class="button-row" style="margin-top:-6px;">
-        <a href="serbestisler.html" class="action-btn" style="background:linear-gradient(135deg,#0f766e,#14b8a6);box-shadow:0 8px 20px -4px rgba(20,184,166,0.4);text-decoration:none;">📋 Sərbəst işlər</a>
-    </div>
-
-    <div class="footer-area">
-        <div class="building-code"><span>🏛️ 845A5</span></div>
-        <div class="footer-note">
-            <span>09:00–10:20</span>
-            <span>10:30–11:50</span>
-            <span>12:00–13:20</span>
-        </div>
-        <div style="text-align:center;margin-top:4px;">
-            <span class="est-glow">E S T</span>
-        </div>
-    </div>
-</div>
 </div>
 
 <!-- ── AI FLOATING ACTION BUTTON ── -->
 <a href="ai.html" id="aiFab" class="ai-fab" aria-label="AI Köməkçi">
     <span class="ai-fab-label" id="aiFabLabel">✨ AI Köməkçi</span>
     <img
-        src="ai-icon.png"
-        class="ai-fab-icon"
-        alt="AI"
-        id="aiFabImg"
-        onerror="
+            src="ai-icon.png"
+            class="ai-fab-icon"
+            alt="AI"
+            id="aiFabImg"
+            onerror="
             this.style.display='none';
             this.insertAdjacentHTML('afterend',
                 '<svg class=\'ai-fab-icon\' viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'>' +
@@ -699,59 +700,61 @@
 
 <!-- SUBJECT POPUP -->
 <div id="subjModal" class="subj-modal">
-    <div class="subj-sheet" id="subjSheet">
-        <div class="subj-sheet-handle"></div>
-        <div class="subj-sheet-name" id="subjName">—</div>
-        <div class="subj-sheet-teacher" id="subjTeacher">—</div>
-        <div class="subj-progress-row">
-            <div class="subj-progress-track"><div class="subj-progress-fill" id="subjFill" style="width:0%"></div></div>
-            <span class="subj-pct" id="subjPct">0%</span>
-        </div>
-        <div class="subj-stats">
-            <div class="subj-stat"><div class="subj-stat-val green" id="subjDone">—</div><div class="subj-stat-lbl">Keçilib</div></div>
-            <div class="subj-stat"><div class="subj-stat-val amber" id="subjLeft">—</div><div class="subj-stat-lbl">Qalıb</div></div>
-            <div class="subj-stat"><div class="subj-stat-val" id="subjTotal">—</div><div class="subj-stat-lbl">Cəmi</div></div>
-        </div>
-        <div id="subjLimitBox" style="margin-top:12px;background:var(--surface);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;">
-            <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);font-weight:700;margin-bottom:8px;">Qayıb limiti</div>
-            <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;">
-                <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitCount">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Limit</div></div>
-                <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitHours">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Saat</div></div>
-                <div style="flex:1;font-size:0.78rem;color:var(--amber);font-weight:600;line-height:1.4;" id="subjLimitRule">—</div>
+    <div class="subj-modal-inner" id="subjModalInner">
+        <div class="subj-sheet" id="subjSheet">
+            <div class="subj-sheet-handle"></div>
+            <div class="subj-sheet-name" id="subjName">—</div>
+            <div class="subj-sheet-teacher" id="subjTeacher">—</div>
+            <div class="subj-progress-row">
+                <div class="subj-progress-track"><div class="subj-progress-fill" id="subjFill" style="width:0%"></div></div>
+                <span class="subj-pct" id="subjPct">0%</span>
             </div>
-            <div style="display:flex;align-items:center;gap:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:8px 10px;">
-                <span style="font-size:1rem;">⚠️</span>
-                <span style="font-size:0.82rem;color:var(--red);font-weight:700;" id="subjKesrText">—</span>
+            <div class="subj-stats">
+                <div class="subj-stat"><div class="subj-stat-val green" id="subjDone">—</div><div class="subj-stat-lbl">Keçilib</div></div>
+                <div class="subj-stat"><div class="subj-stat-val amber" id="subjLeft">—</div><div class="subj-stat-lbl">Qalıb</div></div>
+                <div class="subj-stat"><div class="subj-stat-val" id="subjTotal">—</div><div class="subj-stat-lbl">Cəmi</div></div>
             </div>
-        </div>
+            <div id="subjLimitBox" style="margin-top:12px;background:var(--surface);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;">
+                <div style="font-size:0.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);font-weight:700;margin-bottom:8px;">Qayıb limiti</div>
+                <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;">
+                    <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitCount">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Limit</div></div>
+                    <div style="text-align:center;"><div style="font-size:1.5rem;font-weight:800;" id="subjLimitHours">—</div><div style="font-size:0.58rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.8px;font-weight:600;">Saat</div></div>
+                    <div style="flex:1;font-size:0.78rem;color:var(--amber);font-weight:600;line-height:1.4;" id="subjLimitRule">—</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:8px 10px;">
+                    <span style="font-size:1rem;">⚠️</span>
+                    <span style="font-size:0.82rem;color:var(--red);font-weight:700;" id="subjKesrText">—</span>
+                </div>
+            </div>
 
-        <div class="subj-cal-section">
-            <div class="subj-cal-title">Bu fənnin cədvəldəki günləri</div>
-            <div class="subj-cal-header">
-                <button class="subj-cal-nav" id="subjCalPrev">‹</button>
-                <span class="subj-cal-month" id="subjCalMonth">—</span>
-                <button class="subj-cal-nav" id="subjCalNext">›</button>
+            <div class="subj-cal-section">
+                <div class="subj-cal-title">Bu fənnin cədvəldəki günləri</div>
+                <div class="subj-cal-header">
+                    <button class="subj-cal-nav" id="subjCalPrev">‹</button>
+                    <span class="subj-cal-month" id="subjCalMonth">—</span>
+                    <button class="subj-cal-nav" id="subjCalNext">›</button>
+                </div>
+                <div class="subj-cal-dows" id="subjCalDows"></div>
+                <div class="subj-cal-days" id="subjCalDays"></div>
+                <div class="subj-cal-legend">
+                    <div class="sc-leg"><div class="sc-leg-dot muh"></div>Mühazirə</div>
+                    <div class="sc-leg"><div class="sc-leg-dot sem"></div>Seminar</div>
+                    <div class="sc-leg"><div class="sc-leg-dot lab"></div>Laboratoriya</div>
+                    <div class="sc-leg"><div class="sc-leg-dot mix"></div>Qarışıq</div>
+                </div>
+                <div class="subj-day-detail" id="subjDayDetail">
+                    <div class="subj-dd-date" id="subjDdDate"></div>
+                    <div id="subjDdList"></div>
+                </div>
             </div>
-            <div class="subj-cal-dows" id="subjCalDows"></div>
-            <div class="subj-cal-days" id="subjCalDays"></div>
-            <div class="subj-cal-legend">
-                <div class="sc-leg"><div class="sc-leg-dot muh"></div>Mühazirə</div>
-                <div class="sc-leg"><div class="sc-leg-dot sem"></div>Seminar</div>
-                <div class="sc-leg"><div class="sc-leg-dot lab"></div>Laboratoriya</div>
-                <div class="sc-leg"><div class="sc-leg-dot mix"></div>Qarışıq</div>
-            </div>
-            <div class="subj-day-detail" id="subjDayDetail">
-                <div class="subj-dd-date" id="subjDdDate"></div>
-                <div id="subjDdList"></div>
-            </div>
-        </div>
 
-        <div id="subjBookBox" style="display:none;margin-top:10px;">
-            <a id="subjBookBtn" href="book.pdf" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:var(--radius-lg);color:white;font-family:inherit;font-size:0.88rem;font-weight:700;text-decoration:none;box-shadow:0 6px 16px -3px rgba(168,85,247,0.4);transition:transform 0.15s,filter 0.15s;">
-                📖 Kitabı aç — book.pdf
-            </a>
+            <div id="subjBookBox" style="display:none;margin-top:10px;">
+                <a id="subjBookBtn" href="book.pdf" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;border-radius:var(--radius-lg);color:white;font-family:inherit;font-size:0.88rem;font-weight:700;text-decoration:none;box-shadow:0 6px 16px -3px rgba(168,85,247,0.4);transition:transform 0.15s,filter 0.15s;">
+                    📖 Kitabı aç — book.pdf
+                </a>
+            </div>
+            <button class="subj-close" id="subjClose">Bağla</button>
         </div>
-        <button class="subj-close" id="subjClose">Bağla</button>
     </div>
 </div>
 
@@ -1408,6 +1411,10 @@
 
         subjModal.classList.add('open');
         document.getElementById('subjSheet').scrollTop=0;
+        // Scroll the modal itself to bottom so sheet is visible in Android WebView
+        setTimeout(function(){
+            subjModal.scrollTop = subjModal.scrollHeight;
+        }, 10);
     }
 
     document.getElementById('subjCalPrev').addEventListener('click',function(e){
@@ -1423,7 +1430,7 @@
 
     document.getElementById('subjClose').onclick = function(){ subjModal.classList.remove('open'); };
     subjModal.addEventListener('click', function(e){
-        if(e.target === subjModal) subjModal.classList.remove('open');
+        if(e.target === subjModal || e.target === document.getElementById('subjModalInner')) subjModal.classList.remove('open');
     });
 
     function addScheduleClickHandlers() {
