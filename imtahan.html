@@ -17,8 +17,6 @@
         })();
     </script>
     <style>
-        /* ... previous styles remain the same ... */
-        /* (keep all existing CSS exactly as before) */
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         :root {
             --bg:#0d1117; --surface:#161b27; --card:#1c2333;
@@ -186,7 +184,7 @@
         .q-type-badge.match { background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.3); color:var(--amber); }
         .q-type-badge.order { background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.3); color:#93c5fd; }
 
-        /* Image with fullscreen expand */
+        /* ── Image with fullscreen expand ── */
         .q-img-wrap { position:relative; display:inline-block; width:100%; margin-bottom:14px; }
         .q-img { width:100%; border-radius:12px; border:1px solid var(--border); max-height:200px; object-fit:contain; background:var(--card); display:block; cursor:zoom-in; transition:opacity .15s; }
         .q-img:hover { opacity:0.9; }
@@ -207,7 +205,7 @@
         }
         .q-img-expand:hover { background:rgba(0,0,0,0.85); transform:scale(1.08); }
 
-        /* Fullscreen image lightbox */
+        /* ── Fullscreen image lightbox ── */
         .img-lightbox {
             display:none;
             position:fixed;
@@ -300,12 +298,14 @@
         .hist-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; margin-top:16px; }
         .hist-empty { text-align:center; color:var(--text3); font-size:0.85rem; padding:20px 0; }
 
+        /* ── Quiz review overlay (for tapping result history items) ── */
         .review-overlay { display:none; position:fixed; inset:0; background:rgba(5,8,15,0.97); z-index:700; backdrop-filter:blur(12px); overflow-y:auto; }
         .review-overlay.show { display:block; }
         .review-tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.7rem; font-weight:700; margin-left:8px; vertical-align:middle; }
         .review-tag.correct { background:rgba(34,197,94,0.15); color:#86efac; border:1px solid rgba(34,197,94,0.3); }
         .review-tag.wrong   { background:rgba(239,68,68,0.12);  color:#fca5a5; border:1px solid rgba(239,68,68,0.25); }
 
+        /* ===== EST AI BUTTON STYLES ===== */
         .q-header-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
         .q-header-row .q-text { margin-bottom:0; flex:1; }
         .est-ai-btn {
@@ -360,6 +360,7 @@
         .est-ai-header-btn:hover { filter:brightness(1.1); transform:scale(1.05); box-shadow:0 6px 20px rgba(99,102,241,0.6); }
         .est-ai-header-btn:active { transform:scale(0.96); }
 
+        /* ── AI FLOATING BUTTON ── */
         .ai-fab {
             position:fixed; bottom:28px; right:20px; z-index:999;
             width:58px; height:58px; border-radius:50%;
@@ -406,6 +407,7 @@
         <span id="resultsBadge" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#86efac;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;">0 nəticə</span>
     </button>
     
+    <!-- KOLLOKVIUM I -->
     <div class="exam-card" data-index="0">
         <div class="exam-header" onclick="toggle(0)">
             <div class="exam-icon" style="background:rgba(59,130,246,0.15);">📝</div>
@@ -418,6 +420,7 @@
         <div class="subjects-panel"><div class="subjects-inner" id="subjects1"></div></div>
     </div>
     
+    <!-- KOLLOKVIUM II -->
     <div class="exam-card" data-index="1">
         <div class="exam-header" onclick="toggle(1)">
             <div class="exam-icon" style="background:rgba(245,166,35,0.15);">📋</div>
@@ -432,16 +435,33 @@
     <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
 </div>
 
+<!-- ── IMAGE LIGHTBOX ── -->
 <div class="img-lightbox" id="imgLightbox" onclick="closeLightbox(event)">
     <div class="img-lightbox-close" onclick="closeLightboxBtn()">✕</div>
     <img id="lightboxImg" src="" alt="Tam ölçülü şəkil" onclick="event.stopPropagation()">
 </div>
 
-<a href="#" id="aiFab" class="ai-fab" onclick="handleFabClick(event)">
+<!-- ── AI FLOATING ACTION BUTTON ── -->
+<a href="ai.html" id="aiFab" class="ai-fab" aria-label="AI Köməkçi">
     <span class="ai-fab-label" id="aiFabLabel">✨ AI Köməkçi</span>
-    <img src="ai-icon.png" class="ai-fab-icon" alt="AI" onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<svg style=\'position:absolute;inset:0;width:100%;height:100%;padding:15px;\' viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z\' fill=\'white\' opacity=\'0.95\'/><path d=\'M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z\' fill=\'white\' opacity=\'0.8\'/><path d=\'M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z\' fill=\'white\' opacity=\'0.65\'/></svg>')">
+    <img
+        src="ai-icon.png"
+        class="ai-fab-icon"
+        alt="AI"
+        onerror="
+            this.style.display='none';
+            this.insertAdjacentHTML('afterend',
+                '<svg style=\'position:absolute;inset:0;width:100%;height:100%;padding:15px;\' viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'>' +
+                '<path d=\'M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z\' fill=\'white\' opacity=\'0.95\'/>' +
+                '<path d=\'M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z\' fill=\'white\' opacity=\'0.8\'/>' +
+                '<path d=\'M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z\' fill=\'white\' opacity=\'0.65\'/>' +
+                '</svg>'
+            );
+        "
+    >
 </a>
 
+<!-- POPUPS -->
 <div class="popup-overlay" id="subjectPopup" onclick="overlayClick(event)">
     <div class="popup-box">
         <div class="popup-close" onclick="closeSubject()">✕</div>
@@ -479,6 +499,7 @@
     </div>
 </div>
 
+<!-- ── Quiz Review Overlay (tap result → see questions) ── -->
 <div class="quiz-overlay review-overlay" id="reviewOverlay">
     <div class="quiz-wrap">
         <div class="quiz-header">
@@ -502,70 +523,7 @@
 </div>
 
 <script>
-// ==================== FIXED NAVIGATION FOR ANDROID WEBVIEW ====================
-// Store AI context in multiple places for reliability
-function storeAIContext(ctx) {
-    if (!ctx) return;
-    try {
-        const ctxStr = JSON.stringify(ctx);
-        // Store in both localStorage and sessionStorage
-        localStorage.setItem('aiContext', ctxStr);
-        sessionStorage.setItem('aiContext', ctxStr);
-        // Also store as a global variable (accessible from ai.html if opened in same WebView)
-        window.__aiContext = ctx;
-    } catch(e) { console.warn('Storage error:', e); }
-}
-
-// Navigate to AI page with context
-function navigateToAI(ctx) {
-    storeAIContext(ctx);
-    // Use window.location.href with a slight delay to ensure storage is flushed
-    setTimeout(function() {
-        window.location.href = 'ai.html';
-    }, 50);
-}
-
-function handleFabClick(e) {
-    e.preventDefault();
-    navigateToAI(null);
-}
-
-function openESTAI() {
-    navigateToAI(null);
-}
-
-// Fix lightbox for Android WebView - ensure it works with file:// protocol
-function openLightbox(src) {
-    // For Android WebView, ensure the image path is correct
-    let imgSrc = src;
-    if (window.location.protocol === 'file:' && src && !src.startsWith('file://') && !src.startsWith('http')) {
-        // If it's a relative path, prepend the base
-        imgSrc = 'file:///android_asset/' + src;
-    }
-    const imgElement = document.getElementById('lightboxImg');
-    if (imgElement) {
-        imgElement.src = imgSrc;
-        document.getElementById('imgLightbox').classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function closeLightbox(e) {
-    if(e && e.target !== document.getElementById('imgLightbox') && e.target !== document.querySelector('.img-lightbox-close')) return;
-    document.getElementById('imgLightbox').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-function closeLightboxBtn() {
-    document.getElementById('imgLightbox').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-// ==================== REST OF YOUR EXISTING CODE ====================
-// (Keep all your existing JavaScript code here - subjectsData, QUIZ_DATA, 
-// buildSubjects, toggle, openSubject, closeSubject, openPDFChoice, etc.)
-// The following is a summary - in your actual file, keep ALL existing functions
-
+// ==================== INITIALIZATION ====================
 const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
 document.getElementById('dateNow').textContent = new Date().getDate()+' '+months[new Date().getMonth()]+' '+new Date().getFullYear();
 
@@ -609,37 +567,57 @@ function toggle(idx) {
 }
 document.querySelectorAll('.exam-card')[0].classList.add('open');
 
-let curPdf = '', curKey = '', curSubjectName = '', curKoll = '';
-
-function openSubject(name, knum, pdf, key) {
-    curSubjectName = name; curKoll = knum; curPdf = pdf; curKey = key;
-    document.getElementById('popTitle').textContent = name;
-    document.getElementById('popKbadge').textContent = 'Kollokvium ' + knum;
-    document.getElementById('subjectPopup').classList.add('show');
+// ==================== LIGHTBOX ====================
+function openLightbox(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('imgLightbox').classList.add('show');
     document.body.style.overflow = 'hidden';
 }
-function closeSubject() {
-    document.getElementById('subjectPopup').classList.remove('show');
+function closeLightbox(e) {
+    if(e.target === document.getElementById('imgLightbox')) {
+        document.getElementById('imgLightbox').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+function closeLightboxBtn() {
+    document.getElementById('imgLightbox').classList.remove('show');
     document.body.style.overflow = '';
 }
-function overlayClick(e) { if(e.target === document.getElementById('subjectPopup')) closeSubject(); }
-function openPDFChoice() {
-    document.getElementById('pdfChoiceTitle').textContent = curSubjectName;
-    document.getElementById('pdfChoiceKbadge').textContent = 'Kollokvium ' + curKoll;
-    const isXdiak = curKey.startsWith('xdiak');
-    document.getElementById('pdfWordsBtn').style.display = isXdiak ? 'flex' : 'none';
-    document.getElementById('subjectPopup').classList.remove('show');
-    document.getElementById('pdfChoicePopup').classList.add('show');
-}
-function closePdfChoice() {
-    document.getElementById('pdfChoicePopup').classList.remove('show');
-    document.getElementById('subjectPopup').classList.add('show');
-}
-function pdfChoiceOverlayClick(e) { if(e.target === document.getElementById('pdfChoicePopup')) closePdfChoice(); }
-function openPDF(type) { const base = curPdf.replace(/\.pdf$/i,''); window.open(base+'_'+type+'.pdf','_blank'); }
-function openWords() { window.open('englishwords.pdf','_blank'); }
 
-// QUIZ DATA (keep your existing QUIZ_DATA object)
+// ==================== EST AI ====================
+function openESTAI() {
+    try { localStorage.removeItem('aiContext'); sessionStorage.removeItem('pageContext'); } catch(e) {}
+    navigateToAI(null);
+}
+
+// ── FIX: Reliable navigation to AI page ──
+// Android WebView sometimes doesn't flush localStorage before navigation.
+// We use a small delay + fallback to ensure data is written before leaving.
+function navigateToAI(ctx) {
+    function doNavigate() { window.location.href = 'ai.html'; }
+    if(ctx) {
+        var ctxStr = JSON.stringify(ctx);
+        // Try localStorage first (needed for ai.html to read it)
+        var saved = false;
+        try { localStorage.setItem('aiContext', ctxStr); saved = true; } catch(e) {}
+        // Also write to sessionStorage as backup
+        try { sessionStorage.setItem('aiContext', ctxStr); } catch(e) {}
+        // Also pass via URL hash as ultimate fallback for Android WebView
+        try {
+            var encoded = encodeURIComponent(ctxStr);
+            if(encoded.length < 4000) {
+                window.location.href = 'ai.html#ctx=' + encoded;
+                return;
+            }
+        } catch(e) {}
+        // Fallback: small delay to ensure storage flush, then navigate
+        if(saved) { setTimeout(doNavigate, 80); } else { doNavigate(); }
+    } else {
+        doNavigate();
+    }
+}
+
+// ==================== QUIZ DATA ====================
 const QUIZ_DATA = {
     'diskret_riyaziyyat': [{title:'İmtahan 1', questions:[
         {type:'IMG_B', img:'diskret_1.png', items:['1','2','3'], variants:['a','b','c','d','e'], correctMap:[[3],[0,1,2],[4]]},
@@ -709,13 +687,44 @@ additionalKeys.forEach(key => {
     }
 });
 
+// ==================== GLOBAL VARIABLES ====================
+let curPdf = '', curKey = '', curSubjectName = '', curKoll = '';
 let quizAnswers = [];
 let quizTimerInterval = null;
 const QUIZ_DURATION = 600;
 let examSubmitted = {};
 let examQuestionGrades = {};
 
-// Helper functions for AI
+// ==================== SUBJECT POPUP ====================
+function openSubject(name, knum, pdf, key) {
+    curSubjectName = name; curKoll = knum; curPdf = pdf; curKey = key;
+    document.getElementById('popTitle').textContent = name;
+    document.getElementById('popKbadge').textContent = 'Kollokvium ' + knum;
+    document.getElementById('subjectPopup').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+function closeSubject() {
+    document.getElementById('subjectPopup').classList.remove('show');
+    document.body.style.overflow = '';
+}
+function overlayClick(e) { if(e.target === document.getElementById('subjectPopup')) closeSubject(); }
+function openPDFChoice() {
+    document.getElementById('pdfChoiceTitle').textContent = curSubjectName;
+    document.getElementById('pdfChoiceKbadge').textContent = 'Kollokvium ' + curKoll;
+    const isXdiak = curKey.startsWith('xdiak');
+    document.getElementById('pdfWordsBtn').style.display = isXdiak ? 'flex' : 'none';
+    document.getElementById('subjectPopup').classList.remove('show');
+    document.getElementById('pdfChoicePopup').classList.add('show');
+}
+function closePdfChoice() {
+    document.getElementById('pdfChoicePopup').classList.remove('show');
+    document.getElementById('subjectPopup').classList.add('show');
+}
+function pdfChoiceOverlayClick(e) { if(e.target === document.getElementById('pdfChoicePopup')) closePdfChoice(); }
+function openPDF(type) { const base = curPdf.replace(/\.pdf$/i,''); window.open(base+'_'+type+'.pdf','_blank'); }
+function openWords() { window.open('englishwords.pdf','_blank'); }
+
+// ==================== EST AI CONTEXT HELPERS ====================
 function getQuestionText(q, qi) {
     if(q.type === 'STD') return q.text;
     if(q.type === 'A') return q.text;
@@ -747,12 +756,14 @@ function getUserAnswerText(q, ans) {
     return 'Cavab verilməyib';
 }
 
+// ── FIX: Build full AI context with ALL question details ──
 function buildSingleQuestionContext(key, ei, qi, status) {
     const exam = QUIZ_DATA[key][ei];
     if(!exam) return null;
     const q = exam.questions[qi];
     const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
 
+    // Build full options/statements text for AI context
     let optionsDetail = null;
     if(q.type === 'STD') {
         optionsDetail = q.options.map((o,i) => String.fromCharCode(65+i)+') '+o).join('\n');
@@ -830,33 +841,7 @@ function openAIForAllQuestions(ei) {
     navigateToAI(ctx);
 }
 
-function buildAIBtn(ei, qi, status) {
-    const cls = status === 'wrong' ? 'submitted-wrong' : status === 'correct' ? 'submitted-correct' : '';
-    const icon = status === 'wrong' ? '❌' : status === 'correct' ? '✅' : '🤖';
-    return `<button class="est-ai-btn ${cls}" onclick="openAIForQuestion('${curKey}',${ei},${qi},'${status}')">${icon} AI-dan soruş</button>`;
-}
-
-function buildImgWrap(src) {
-    return `<div class="q-img-wrap">
-        <img class="q-img" src="${src}" alt="Sual şəkli" onclick="openLightbox('${src}')" style="cursor:zoom-in;">
-        <div class="q-img-expand" onclick="openLightbox('${src}')" title="Tam ölçülü bax">⛶</div>
-    </div>`;
-}
-
-// ... (keep all your existing buildPanel, pickSTD, pickA, pickB, submitExam, etc.)
-// For brevity, I'm showing the key functions - in your actual file, keep ALL your existing code
-
-// Quick summary of functions you must keep from your original:
-// - openQuiz(), switchTab(), pickSTD(), pickA(), pickB(), gradeTypeA(), gradeTypeB(), gradeTypeOrder()
-// - submitExam(), retryExam(), closeQuiz(), startTimer(), stopTimer(), autoSubmitAll()
-// - saveResult(), getHistory(), setHistory(), updateBadge(), deleteSingleResult(), renderResults()
-// - openResultsOverlay(), closeResultsOverlay(), openReviewForRecord(), closeReviewOverlay(), buildReviewHTML()
-// - toggleTheme()
-// - attachOrderDragListeners, setupOrderDragDrop, updateOrderPositions, updateOrderAnswers
-
-// For the sake of completeness, I'm providing the core quiz functions - 
-// but in your actual implementation, keep ALL your existing code from the original file
-
+// ==================== QUIZ FUNCTIONS ====================
 function openQuiz() {
     const data = QUIZ_DATA[curKey];
     if(!data) { alert('Test sualları hazırlanır...'); return; }
@@ -897,6 +882,21 @@ function openQuiz() {
     attachAllOrderDragListeners();
 }
 
+function buildAIBtn(ei, qi, status) {
+    const cls = status === 'wrong' ? 'submitted-wrong' : status === 'correct' ? 'submitted-correct' : '';
+    const icon = status === 'wrong' ? '❌' : status === 'correct' ? '✅' : '🤖';
+    // Use button + onclick instead of <a href> — more reliable on Android WebView
+    return `<button class="est-ai-btn ${cls}" onclick="openAIForQuestion('${curKey}',${ei},${qi},'${status}')">${icon} AI-dan soruş</button>`;
+}
+
+// ── Build image wrap with expand button ──
+function buildImgWrap(src) {
+    return `<div class="q-img-wrap">
+        <img class="q-img" src="${src}" alt="Sual şəkli" onclick="openLightbox('${src}')">
+        <div class="q-img-expand" onclick="openLightbox('${src}')" title="Tam ölçülü bax">⛶</div>
+    </div>`;
+}
+
 function buildPanel(ei) {
     const exam = QUIZ_DATA[curKey][ei];
     const letters = ['A','B','C','D','E'];
@@ -922,7 +922,7 @@ function buildPanel(ei) {
             html += `</div></div>`;
         } else if(q.type === 'B' || q.type === 'IMG_B') {
             html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-header-row"><span class="q-type-badge match">↔ Uyğunlaşdırma</span>${aiBtn}</div>`;
-            if(q.img) html += buildImgWrap(q.img);
+            if(q.img) html += buildImgWrap(q.img);  // ← FIX: image with expand button
             html += `<div class="q-text">${q.text || ''}</div><div class="match-wrap" id="match-${ei}-${qi}">`;
             q.items.forEach((item, ii) => {
                 html += `<div class="match-item" id="mi-${ei}-${qi}-${ii}"><div class="match-q">${ii+1}. ${item}</div><div class="match-variants">`;
@@ -1098,6 +1098,7 @@ function submitExam(ei) {
         totalScore += pts; maxScore += max;
     });
 
+    // ── Update AI buttons after submit ──
     exam.questions.forEach((q, qi) => {
         const grade = examQuestionGrades[ei][qi];
         const status = grade === 'correct' ? 'correct' : 'wrong';
@@ -1109,6 +1110,7 @@ function submitExam(ei) {
                 if(btn) {
                     btn.className = 'est-ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
                     btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI-dan soruş';
+                    // Update onclick with new status
                     btn.setAttribute('onclick', `openAIForQuestion('${curKey}',${ei},${qi},'${status}')`);
                 }
             }
@@ -1157,6 +1159,7 @@ function closeQuiz() {
     document.getElementById('subjectPopup').classList.add('show');
 }
 
+// ==================== DRAG & DROP ====================
 function attachAllOrderDragListeners() {
     const data = QUIZ_DATA[curKey];
     if(!data) return;
@@ -1206,6 +1209,7 @@ function updateOrderAnswers(listEl, ei, qi) {
     quizAnswers[ei][qi] = [...listEl.querySelectorAll('.order-item')].map(el => parseInt(el.dataset.orig));
 }
 
+// ==================== TIMER ====================
 function startTimer() {
     stopTimer(); let remaining = QUIZ_DURATION; updateTimerDisplay(remaining);
     const timerEl = document.getElementById('quizTimer');
@@ -1230,7 +1234,7 @@ function autoSubmitAll() {
     if(data) data.forEach((_,ei) => { const b = document.getElementById('sub-'+ei); if(b && !b.disabled) submitExam(ei); });
 }
 
-// Results System
+// ==================== RESULTS SYSTEM ====================
 const SUBJECT_NAMES = {
     'diskret_riyaziyyat':'Diskret riyaz.','diskret_riyaziyyat_2':'Diskret riyaz.',
     'proqramlasdirma':'Proqramlaşd.','proqramlasdirma_2':'Proqramlaşd.',
@@ -1252,6 +1256,7 @@ const SUBJECT_GROUPS = [
 function getHistory() { try { return JSON.parse(localStorage.getItem('testHistory')||'[]'); } catch(e) { return []; } }
 function setHistory(h) { try { localStorage.setItem('testHistory', JSON.stringify(h)); } catch(e) {} }
 
+// ── FIX: Save full question snapshot with result ──
 function saveResult(key, ei, score, max, pass, subjectName, koll, grades, questions) {
     const h = getHistory();
     const now = new Date();
@@ -1259,8 +1264,10 @@ function saveResult(key, ei, score, max, pass, subjectName, koll, grades, questi
     const dateStr = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
     const kollLabel = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
 
+    // Serialize question results for review
+    // Store only what we need (text + correct/wrong status + correct answer)
     const qSnapshot = questions ? questions.map((q, qi) => {
-        const grade = grades ? (grades[qi] || 'unknown') : 'unknown';
+        const grade = grades ? (grades[qi] || 'wrong') : 'unknown';
         return {
             text: getQuestionText(q, qi),
             type: q.type,
@@ -1296,6 +1303,7 @@ function deleteSingleResult(id, e) {
     if(document.getElementById('resultsOverlay').classList.contains('show')) renderResults();
 }
 
+// ── FIX: Build review HTML from saved snapshot ──
 function buildReviewHTML(record) {
     if(!record.qSnapshot || record.qSnapshot.length === 0) {
         return '<div style="text-align:center;color:var(--text3);padding:30px 0;">Bu nəticə üçün sual məlumatı yoxdur. Yeni test eləyin.</div>';
@@ -1327,6 +1335,7 @@ function buildReviewHTML(record) {
     return html;
 }
 
+// ── FIX: Tap history item → open review overlay ──
 function openReviewForRecord(record) {
     document.getElementById('reviewTitle').textContent = record.subjectName || record.subj;
     document.getElementById('reviewSubtitle').textContent = record.koll + ' · ' + record.score + '/' + record.max + ' bal';
@@ -1359,6 +1368,7 @@ function renderResults() {
     });
     const histList = document.getElementById('histList');
     if(h.length === 0) { histList.innerHTML = '<div class="hist-empty">Hələ heç bir test edilməyib</div>'; return; }
+    // ── FIX: history items are now tappable to open review ──
     histList.innerHTML = h.map(r => 
         `<div class="hist-item" onclick="openReviewForRecord(${JSON.stringify(r).replace(/"/g,'&quot;')})">` +
         `<div class="hist-dot ${r.pass?'pass':'fail'}"></div>` +
@@ -1383,6 +1393,7 @@ document.getElementById('clearBtn').addEventListener('click', function() {
     }
 });
 
+// ==================== THEME ====================
 function toggleTheme() {
     const isLight = document.body.classList.toggle('light');
     document.getElementById('themeToggle').textContent = isLight ? '🌑' : '🌙';
@@ -1395,7 +1406,23 @@ function toggleTheme() {
 
 updateBadge();
 
-// Fab auto-show tooltip
+// ── FAB: Save page context ──
+document.getElementById('aiFab').addEventListener('click', function(e) {
+    e.preventDefault();
+    try {
+        var clone = document.documentElement.cloneNode(true);
+        clone.querySelectorAll('style, link[rel="stylesheet"]').forEach(function(s){ s.remove(); });
+        clone.querySelectorAll('script').forEach(function(s){ s.remove(); });
+        clone.querySelectorAll('[style]').forEach(function(el){ el.removeAttribute('style'); });
+        var html = clone.outerHTML;
+        if(html.length > 12000) html = html.substring(0, 12000) + '...[truncated]';
+        try { sessionStorage.setItem('pageContext', html); } catch(err) {}
+        try { sessionStorage.setItem('pageUrl', window.location.href); } catch(err) {}
+    } catch(err) {}
+    window.location.href = 'ai.html';
+});
+
+// ── AI FAB: Auto-show tooltip loop ──
 (function(){
     var fab   = document.getElementById('aiFab');
     var label = document.getElementById('aiFabLabel');
