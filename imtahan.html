@@ -183,7 +183,68 @@
         .q-type-badge.multi { background:rgba(168,85,247,0.15); border:1px solid rgba(168,85,247,0.3); color:#c084fc; }
         .q-type-badge.match { background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.3); color:var(--amber); }
         .q-type-badge.order { background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.3); color:#93c5fd; }
-        .q-img { width:100%; border-radius:12px; margin-bottom:14px; border:1px solid var(--border); max-height:200px; object-fit:contain; background:var(--card); }
+
+        /* ── Image with fullscreen expand ── */
+        .q-img-wrap { position:relative; display:inline-block; width:100%; margin-bottom:14px; }
+        .q-img { width:100%; border-radius:12px; border:1px solid var(--border); max-height:200px; object-fit:contain; background:var(--card); display:block; cursor:zoom-in; transition:opacity .15s; }
+        .q-img:hover { opacity:0.9; }
+        .q-img-expand {
+            position:absolute;
+            top:8px; right:8px;
+            width:32px; height:32px;
+            background:rgba(0,0,0,0.65);
+            border:1px solid rgba(255,255,255,0.18);
+            border-radius:9px;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer;
+            font-size:14px;
+            color:white;
+            backdrop-filter:blur(6px);
+            transition:background .15s, transform .15s;
+            z-index:2;
+        }
+        .q-img-expand:hover { background:rgba(0,0,0,0.85); transform:scale(1.08); }
+
+        /* ── Fullscreen image lightbox ── */
+        .img-lightbox {
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.96);
+            z-index:9999;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            backdrop-filter:blur(10px);
+            cursor:zoom-out;
+        }
+        .img-lightbox.show { display:flex; animation:fadeIn .2s ease both; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .img-lightbox img {
+            max-width:100%;
+            max-height:90vh;
+            border-radius:14px;
+            object-fit:contain;
+            box-shadow:0 24px 80px rgba(0,0,0,0.8);
+            animation:imgZoomIn .25s cubic-bezier(.16,1,.3,1) both;
+            cursor:default;
+        }
+        @keyframes imgZoomIn { from{opacity:0;transform:scale(0.88)} to{opacity:1;transform:scale(1)} }
+        .img-lightbox-close {
+            position:absolute;
+            top:16px; right:16px;
+            width:40px; height:40px;
+            background:rgba(255,255,255,0.1);
+            border:1px solid rgba(255,255,255,0.15);
+            border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer;
+            font-size:18px;
+            color:white;
+            transition:background .2s;
+        }
+        .img-lightbox-close:hover { background:rgba(255,255,255,0.2); }
+
         .img-match-item { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 13px; margin-bottom:8px; }
         .img-match-item.correct-item { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); }
         .img-match-item.wrong-item   { background:rgba(239,68,68,0.07);  border-color:rgba(239,68,68,0.25); }
@@ -207,7 +268,8 @@
         .order-correct-row { font-size:0.82rem; color:var(--text2); padding:2px 0; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
         .popup-btn.words { background:linear-gradient(135deg,#6d28d9,#8b5cf6); box-shadow:0 8px 20px -4px rgba(139,92,246,0.35); }
-        .hist-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; position:relative; transition:background .2s; }
+        .hist-item { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; position:relative; transition:background .2s; cursor:pointer; }
+        .hist-item:hover { background:rgba(59,130,246,0.07); border-color:rgba(59,130,246,0.2); }
         .hist-item:hover .hist-delete { opacity:0.8; visibility:visible; }
         .hist-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
         .hist-dot.pass { background:var(--green); }
@@ -225,7 +287,8 @@
         .best-section { margin-bottom:16px; }
         .best-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; }
         .best-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-        .best-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; }
+        .best-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; cursor:pointer; transition:background .18s, border-color .18s; }
+        .best-card:hover { background:rgba(59,130,246,0.08); border-color:rgba(59,130,246,0.25); }
         .best-card-name { font-size:0.72rem; color:var(--text3); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .best-card-score { font-size:1.3rem; font-weight:800; }
         .best-card-score.pass { color:var(--green); }
@@ -235,11 +298,16 @@
         .hist-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1.5px; color:var(--text3); font-weight:700; margin-bottom:10px; margin-top:16px; }
         .hist-empty { text-align:center; color:var(--text3); font-size:0.85rem; padding:20px 0; }
 
+        /* ── Quiz review overlay (for tapping result history items) ── */
+        .review-overlay { display:none; position:fixed; inset:0; background:rgba(5,8,15,0.97); z-index:700; backdrop-filter:blur(12px); overflow-y:auto; }
+        .review-overlay.show { display:block; }
+        .review-tag { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.7rem; font-weight:700; margin-left:8px; vertical-align:middle; }
+        .review-tag.correct { background:rgba(34,197,94,0.15); color:#86efac; border:1px solid rgba(34,197,94,0.3); }
+        .review-tag.wrong   { background:rgba(239,68,68,0.12);  color:#fca5a5; border:1px solid rgba(239,68,68,0.25); }
+
         /* ===== EST AI BUTTON STYLES ===== */
         .q-header-row { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:14px; }
         .q-header-row .q-text { margin-bottom:0; flex:1; }
-
-        /* ── Per-question AI button: same style as FAB tooltip / badge ── */
         .est-ai-btn {
             flex-shrink:0;
             display:inline-flex;
@@ -254,7 +322,6 @@
             font-weight:700;
             color:white;
             cursor:pointer;
-            text-decoration:none;
             transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, filter 0.15s;
             white-space:nowrap;
             margin-top:2px;
@@ -264,160 +331,57 @@
         }
         .est-ai-btn::before {
             content:'';
-            position:absolute;
-            inset:-3px;
-            border-radius:20px;
+            position:absolute; inset:-3px; border-radius:20px;
             background:linear-gradient(135deg,#6366f1,#8b5cf6);
-            opacity:0;
-            animation:aiBtnRing 2.5s ease-in-out infinite;
-            z-index:-1;
+            opacity:0; animation:aiBtnRing 2.5s ease-in-out infinite; z-index:-1;
         }
-        @keyframes aiBtnRing {
-            0%{opacity:0;transform:scale(1);}
-            50%{opacity:0.3;transform:scale(1.12);}
-            100%{opacity:0;transform:scale(1.25);}
-        }
-        .est-ai-btn:hover {
-            transform:scale(1.07);
-            box-shadow:0 6px 20px rgba(99,102,241,0.65), 0 0 0 1px rgba(255,255,255,0.12) inset;
-            filter:brightness(1.08);
-        }
+        @keyframes aiBtnRing { 0%{opacity:0;transform:scale(1);} 50%{opacity:0.3;transform:scale(1.12);} 100%{opacity:0;transform:scale(1.25);} }
+        .est-ai-btn:hover { transform:scale(1.07); box-shadow:0 6px 20px rgba(99,102,241,0.65), 0 0 0 1px rgba(255,255,255,0.12) inset; filter:brightness(1.08); }
         .est-ai-btn:active { transform:scale(0.95); }
-        .est-ai-btn.submitted-wrong {
-            background:linear-gradient(135deg,#dc2626,#ef4444);
-            box-shadow:0 4px 14px rgba(239,68,68,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset;
-            animation:none;
-        }
+        .est-ai-btn.submitted-wrong { background:linear-gradient(135deg,#dc2626,#ef4444); box-shadow:0 4px 14px rgba(239,68,68,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset; animation:none; }
         .est-ai-btn.submitted-wrong::before { display:none; }
-        .est-ai-btn.submitted-correct {
-            background:linear-gradient(135deg,#059669,#10b981);
-            box-shadow:0 4px 14px rgba(16,185,129,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset;
-            animation:none;
-        }
+        .est-ai-btn.submitted-correct { background:linear-gradient(135deg,#059669,#10b981); box-shadow:0 4px 14px rgba(16,185,129,0.4), 0 0 0 1px rgba(255,255,255,0.08) inset; animation:none; }
         .est-ai-btn.submitted-correct::before { display:none; }
-
         .btn-ask-mistakes {
-            width:100%;
-            padding:13px 18px;
-            background:linear-gradient(135deg,#5b21b6,#8b5cf6);
-            border:none;
-            border-radius:15px;
-            color:white;
-            font-family:var(--r);
-            font-size:0.92rem;
-            font-weight:700;
-            cursor:pointer;
-            box-shadow:0 8px 20px -4px rgba(139,92,246,0.4);
-            transition:filter .15s, transform .15s;
-            margin-top:10px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            gap:8px;
+            width:100%; padding:13px 18px;
+            background:linear-gradient(135deg,#5b21b6,#8b5cf6); border:none; border-radius:15px;
+            color:white; font-family:var(--r); font-size:0.92rem; font-weight:700; cursor:pointer;
+            box-shadow:0 8px 20px -4px rgba(139,92,246,0.4); transition:filter .15s, transform .15s;
+            margin-top:10px; display:flex; align-items:center; justify-content:center; gap:8px;
         }
         .btn-ask-mistakes:hover { filter:brightness(1.1); }
         .btn-ask-mistakes:active { transform:scale(0.98); }
-        
         .est-ai-header-btn {
-            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);
-            color:white;
-            font-weight:700;
-            padding:8px 16px;
-            border-radius:20px;
-            font-size:0.8rem;
-            display:flex;
-            align-items:center;
-            gap:6px;
-            cursor:pointer;
-            transition:transform .2s cubic-bezier(0.34,1.56,0.64,1), filter .15s, box-shadow .2s;
-            border:none;
-            font-family:var(--r);
-            box-shadow:0 4px 14px rgba(99,102,241,0.45);
+            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa); color:white; font-weight:700;
+            padding:8px 16px; border-radius:20px; font-size:0.8rem; display:flex; align-items:center;
+            gap:6px; cursor:pointer; transition:transform .2s cubic-bezier(0.34,1.56,0.64,1), filter .15s, box-shadow .2s;
+            border:none; font-family:var(--r); box-shadow:0 4px 14px rgba(99,102,241,0.45);
         }
-        .est-ai-header-btn:hover {
-            filter:brightness(1.1);
-            transform:scale(1.05);
-            box-shadow:0 6px 20px rgba(99,102,241,0.6);
-        }
+        .est-ai-header-btn:hover { filter:brightness(1.1); transform:scale(1.05); box-shadow:0 6px 20px rgba(99,102,241,0.6); }
         .est-ai-header-btn:active { transform:scale(0.96); }
 
         /* ── AI FLOATING BUTTON ── */
         .ai-fab {
-            position:fixed;
-            bottom:28px;
-            right:20px;
-            z-index:999;
-            width:58px;
-            height:58px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);
-            border:none;
-            cursor:pointer;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+            position:fixed; bottom:28px; right:20px; z-index:999;
+            width:58px; height:58px; border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa); border:none; cursor:pointer;
+            display:flex; align-items:center; justify-content:center;
             box-shadow:0 8px 32px rgba(99,102,241,0.55),0 2px 8px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.1) inset;
             text-decoration:none;
             transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;
             animation:fabIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
             overflow:hidden;
         }
-        @keyframes fabIn {
-            from{opacity:0;transform:scale(0) rotate(-180deg);}
-            to{opacity:1;transform:scale(1) rotate(0deg);}
-        }
-        .ai-fab:hover {
-            transform:scale(1.1);
-            box-shadow:0 12px 40px rgba(99,102,241,0.7),0 2px 12px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.15) inset;
-        }
+        @keyframes fabIn { from{opacity:0;transform:scale(0) rotate(-180deg);} to{opacity:1;transform:scale(1) rotate(0deg);} }
+        .ai-fab:hover { transform:scale(1.1); box-shadow:0 12px 40px rgba(99,102,241,0.7),0 2px 12px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.15) inset; }
         .ai-fab:active { transform:scale(0.95); }
-        .ai-fab::before {
-            content:'';
-            position:absolute;
-            inset:-4px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#6366f1,#8b5cf6);
-            opacity:0;
-            animation:fabRing 2.5s ease-in-out infinite;
-            z-index:-1;
-        }
-        @keyframes fabRing {
-            0%{opacity:0;transform:scale(1);}
-            50%{opacity:0.35;transform:scale(1.18);}
-            100%{opacity:0;transform:scale(1.35);}
-        }
-        .ai-fab-icon {
-            position:absolute;
-            inset:0;
-            width:100%;
-            height:100%;
-            object-fit:cover;
-            border-radius:50%;
-            pointer-events:none;
-        }
-        .ai-fab-label {
-            position:absolute;
-            right:68px;
-            background:#161b27;
-            border:1px solid rgba(255,255,255,0.07);
-            color:#f1f5f9;
-            font-size:0.75rem;
-            font-weight:700;
-            padding:6px 12px;
-            border-radius:20px;
-            white-space:nowrap;
-            opacity:0;
-            pointer-events:none;
-            transform:translateX(8px);
-            transition:opacity 0.25s,transform 0.25s;
-            box-shadow:0 4px 16px rgba(0,0,0,0.3);
-        }
+        .ai-fab::before { content:''; position:absolute; inset:-4px; border-radius:50%; background:linear-gradient(135deg,#6366f1,#8b5cf6); opacity:0; animation:fabRing 2.5s ease-in-out infinite; z-index:-1; }
+        @keyframes fabRing { 0%{opacity:0;transform:scale(1);} 50%{opacity:0.35;transform:scale(1.18);} 100%{opacity:0;transform:scale(1.35);} }
+        .ai-fab-icon { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; pointer-events:none; }
+        .ai-fab-label { position:absolute; right:68px; background:#161b27; border:1px solid rgba(255,255,255,0.07); color:#f1f5f9; font-size:0.75rem; font-weight:700; padding:6px 12px; border-radius:20px; white-space:nowrap; opacity:0; pointer-events:none; transform:translateX(8px); transition:opacity 0.25s,transform 0.25s; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
         body.light .ai-fab-label { background:#ffffff; border-color:rgba(0,0,0,0.09); color:#0f172a; }
         .ai-fab:hover .ai-fab-label { opacity:1; transform:translateX(0); }
-        .ai-fab.fab-label-show .ai-fab-label {
-            opacity:1 !important;
-            transform:translateX(0) !important;
-        }
+        .ai-fab.fab-label-show .ai-fab-label { opacity:1 !important; transform:translateX(0) !important; }
     </style>
 </head>
 <body>
@@ -469,6 +433,12 @@
         <div class="subjects-panel"><div class="subjects-inner" id="subjects2"></div></div>
     </div>
     <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
+</div>
+
+<!-- ── IMAGE LIGHTBOX ── -->
+<div class="img-lightbox" id="imgLightbox" onclick="closeLightbox(event)">
+    <div class="img-lightbox-close" onclick="closeLightboxBtn()">✕</div>
+    <img id="lightboxImg" src="" alt="Tam ölçülü şəkil" onclick="event.stopPropagation()">
 </div>
 
 <!-- ── AI FLOATING ACTION BUTTON ── -->
@@ -529,6 +499,17 @@
     </div>
 </div>
 
+<!-- ── Quiz Review Overlay (tap result → see questions) ── -->
+<div class="quiz-overlay review-overlay" id="reviewOverlay">
+    <div class="quiz-wrap">
+        <div class="quiz-header">
+            <div class="quiz-back" onclick="closeReviewOverlay()">←</div>
+            <div style="flex:1;"><div class="quiz-htitle" id="reviewTitle">Nəticə</div><div class="quiz-hsub" id="reviewSubtitle"></div></div>
+        </div>
+        <div id="reviewContent"></div>
+    </div>
+</div>
+
 <div class="quiz-overlay" id="quizOverlay">
     <div class="quiz-wrap">
         <div class="quiz-header">
@@ -586,11 +567,54 @@ function toggle(idx) {
 }
 document.querySelectorAll('.exam-card')[0].classList.add('open');
 
+// ==================== LIGHTBOX ====================
+function openLightbox(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('imgLightbox').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+    if(e.target === document.getElementById('imgLightbox')) {
+        document.getElementById('imgLightbox').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+function closeLightboxBtn() {
+    document.getElementById('imgLightbox').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
 // ==================== EST AI ====================
 function openESTAI() {
-    localStorage.removeItem('aiContext');
-    sessionStorage.removeItem('pageContext');
-    window.location.href = 'ai.html';
+    try { localStorage.removeItem('aiContext'); sessionStorage.removeItem('pageContext'); } catch(e) {}
+    navigateToAI(null);
+}
+
+// ── FIX: Reliable navigation to AI page ──
+// Android WebView sometimes doesn't flush localStorage before navigation.
+// We use a small delay + fallback to ensure data is written before leaving.
+function navigateToAI(ctx) {
+    function doNavigate() { window.location.href = 'ai.html'; }
+    if(ctx) {
+        var ctxStr = JSON.stringify(ctx);
+        // Try localStorage first (needed for ai.html to read it)
+        var saved = false;
+        try { localStorage.setItem('aiContext', ctxStr); saved = true; } catch(e) {}
+        // Also write to sessionStorage as backup
+        try { sessionStorage.setItem('aiContext', ctxStr); } catch(e) {}
+        // Also pass via URL hash as ultimate fallback for Android WebView
+        try {
+            var encoded = encodeURIComponent(ctxStr);
+            if(encoded.length < 4000) {
+                window.location.href = 'ai.html#ctx=' + encoded;
+                return;
+            }
+        } catch(e) {}
+        // Fallback: small delay to ensure storage flush, then navigate
+        if(saved) { setTimeout(doNavigate, 80); } else { doNavigate(); }
+    } else {
+        doNavigate();
+    }
 }
 
 // ==================== QUIZ DATA ====================
@@ -668,7 +692,6 @@ let curPdf = '', curKey = '', curSubjectName = '', curKoll = '';
 let quizAnswers = [];
 let quizTimerInterval = null;
 const QUIZ_DURATION = 600;
-
 let examSubmitted = {};
 let examQuestionGrades = {};
 
@@ -733,22 +756,43 @@ function getUserAnswerText(q, ans) {
     return 'Cavab verilməyib';
 }
 
-// ── Core: set context then navigate ──
-function openAIForQuestion(ei, qi, status) {
-    const exam = QUIZ_DATA[curKey][ei];
+// ── FIX: Build full AI context with ALL question details ──
+function buildSingleQuestionContext(key, ei, qi, status) {
+    const exam = QUIZ_DATA[key][ei];
+    if(!exam) return null;
     const q = exam.questions[qi];
     const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
 
-    const ctx = {
-        questionText: getQuestionText(q, qi),
-        status: status,
-        correctAnswer: getAnswerText(q, 'correct'),
-        yourAnswer: ans ? getUserAnswerText(q, ans) : null,
-        optionsText: q.type === 'STD' ? q.options.join(', ') : null
-    };
+    // Build full options/statements text for AI context
+    let optionsDetail = null;
+    if(q.type === 'STD') {
+        optionsDetail = q.options.map((o,i) => String.fromCharCode(65+i)+') '+o).join('\n');
+    } else if(q.type === 'A') {
+        optionsDetail = q.statements.map((s,i) => (i+1)+'. '+s).join('\n');
+    } else if(q.type === 'B' || q.type === 'IMG_B') {
+        const letters = ['a','b','c','d','e'];
+        optionsDetail = 'Əşyalar:\n'+q.items.map((it,i)=>(i+1)+'. '+it).join('\n')+'\nVariantlar:\n'+q.variants.map((v,i)=>letters[i]+') '+v).join('\n');
+    } else if(q.type === 'ORDER') {
+        optionsDetail = q.statements.map((s,i)=>(i+1)+'. '+s).join('\n');
+    }
 
-    localStorage.setItem('aiContext', JSON.stringify(ctx));
-    window.location.href = 'ai.html';
+    return {
+        type: 'single_question',
+        subject: curSubjectName || key,
+        kollokvium: curKoll || (key.endsWith('_2') ? 'II' : 'I'),
+        questionNumber: qi + 1,
+        questionType: q.type,
+        questionText: getQuestionText(q, qi),
+        optionsDetail: optionsDetail,
+        yourAnswer: ans !== null ? getUserAnswerText(q, ans) : 'Cavab verilməyib',
+        correctAnswer: getAnswerText(q, 'correct'),
+        status: status
+    };
+}
+
+function openAIForQuestion(key, ei, qi, status) {
+    const ctx = buildSingleQuestionContext(key, ei, qi, status);
+    navigateToAI(ctx);
 }
 
 function openAIForAllQuestions(ei) {
@@ -759,17 +803,34 @@ function openAIForAllQuestions(ei) {
     exam.questions.forEach((q, qi) => {
         const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
         const grade = grades[qi] || 'pending';
+
+        let optionsDetail = null;
+        if(q.type === 'STD') {
+            optionsDetail = q.options.map((o,i)=>String.fromCharCode(65+i)+') '+o).join('\n');
+        } else if(q.type === 'A') {
+            optionsDetail = q.statements.map((s,i)=>(i+1)+'. '+s).join('\n');
+        } else if(q.type === 'B' || q.type === 'IMG_B') {
+            const letters = ['a','b','c','d','e'];
+            optionsDetail = 'Əşyalar: '+q.items.join(', ')+' | Variantlar: '+q.variants.map((v,i)=>letters[i]+') '+v).join(', ');
+        } else if(q.type === 'ORDER') {
+            optionsDetail = q.statements.map((s,i)=>(i+1)+'. '+s).join(', ');
+        }
+
         allQuestions.push({
             questionNumber: qi + 1,
+            questionType: q.type,
             questionText: getQuestionText(q, qi),
-            yourAnswer: ans ? getUserAnswerText(q, ans) : 'Cavab verilməyib',
+            optionsDetail: optionsDetail,
+            yourAnswer: ans !== null ? getUserAnswerText(q, ans) : 'Cavab verilməyib',
             correctAnswer: getAnswerText(q, 'correct'),
             isCorrect: grade === 'correct'
         });
     });
 
-    const ctx = { 
+    const ctx = {
         type: 'all_questions',
+        subject: curSubjectName,
+        kollokvium: curKoll,
         questions: allQuestions,
         summary: {
             total: allQuestions.length,
@@ -777,9 +838,7 @@ function openAIForAllQuestions(ei) {
             wrong: allQuestions.filter(q => !q.isCorrect).length
         }
     };
-    
-    localStorage.setItem('aiContext', JSON.stringify(ctx));
-    window.location.href = 'ai.html';
+    navigateToAI(ctx);
 }
 
 // ==================== QUIZ FUNCTIONS ====================
@@ -823,11 +882,19 @@ function openQuiz() {
     attachAllOrderDragListeners();
 }
 
-// ── Build AI button as <a href> tag (works on Android WebView) ──
 function buildAIBtn(ei, qi, status) {
     const cls = status === 'wrong' ? 'submitted-wrong' : status === 'correct' ? 'submitted-correct' : '';
     const icon = status === 'wrong' ? '❌' : status === 'correct' ? '✅' : '🤖';
-    return `<a href="ai.html" class="est-ai-btn ${cls}" data-ei="${ei}" data-qi="${qi}" data-status="${status}">${icon} AI-dan soruş</a>`;
+    // Use button + onclick instead of <a href> — more reliable on Android WebView
+    return `<button class="est-ai-btn ${cls}" onclick="openAIForQuestion('${curKey}',${ei},${qi},'${status}')">${icon} AI-dan soruş</button>`;
+}
+
+// ── Build image wrap with expand button ──
+function buildImgWrap(src) {
+    return `<div class="q-img-wrap">
+        <img class="q-img" src="${src}" alt="Sual şəkli" onclick="openLightbox('${src}')">
+        <div class="q-img-expand" onclick="openLightbox('${src}')" title="Tam ölçülü bax">⛶</div>
+    </div>`;
 }
 
 function buildPanel(ei) {
@@ -855,7 +922,7 @@ function buildPanel(ei) {
             html += `</div></div>`;
         } else if(q.type === 'B' || q.type === 'IMG_B') {
             html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-header-row"><span class="q-type-badge match">↔ Uyğunlaşdırma</span>${aiBtn}</div>`;
-            if(q.img) html += `<img class="q-img" src="${q.img}" alt="Sual ${qi+1}">`;
+            if(q.img) html += buildImgWrap(q.img);  // ← FIX: image with expand button
             html += `<div class="q-text">${q.text || ''}</div><div class="match-wrap" id="match-${ei}-${qi}">`;
             q.items.forEach((item, ii) => {
                 html += `<div class="match-item" id="mi-${ei}-${qi}-${ii}"><div class="match-q">${ii+1}. ${item}</div><div class="match-variants">`;
@@ -1031,7 +1098,7 @@ function submitExam(ei) {
         totalScore += pts; maxScore += max;
     });
 
-    // ── Update AI buttons after submit (update data-status + class + text) ──
+    // ── Update AI buttons after submit ──
     exam.questions.forEach((q, qi) => {
         const grade = examQuestionGrades[ei][qi];
         const status = grade === 'correct' ? 'correct' : 'wrong';
@@ -1043,10 +1110,8 @@ function submitExam(ei) {
                 if(btn) {
                     btn.className = 'est-ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
                     btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI-dan soruş';
-                    btn.dataset.ei = ei;
-                    btn.dataset.qi = qi;
-                    btn.dataset.status = status;
-                    btn.href = 'ai.html';
+                    // Update onclick with new status
+                    btn.setAttribute('onclick', `openAIForQuestion('${curKey}',${ei},${qi},'${status}')`);
                 }
             }
         }
@@ -1065,7 +1130,7 @@ function submitExam(ei) {
     res.innerHTML = `<div class="result-score ${pass?'pass':'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div>${analyzeBtn}<button class="btn-retry" style="margin-top:8px;" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
     res.classList.add('show');
     
-    saveResult(curKey, ei, totalScore, maxScore, pass);
+    saveResult(curKey, ei, totalScore, maxScore, pass, curSubjectName, curKoll, examQuestionGrades[ei], exam.questions);
     const allDone = QUIZ_DATA[curKey].every((_,i) => { const b = document.getElementById('sub-'+i); return b && b.disabled; });
     if(allDone) stopTimer();
 }
@@ -1191,15 +1256,38 @@ const SUBJECT_GROUPS = [
 function getHistory() { try { return JSON.parse(localStorage.getItem('testHistory')||'[]'); } catch(e) { return []; } }
 function setHistory(h) { try { localStorage.setItem('testHistory', JSON.stringify(h)); } catch(e) {} }
 
-function saveResult(key, ei, score, max, pass) {
+// ── FIX: Save full question snapshot with result ──
+function saveResult(key, ei, score, max, pass, subjectName, koll, grades, questions) {
     const h = getHistory();
     const now = new Date();
     const pad = n => String(n).padStart(2,'0');
     const dateStr = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-    const koll = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
-    h.unshift({key,ei,score,max,pass,date:dateStr,subj:SUBJECT_NAMES[key]||key,koll,id:Date.now()+Math.random()});
+    const kollLabel = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
+
+    // Serialize question results for review
+    // Store only what we need (text + correct/wrong status + correct answer)
+    const qSnapshot = questions ? questions.map((q, qi) => {
+        const grade = grades ? (grades[qi] || 'wrong') : 'unknown';
+        return {
+            text: getQuestionText(q, qi),
+            type: q.type,
+            grade: grade,
+            correctAnswer: getAnswerText(q, 'correct')
+        };
+    }) : [];
+
+    h.unshift({
+        key, ei, score, max, pass,
+        date: dateStr,
+        subj: SUBJECT_NAMES[key] || key,
+        koll: kollLabel,
+        subjectName: subjectName || SUBJECT_NAMES[key],
+        id: Date.now() + Math.random(),
+        qSnapshot
+    });
     if(h.length > 200) h.splice(200);
-    setHistory(h); updateBadge();
+    setHistory(h);
+    updateBadge();
 }
 
 function updateBadge() {
@@ -1208,10 +1296,55 @@ function updateBadge() {
     if(badge) badge.textContent = h.length === 0 ? '0 nəticə' : h.length+' nəticə';
 }
 
-function deleteSingleResult(id) {
+function deleteSingleResult(id, e) {
+    if(e) e.stopPropagation();
     let h = getHistory(); h = h.filter(item => item.id !== id);
     setHistory(h); updateBadge();
     if(document.getElementById('resultsOverlay').classList.contains('show')) renderResults();
+}
+
+// ── FIX: Build review HTML from saved snapshot ──
+function buildReviewHTML(record) {
+    if(!record.qSnapshot || record.qSnapshot.length === 0) {
+        return '<div style="text-align:center;color:var(--text3);padding:30px 0;">Bu nəticə üçün sual məlumatı yoxdur. Yeni test eləyin.</div>';
+    }
+    const pct = Math.round(record.score / record.max * 100);
+    let html = `<div class="q-card" style="text-align:center;margin-bottom:16px;">
+        <div class="result-score ${record.pass?'pass':'fail'}">${record.score}/${record.max} bal</div>
+        <div class="result-label">${pct}% · ${record.koll} · ${record.date}</div>
+    </div>`;
+
+    record.qSnapshot.forEach((snap, qi) => {
+        const isCorr = snap.grade === 'correct';
+        const isPartial = snap.grade === 'partial';
+        const borderColor = isCorr ? 'rgba(34,197,94,0.35)' : isPartial ? 'rgba(245,166,35,0.35)' : 'rgba(239,68,68,0.3)';
+        const bg = isCorr ? 'rgba(34,197,94,0.06)' : isPartial ? 'rgba(245,166,35,0.06)' : 'rgba(239,68,68,0.06)';
+        const tagCls = isCorr ? 'correct' : 'wrong';
+        const tagText = isCorr ? '✅ Düzgün' : isPartial ? '⚠️ Qismən' : '❌ Səhv';
+        html += `<div class="q-card" style="border-color:${borderColor};background:${bg};">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;">
+                <div class="q-num">Sual ${qi+1} / ${record.qSnapshot.length}</div>
+                <span class="review-tag ${tagCls}">${tagText}</span>
+            </div>
+            <div style="font-size:0.9rem;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:${isCorr?'0':'10px'}">${snap.text}</div>`;
+        if(!isCorr && snap.correctAnswer) {
+            html += `<div style="margin-top:8px;padding:8px 12px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:10px;font-size:0.8rem;color:#86efac;"><strong>✅ Düzgün cavab:</strong> ${snap.correctAnswer}</div>`;
+        }
+        html += `</div>`;
+    });
+    return html;
+}
+
+// ── FIX: Tap history item → open review overlay ──
+function openReviewForRecord(record) {
+    document.getElementById('reviewTitle').textContent = record.subjectName || record.subj;
+    document.getElementById('reviewSubtitle').textContent = record.koll + ' · ' + record.score + '/' + record.max + ' bal';
+    document.getElementById('reviewContent').innerHTML = buildReviewHTML(record);
+    document.getElementById('reviewOverlay').classList.add('show');
+}
+
+function closeReviewOverlay() {
+    document.getElementById('reviewOverlay').classList.remove('show');
 }
 
 function renderResults() {
@@ -1221,19 +1354,29 @@ function renderResults() {
     bestGrid.innerHTML = '';
     SUBJECT_GROUPS.forEach(g => {
         const entries = h.filter(r => g.keys.includes(r.key));
-        const card = document.createElement('div'); card.className = 'best-card';
+        const card = document.createElement('div');
+        card.className = 'best-card';
         if(entries.length === 0) {
             card.innerHTML = `<div class="best-card-name">${g.name}</div><div class="best-card-score none">—</div><div class="best-card-koll">Test edilməyib</div>`;
         } else {
             const best = entries.reduce((a,b) => ((a.score/a.max)>=(b.score/b.max)?a:b));
             const pct = Math.round(best.score/best.max*100);
             card.innerHTML = `<div class="best-card-name">${g.name}</div><div class="best-card-score ${best.pass?'pass':'fail'}">${best.score}/${best.max}</div><div class="best-card-koll">${best.koll} · ${pct}%</div>`;
+            card.onclick = () => openReviewForRecord(best);
         }
         bestGrid.appendChild(card);
     });
     const histList = document.getElementById('histList');
     if(h.length === 0) { histList.innerHTML = '<div class="hist-empty">Hələ heç bir test edilməyib</div>'; return; }
-    histList.innerHTML = h.map(r => `<div class="hist-item"><div class="hist-dot ${r.pass?'pass':'fail'}"></div><div class="hist-info"><div class="hist-subj">${r.subj} — ${r.koll}</div><div class="hist-meta">${r.date}</div></div><div class="hist-score ${r.pass?'pass':'fail'}">${r.score}/${r.max}</div><div class="hist-delete" data-id="${r.id}" onclick="deleteSingleResult(${r.id})">🗑</div></div>`).join('');
+    // ── FIX: history items are now tappable to open review ──
+    histList.innerHTML = h.map(r => 
+        `<div class="hist-item" onclick="openReviewForRecord(${JSON.stringify(r).replace(/"/g,'&quot;')})">` +
+        `<div class="hist-dot ${r.pass?'pass':'fail'}"></div>` +
+        `<div class="hist-info"><div class="hist-subj">${r.subj} — ${r.koll}</div><div class="hist-meta">${r.date} · Baxmaq üçün bas</div></div>` +
+        `<div class="hist-score ${r.pass?'pass':'fail'}">${r.score}/${r.max}</div>` +
+        `<div class="hist-delete" onclick="deleteSingleResult(${r.id},event)">🗑</div>` +
+        `</div>`
+    ).join('');
 }
 
 function openResultsOverlay() { renderResults(); document.getElementById('resultsOverlay').classList.add('show'); document.body.style.overflow='hidden'; }
@@ -1263,7 +1406,7 @@ function toggleTheme() {
 
 updateBadge();
 
-// ── FAB: Save page HTML context to sessionStorage ──
+// ── FAB: Save page context ──
 document.getElementById('aiFab').addEventListener('click', function(e) {
     e.preventDefault();
     try {
@@ -1273,26 +1416,13 @@ document.getElementById('aiFab').addEventListener('click', function(e) {
         clone.querySelectorAll('[style]').forEach(function(el){ el.removeAttribute('style'); });
         var html = clone.outerHTML;
         if(html.length > 12000) html = html.substring(0, 12000) + '...[truncated]';
-        sessionStorage.setItem('pageContext', html);
-        sessionStorage.setItem('pageUrl', window.location.href);
+        try { sessionStorage.setItem('pageContext', html); } catch(err) {}
+        try { sessionStorage.setItem('pageUrl', window.location.href); } catch(err) {}
     } catch(err) {}
     window.location.href = 'ai.html';
 });
 
-// ── Delegated click handler for all .est-ai-btn anchors ──
-// This works on Android WebView because we intercept before navigation,
-// set localStorage context, then do window.location.href (same as FAB).
-document.addEventListener('click', function(e) {
-    var btn = e.target.closest('.est-ai-btn');
-    if(!btn) return;
-    e.preventDefault();
-    var ei = parseInt(btn.dataset.ei);
-    var qi = parseInt(btn.dataset.qi);
-    var status = btn.dataset.status || 'pending';
-    openAIForQuestion(ei, qi, status);
-});
-
-// ── AI FAB: Auto-show "EST AI" tooltip loop ──
+// ── AI FAB: Auto-show tooltip loop ──
 (function(){
     var fab   = document.getElementById('aiFab');
     var label = document.getElementById('aiFabLabel');
@@ -1315,15 +1445,10 @@ document.addEventListener('click', function(e) {
     });
 
     fab.addEventListener('mouseleave', function(){
-        if(inLoop){
-            loopTimer = setTimeout(showEstAI, 3000);
-        }
+        if(inLoop){ loopTimer = setTimeout(showEstAI, 3000); }
     });
 
-    setTimeout(function(){
-        inLoop = true;
-        showEstAI();
-    }, 5000);
+    setTimeout(function(){ inLoop = true; showEstAI(); }, 5000);
 })();
 </script>
 </body>
