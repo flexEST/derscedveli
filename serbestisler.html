@@ -111,25 +111,19 @@
         .dl-text { font-size:0.8rem; color:var(--amber); font-weight:600; }
         .dl-sub  { font-size:0.72rem; color:#92714a; margin-top:2px; }
 
-       .contact-email-row {
-        background: rgba(245,166,35,0.12);
-        border: 1px solid rgba(245,166,35,0.35);
-        border-radius: 14px;
-        padding: 10px 14px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-top: 6px;
-    }
-.contact-email-row .email-icon { font-size: 1rem; flex-shrink: 0; }
-.contact-email-row .email-text { font-size: 0.78rem; color: var(--amber); word-break: break-all; font-family: monospace; font-weight: bold; }
-.contact-email-row .email-label { font-size: 0.7rem; font-weight: 700; color: var(--amber); margin-right: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.contact-email-row .email-icon { font-size: 1rem; flex-shrink: 0; }
-.contact-email-row .email-text { font-size: 0.78rem; color: var(--text2); word-break: break-all; font-family: monospace; }
-.contact-email-row .email-label { font-size: 0.7rem; font-weight: 600; color: var(--text3); margin-right: 6px; }
-        .contact-email-row .email-icon { font-size:1rem; flex-shrink:0; }
-        .contact-email-row .email-text { font-size:0.78rem; color:var(--text2); word-break:break-all; font-family:monospace; letter-spacing:0.2px; }
-        .contact-email-row .email-label { font-size:0.7rem; font-weight:600; color:var(--text3); margin-right:6px; }
+        .contact-email-row {
+            background: rgba(245,166,35,0.12);
+            border: 1px solid rgba(245,166,35,0.35);
+            border-radius: 14px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 6px;
+        }
+        .contact-email-row .email-icon { font-size: 1rem; flex-shrink: 0; }
+        .contact-email-row .email-text { font-size: 0.78rem; color: var(--amber); word-break: break-all; font-family: monospace; font-weight: bold; }
+        .contact-email-row .email-label { font-size: 0.7rem; font-weight: 700; color: var(--amber); margin-right: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .subj-card.locked .subj-top { opacity:.75; }
         .locked-note { margin:0 14px 16px; padding:12px 14px; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.08); border-radius:14px; font-size:0.82rem; color:var(--text3); text-align:center; }
@@ -149,6 +143,8 @@
         .update-notice { margin:-10px 0 18px; background:rgba(245,166,35,0.10); border:1px solid rgba(245,166,35,0.25); border-radius:14px; padding:10px 14px; text-align:center; font-size:0.74rem; color:#f5a623; letter-spacing:0.2px; font-weight:600; }
         
         @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        
+        .special-note { background: rgba(168,85,247,0.08); border-left: 3px solid #a855f7; padding: 8px 12px; font-size: 0.75rem; color: var(--text2); margin: 6px 14px 12px; border-radius: 12px; }
     </style>
 </head>
 <body>
@@ -172,7 +168,7 @@
         🔄 Dəyişiklikləri görmək üçün səhifəni yeniləyin
     </div>
 
-    <!-- İNFORMASİYA TEXNOLOGİYALARI -->
+    <!-- İNFORMASİYA TEXNOLOGİYALARI (Əvvəlki kimi lakin dinamik təqvim) -->
     <div class="subj-card" data-idx="0" style="animation-delay:.06s">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(59,130,246,0.15);">💻</div>
@@ -195,7 +191,7 @@
             <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:13px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
                 <span style="font-size:1rem;">📚</span>
                 <div style="flex:1;">
-                    <div style="font-size:0.78rem;font-weight:700;color:#93c5fd;">Bu ay 9 dərs ərzində verilə bilər</div>
+                    <div style="font-size:0.78rem;font-weight:700;color:#93c5fd;" id="it-deadline-info">Bu ay 9 dərs ərzində verilə bilər</div>
                     <div style="font-size:0.7rem;color:var(--text3);opacity:0.6;margin-top:2px;">Həftədə 2 mühazirə (hər həftə)</div>
                 </div>
                 <button onclick="toggleSubjCal('it')" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#93c5fd;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button>
@@ -234,7 +230,7 @@
         </div>
     </div>
 
-    <!-- PROQRAMLAŞDIRMA -->
+    <!-- PROQRAMLAŞDIRMA (oxşar) -->
     <div class="subj-card" data-idx="1" style="animation-delay:.10s">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(34,197,94,0.15);">🖥️</div>
@@ -246,17 +242,15 @@
                 </div>
             </div>
         </div>
-
         <div class="task-goal">
             <div class="goal-label">Tapşırığın məqsədi</div>
             <div class="goal-text">Hər hansı bir İT mütəxəssisi ilə görüşüb müsahibə apar, ona bir neçə peşəkar sual ver və cavablarını qeyd et. Sonra bu müsahibəyə əsaslanaraq slayt hazırla.</div>
         </div>
-
         <div style="margin:0 14px 14px;">
             <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:13px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
                 <span style="font-size:1rem;">📚</span>
                 <div style="flex:1;">
-                    <div style="font-size:0.78rem;font-weight:700;color:#93c5fd;">Bu ay 6 dərs ərzində verilə bilər</div>
+                    <div style="font-size:0.78rem;font-weight:700;color:#93c5fd;" id="proq-deadline-info">Bu ay 6 dərs ərzində verilə bilər</div>
                     <div style="font-size:0.7rem;color:var(--text3);opacity:0.6;margin-top:2px;">1 mühazirə hər həftə + 1 mühazirə növbəli həftələrdə</div>
                 </div>
                 <button onclick="toggleSubjCal('proq')" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:#86efac;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button>
@@ -266,7 +260,6 @@
                 <div id="detail-proq" class="subj-mini-cal-detail"></div>
             </div>
         </div>
-
         <div class="details-toggle" onclick="toggleDetails(1)">
             <span class="dt-label">📋 Slaytın məzmununa bax</span>
             <span class="dt-chevron">⌄</span>
@@ -276,86 +269,53 @@
                 <div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Müsahibədən bir fotoşəkil</div><div class="topic-sub">İT mütəxəssisi ilə birgə çəkilmiş şəkil slayta əlavə edilməlidir</div></div></div>
                 <div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Verilmiş suallar və alınan cavablar</div><div class="topic-sub">Hər sual və ona verilən cavab slaytda aydın şəkildə göstərilməlidir</div></div></div>
                 <div class="topic-row"><div class="topic-num">3</div><div class="topic-info"><div class="topic-text">Nəticə: Bu müsahibədən nə öyrəndim?</div><div class="topic-sub">Slaytın sonunda müsahibədən çıxardığın fərdi nəticə yazılmalıdır</div></div></div>
-                <div class="deadline-banner">
-                    <div class="dl-dot"></div>
-                    <div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Talıbzadə Sərxan</div></div>
-                </div>
-                <div class="contact-email-row">
-                    <div class="email-icon">📧</div>
-                    <div class="email-text"><span class="email-label">Əlaqə:</span> ❌</div>
-                </div>
+                <div class="deadline-banner"><div class="dl-dot"></div><div><div class="dl-text">Təhvil müddəti: Bu ay ərzində</div><div class="dl-sub">Müəllim: Talıbzadə Sərxan</div></div></div>
+                <div class="contact-email-row"><div class="email-icon">📧</div><div class="email-text"><span class="email-label">Əlaqə:</span> ❌</div></div>
             </div>
         </div>
     </div>
 
-    <!-- SAHİBKARLIQ (YENİ TARİXLƏR: 12 MAY VƏ 26 MAY) -->
+    <!-- SAHİBKARLIQ (əvvəlki kimi) -->
     <div class="subj-card" data-idx="2" style="animation-delay:.14s">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(20,184,166,0.15);">💼</div>
             <div class="subj-meta">
                 <div class="subj-name">Sahibkarlığın əsasları və biznesə giriş</div>
-                <div class="badge-row">
-                    <span class="badge purple">Slayt</span>
-                    <span class="badge blue">15 mövzu</span>
-                    <span class="badge amber">📅 Bu semestr</span>
-                </div>
+                <div class="badge-row"><span class="badge purple">Slayt</span><span class="badge blue">15 mövzu</span><span class="badge amber">📅 Bu semestr</span></div>
             </div>
         </div>
+        <div class="task-goal"><div class="goal-label">Tapşırığın məqsədi</div><div class="goal-text">Aşağıdakı 15 mövzudan <strong>üçünü seçib</strong> ona aid slayt hazırla və öyrən. Slayt müəllimə qrup vəya tək şəkildə təqdim olunacaq.</div></div>
+        <div style="margin:0 14px 14px;"><div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:13px;padding:10px 14px;display:flex;align-items:center;gap:10px;"><span style="font-size:1rem;">📚</span><div style="flex:1;"><div style="font-size:0.78rem;font-weight:700;color:#93c5fd;">Bu semestr 3 dərs ərzində verilə bilər</div><div style="font-size:0.7rem;color:var(--text3);opacity:0.6;margin-top:2px;">Mühazirə həftələrdə (Aprel + May)</div></div><button onclick="toggleSubjCal('sah')" style="background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);color:#5eead4;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button></div><div id="cal-sah" class="subj-mini-cal"><div id="grid-sah" class="subj-mini-cal-grid"></div><div id="detail-sah" class="subj-mini-cal-detail"></div></div></div>
+        <div class="details-toggle" onclick="toggleDetails(2)"><span class="dt-label">📋 Bütün mövzulara bax</span><span class="dt-chevron">⌄</span></div>
+        <div class="details-panel"><div class="details-inner"><div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Sahibkarlıq anlayışı və onun iqtisadiyyatda rolu</div></div></div><div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Biznes və sahibkarlıq: oxşar və fərqli cəhətlər</div></div></div><div class="topic-row"><div class="topic-num">3</div><div class="topic-info"><div class="topic-text">Sahibkarın əsas xüsusiyyətləri və bacarıqları</div></div></div><div class="topic-row"><div class="topic-num">4</div><div class="topic-info"><div class="topic-text">Rəqabət və onun biznesə təsiri</div></div></div><div class="topic-row"><div class="topic-num">5</div><div class="topic-info"><div class="topic-text">Bazar iqtisadiyyatında sahibkarlığın inkişaf amilləri</div></div></div><div class="topic-row"><div class="topic-num">6</div><div class="topic-info"><div class="topic-text">Dövlətin sahibkarlığın inkişafında rolu</div></div></div><div class="topic-row"><div class="topic-num">7</div><div class="topic-info"><div class="topic-text">Biznes ideyasının formalaşdırılması mərhələləri</div></div></div><div class="topic-row"><div class="topic-num">8</div><div class="topic-info"><div class="topic-text">Biznes-plan: anlayışı və strukturu</div></div></div><div class="topic-row"><div class="topic-num">9</div><div class="topic-info"><div class="topic-text">Startap anlayışı və startapların xüsusiyyətləri</div></div></div><div class="topic-row"><div class="topic-num">10</div><div class="topic-info"><div class="topic-text">Rəqəmsal sahibkarlıq və elektron biznes</div></div></div><div class="topic-row"><div class="topic-num">11</div><div class="topic-info"><div class="topic-text">İnnovasiya və sahibkarlıq fəaliyyəti</div></div></div><div class="topic-row"><div class="topic-num">12</div><div class="topic-info"><div class="topic-text">Sosial sahibkarlıq anlayışı</div></div></div><div class="topic-row"><div class="topic-num">13</div><div class="topic-info"><div class="topic-text">Yaşıl biznes və davamlı inkişaf</div></div></div><div class="topic-row"><div class="topic-num">14</div><div class="topic-info"><div class="topic-text">Gənclərin sahibkarlıq fəaliyyətində iştirakı</div></div></div><div class="topic-row"><div class="topic-num">15</div><div class="topic-info"><div class="topic-text">İnvestisiya anlayışı və biznesdə əhəmiyyəti</div></div></div><div class="deadline-banner"><div class="dl-dot"></div><div><div class="dl-text">Təhvil müddəti: Bu semestr ərzində</div><div class="dl-sub">Müəllim: Əliyeva Günay</div></div></div><div class="contact-email-row"><div class="email-icon">📧</div><div class="email-text"><span class="email-label">Əlaqə:</span> gunay.eliyeva@aztu.edu.az</div></div></div></div>
+    </div>
 
+    <!-- XDIAK - YENİ, 22 APREL -->
+    <div class="subj-card" data-idx="3" style="animation-delay:.18s">
+        <div class="subj-top">
+            <div class="subj-icon" style="background:rgba(168,85,247,0.18);">🎓</div>
+            <div class="subj-meta">
+                <div class="subj-name">XDIAK (Xüsusi Dərs İş və Aktivlik)</div>
+                <div class="badge-row"><span class="badge purple">Slayt/Video</span><span class="badge amber">📅 22 Aprel</span></div>
+            </div>
+        </div>
         <div class="task-goal">
-            <div class="goal-label">Tapşırığın məqsədi</div>
-            <div class="goal-text">Aşağıdakı 15 mövzudan <strong>üçünü seçib</strong> ona aid slayt hazırla və öyrən. Slayt müəllimə qrup vəya tək şəkildə təqdim olunacaq.</div>
+            <div class="goal-label">Sərbəst iş tapşırığı</div>
+            <div class="goal-text">Hər hansı bir mövzu haqqında <strong>slayd və ya video</strong> hazırlayın. Təqdimat 22 aprel tarixinədək təhvil verilməlidir.</div>
         </div>
-
-        <div style="margin:0 14px 14px;">
-            <div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:13px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
-                <span style="font-size:1rem;">📚</span>
-                <div style="flex:1;">
-                    <div style="font-size:0.78rem;font-weight:700;color:#93c5fd;">Bu semestr 3 dərs ərzində verilə bilər</div>
-                    <div style="font-size:0.7rem;color:var(--text3);opacity:0.6;margin-top:2px;">Mühazirə həftələrdə (Aprel + May)</div>
-                </div>
-                <button onclick="toggleSubjCal('sah')" style="background:rgba(20,184,166,0.12);border:1px solid rgba(20,184,166,0.3);color:#5eead4;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;font-family:var(--r);">📅 Günlərə bax</button>
-            </div>
-            <div id="cal-sah" class="subj-mini-cal">
-                <div id="grid-sah" class="subj-mini-cal-grid"></div>
-                <div id="detail-sah" class="subj-mini-cal-detail"></div>
-            </div>
-        </div>
-
-        <div class="details-toggle" onclick="toggleDetails(2)">
-            <span class="dt-label">📋 Bütün mövzulara bax</span>
-            <span class="dt-chevron">⌄</span>
-        </div>
+        <div class="special-note">🎯 Yalnız 22 aprel 2026-cı il üçün keçərlidir. Bu günə qədər hazır olmalıdır.</div>
+        <div class="details-toggle" onclick="toggleDetails(3)"><span class="dt-label">📋 Tələblər</span><span class="dt-chevron">⌄</span></div>
         <div class="details-panel">
             <div class="details-inner">
-                <div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Sahibkarlıq anlayışı və onun iqtisadiyyatda rolu</div></div></div>
-                <div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Biznes və sahibkarlıq: oxşar və fərqli cəhətlər</div></div></div>
-                <div class="topic-row"><div class="topic-num">3</div><div class="topic-info"><div class="topic-text">Sahibkarın əsas xüsusiyyətləri və bacarıqları</div></div></div>
-                <div class="topic-row"><div class="topic-num">4</div><div class="topic-info"><div class="topic-text">Rəqabət və onun biznesə təsiri</div></div></div>
-                <div class="topic-row"><div class="topic-num">5</div><div class="topic-info"><div class="topic-text">Bazar iqtisadiyyatında sahibkarlığın inkişaf amilləri</div></div></div>
-                <div class="topic-row"><div class="topic-num">6</div><div class="topic-info"><div class="topic-text">Dövlətin sahibkarlığın inkişafında rolu</div></div></div>
-                <div class="topic-row"><div class="topic-num">7</div><div class="topic-info"><div class="topic-text">Biznes ideyasının formalaşdırılması mərhələləri</div></div></div>
-                <div class="topic-row"><div class="topic-num">8</div><div class="topic-info"><div class="topic-text">Biznes-plan: anlayışı və strukturu</div></div></div>
-                <div class="topic-row"><div class="topic-num">9</div><div class="topic-info"><div class="topic-text">Startap anlayışı və startapların xüsusiyyətləri</div></div></div>
-                <div class="topic-row"><div class="topic-num">10</div><div class="topic-info"><div class="topic-text">Rəqəmsal sahibkarlıq və elektron biznes</div></div></div>
-                <div class="topic-row"><div class="topic-num">11</div><div class="topic-info"><div class="topic-text">İnnovasiya və sahibkarlıq fəaliyyəti</div></div></div>
-                <div class="topic-row"><div class="topic-num">12</div><div class="topic-info"><div class="topic-text">Sosial sahibkarlıq anlayışı</div></div></div>
-                <div class="topic-row"><div class="topic-num">13</div><div class="topic-info"><div class="topic-text">Yaşıl biznes və davamlı inkişaf</div></div></div>
-                <div class="topic-row"><div class="topic-num">14</div><div class="topic-info"><div class="topic-text">Gənclərin sahibkarlıq fəaliyyətində iştirakı</div></div></div>
-                <div class="topic-row"><div class="topic-num">15</div><div class="topic-info"><div class="topic-text">İnvestisiya anlayışı və biznesdə əhəmiyyəti</div></div></div>
-                <div class="deadline-banner">
-                    <div class="dl-dot"></div>
-                    <div><div class="dl-text">Təhvil müddəti: Bu semestr ərzində</div><div class="dl-sub">Müəllim: Əliyeva Günay</div></div>
-                </div>
-                <div class="contact-email-row">
-                    <div class="email-icon">📧</div>
-                    <div class="email-text"><span class="email-label">Əlaqə:</span> gunay.eliyeva@aztu.edu.az</div>
-                </div>
+                <div class="topic-row"><div class="topic-num">1</div><div class="topic-info"><div class="topic-text">Mövzu seçimi sərbəstdir</div><div class="topic-sub">İstənilən elmi, texniki, mədəni və ya ictimai mövzu</div></div></div>
+                <div class="topic-row"><div class="topic-num">2</div><div class="topic-info"><div class="topic-text">Slayt (10+ səhifə) və ya video (3-5 dəqiqə)</div><div class="topic-sub">Məzmun aydın, strukturlaşdırılmış və yaradıcı olmalıdır</div></div></div>
+                <div class="deadline-banner"><div class="dl-dot"></div><div><div class="dl-text">Son müddət: 22 Aprel 2026</div><div class="dl-sub">Müəllim:  Fərzəliyeva Ədilə</div></div></div>
+                <div class="contact-email-row"><div class="email-icon">📧</div><div class="email-text"><span class="email-label">Əlaqə:</span> adelyaf28@gmail.com</div></div>
             </div>
         </div>
     </div>
 
-    <!-- DİGƏR FƏNLƏR -->
+    <!-- DİSKRET, İNFORMASİYA TEXNOGLİYA, DİFERENSİAL xüsusi qeyd -->
     <div class="subj-card locked">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(168,85,247,0.12);">📐</div>
@@ -364,7 +324,7 @@
                 <div class="badge-row"><span class="badge amber">📅 Bu ay</span></div>
             </div>
         </div>
-        <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
+        <div class="locked-note">📌 Bu fənn üzrə sərbəst işi olmur. Qiyməti müəllim özü təyin edir.</div>
     </div>
 
     <div class="subj-card locked">
@@ -375,18 +335,18 @@
                 <div class="badge-row"><span class="badge amber">📅 Bu ay</span></div>
             </div>
         </div>
-        <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
+        <div class="locked-note">📌 Bu fənn üzrə sərbəst işi olmur. Qiyməti müəllim özü yazır.</div>
     </div>
 
     <div class="subj-card locked">
         <div class="subj-top">
             <div class="subj-icon" style="background:rgba(245,166,35,0.12);">📖</div>
             <div class="subj-meta">
-                <div class="subj-name">XDIAK</div>
+                <div class="subj-name">İnformasiya texnologiyaları (ümumi)</div>
                 <div class="badge-row"><span class="badge amber">📅 Bu ay</span></div>
             </div>
         </div>
-        <div class="locked-note">🕐 Tapşırıq hələ əlavə edilməyib</div>
+        <div class="locked-note">📌 Bu fənn üzrə sərbəst işi olmur. Qiymətləndirmə müəllim tərəfindən aparılır.</div>
     </div>
 
     <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
@@ -394,55 +354,39 @@
 
 <script>
     const DAY_NAMES_FULL = ['Bazar', 'Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə'];
-    const DAY_NAMES_SHORT = ['Bzr', 'B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şnb'];
-    
     const SUBJ_DAYS = {
         it:   [2, 6, 9, 13, 16, 20, 23, 27, 30],
         proq: [6, 9, 13, 20, 23, 27],
         sah:  [28, 132, 146] 
     };
-    
-    const SUBJ_COLOR = {
-        it:   '#3b82f6',
-        proq: '#22c55e',
-        sah:  '#14b8a6'
-    };
-    
-    const SUBJ_NAME = {
-        it:   'İnformasiya texnologiyalarının əsasları',
-        proq: 'Proqramlaşdırmanın əsasları',
-        sah:  'Sahibkarlığın əsasları'
-    };
-    
-    const SUBJ_TIME = {
-        it:   '09:00–10:20 · 12:00–13:20',
-        proq: '10:30–11:50',
-        sah:  '12:00–13:20'
-    };
+    const SUBJ_COLOR = { it: '#3b82f6', proq: '#22c55e', sah: '#14b8a6' };
+    const SUBJ_NAME = { it: 'İnformasiya texnologiyalarının əsasları', proq: 'Proqramlaşdırmanın əsasları', sah: 'Sahibkarlığın əsasları' };
+    const SUBJ_TIME = { it: '09:00–10:20 · 12:00–13:20', proq: '10:30–11:50', sah: '12:00–13:20' };
     
     let calOpenState = { it: false, proq: false, sah: false };
-    
     const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'];
     const d = new Date();
     document.getElementById('dateNow').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
     
-    function toggleDetails(idx) {
-        const cards = document.querySelectorAll('.subj-card:not(.locked)');
-        if (cards[idx]) cards[idx].classList.toggle('open');
-    }
-    
-    function getDayOfWeek(day, month, year) {
-        return new Date(year, month, day).getDay();
-    }
-    
-    function getDayNameFull(day, month, year) {
-        return DAY_NAMES_FULL[getDayOfWeek(day, month, year)];
-    }
-    
-    function isSahLessonDay(day, month) {
-        if (month === 3 && day === 28) return true;
-        if (month === 4 && (day === 12 || day === 26)) return true;
-        return false;
+    // Dinamik olaraq hər fənn üçün keçmiş dərs günlərini nəzərə alaraq "x-1 gün" mantığı: əgər bu gün aprelin 22-dən sonradırsa, təqvimdəki aktiv günləri "keçmiş" kimi göstəririk
+    function getFilteredDaysForSubject(key, baseDays) {
+        const today = new Date();
+        const currentYear = 2026;
+        const currentMonth = 3; // aprel
+        const todayDay = today.getDate();
+        const isApril = (today.getFullYear() === currentYear && today.getMonth() === currentMonth);
+        if (!isApril) return baseDays.slice(); // digər aylar üçün olduğu kimi
+        
+        // Əgər bugün apreldirsə, keçmiş günləri sil, qalan günlər "x-1" prinsipi ilə azaldılmış siyahı
+        // Lakin biz sadəcə interfeysdə vurğunu dəyişirik: calendar funksiyasında əgər gün keçibsə, həmin günə klik mümkün olmur (deadline keçib)
+        // Lakin tələbə görə "əgər dərsi olan gün keçibsə, bu ay x-1 gündə verilə bilər" - təqvim göstəricisi olaraq aktiv günləri azaldırıq.
+        // Daha real: əgər bugün 22 apreldən böyükdürsə, 22 aprel daxil olmaqla bütün keçmiş dərs günlərini göstərmirik (sadəcə qeyri-aktiv).
+        const filtered = [];
+        for(let day of baseDays) {
+            if(day < todayDay) continue; // keçmiş günləri təqvimdə göstər amma aktiv deyil, yalnız məlumat üçün
+            filtered.push(day);
+        }
+        return filtered.length ? filtered : []; 
     }
     
     function buildSubjCal(key) {
@@ -450,85 +394,23 @@
         if (!grid) return;
         grid.innerHTML = '';
         const weekdays = ['B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şnb', 'Bzr'];
-        weekdays.forEach(function(dayName) {
+        weekdays.forEach(dayName => {
             const el = document.createElement('div');
             el.className = 'subj-mini-cal-dow';
             el.textContent = dayName;
             grid.appendChild(el);
         });
+        const today = new Date();
+        const isCurrentMonthApril = (today.getFullYear() === 2026 && today.getMonth() === 3);
+        const currentDay = today.getDate();
+        const offset = 2;
         
         if (key === 'sah') {
-            const offsetApril = 2;
-            const today = new Date();
-            const isCurrentMonthApril = (today.getFullYear() === 2026 && today.getMonth() === 3);
-            const currentDay = today.getDate();
-            for (let i = 0; i < offsetApril; i++) {
-                const el = document.createElement('div');
-                el.className = 'subj-mini-cal-day';
-                el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
-                el.textContent = 29 + i;
-                grid.appendChild(el);
-            }
-            for (let d = 1; d <= 30; d++) {
-                const isLesson = isSahLessonDay(d, 3);
-                const isToday = isCurrentMonthApril && d === currentDay;
-                const col = (offsetApril + d - 1) % 7;
-                const isWknd = (col === 5 || col === 6);
-                const el = document.createElement('div');
-                el.className = 'subj-mini-cal-day';
-                let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
-                if (isToday) cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
-                else if (isLesson) { cssText += `background:${SUBJ_COLOR.sah}30;border:1px solid ${SUBJ_COLOR.sah}70;color:var(--text);font-weight:700;cursor:pointer;`; el.addEventListener('click', (function(day, month) { return function() { showSahDayDetail(day, month); }; })(d, 3)); }
-                else if (isWknd) cssText += 'opacity:0.2;color:var(--text3);';
-                else cssText += 'opacity:0.28;color:var(--text3);';
-                el.style.cssText = cssText;
-                el.textContent = d;
-                grid.appendChild(el);
-            }
-            const sepDiv = document.createElement('div');
-            sepDiv.style.gridColumn = 'span 7';
-            sepDiv.style.marginTop = '12px';
-            sepDiv.style.marginBottom = '6px';
-            sepDiv.style.fontSize = '0.7rem';
-            sepDiv.style.fontWeight = '600';
-            sepDiv.style.color = SUBJ_COLOR.sah;
-            sepDiv.style.borderTop = `1px solid ${SUBJ_COLOR.sah}40`;
-            sepDiv.style.paddingTop = '8px';
-            sepDiv.textContent = '📅 MAY 2026 (əlavə dərslər)';
-            grid.appendChild(sepDiv);
-            const offsetMay = 5;
-            const isCurrentMonthMay = (today.getFullYear() === 2026 && today.getMonth() === 4);
-            for (let i = 0; i < offsetMay; i++) {
-                const el = document.createElement('div');
-                el.className = 'subj-mini-cal-day';
-                el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
-                const prevMonthDays = 31 - (offsetMay - i) + 1;
-                el.textContent = prevMonthDays;
-                grid.appendChild(el);
-            }
-            for (let d = 1; d <= 31; d++) {
-                const isLesson = (d === 12 || d === 26);
-                const isToday = isCurrentMonthMay && d === currentDay;
-                const col = (offsetMay + d - 1) % 7;
-                const isWknd = (col === 5 || col === 6);
-                const el = document.createElement('div');
-                el.className = 'subj-mini-cal-day';
-                let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
-                if (isToday) cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
-                else if (isLesson) { cssText += `background:${SUBJ_COLOR.sah}30;border:1px solid ${SUBJ_COLOR.sah}70;color:var(--text);font-weight:700;cursor:pointer;`; el.addEventListener('click', (function(day, month) { return function() { showSahDayDetail(day, month); }; })(d, 4)); }
-                else if (isWknd) cssText += 'opacity:0.2;color:var(--text3);';
-                else cssText += 'opacity:0.28;color:var(--text3);';
-                el.style.cssText = cssText;
-                el.textContent = d;
-                grid.appendChild(el);
-            }
+            // Sahibkarlıq üçün əvvəlki məntiq qalır
+            this.buildSahCalendar(grid, today, isCurrentMonthApril, currentDay);
         } else {
-            const offset = 2;
-            const today = new Date();
-            const isCurrentMonth = (today.getFullYear() === 2026 && today.getMonth() === 3);
-            const currentDay = today.getDate();
-            const daysArr = SUBJ_DAYS[key];
-            const color = SUBJ_COLOR[key];
+            const originalDays = SUBJ_DAYS[key];
+            // keçmiş günləri filtrələyirik, ancaq təqvimdə passive göstərəcəyik
             for (let i = 0; i < offset; i++) {
                 const el = document.createElement('div');
                 el.className = 'subj-mini-cal-day';
@@ -537,21 +419,90 @@
                 grid.appendChild(el);
             }
             for (let d = 1; d <= 30; d++) {
-                const isLesson = daysArr.indexOf(d) >= 0;
-                const isToday = isCurrentMonth && d === currentDay;
+                const isLesson = originalDays.indexOf(d) >= 0;
+                const isPastLesson = isLesson && (isCurrentMonthApril && d < currentDay);
+                const isToday = isCurrentMonthApril && d === currentDay;
                 const col = (offset + d - 1) % 7;
                 const isWknd = (col === 5 || col === 6);
                 const el = document.createElement('div');
                 el.className = 'subj-mini-cal-day';
                 let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
                 if (isToday) cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
-                else if (isLesson) { cssText += `background:${color}30;border:1px solid ${color}70;color:var(--text);font-weight:700;cursor:pointer;`; el.addEventListener('click', (function(day) { return function() { showSubjDayDetail(key, day); }; })(d)); }
+                else if (isLesson && !isPastLesson) { 
+                    cssText += `background:${SUBJ_COLOR[key]}30;border:1px solid ${SUBJ_COLOR[key]}70;color:var(--text);font-weight:700;cursor:pointer;`; 
+                    el.addEventListener('click', (function(day) { return function() { showSubjDayDetail(key, day); }; })(d));
+                }
+                else if (isLesson && isPastLesson) { cssText += 'opacity:0.2;background:#333;color:gray;text-decoration:line-through;cursor:default;'; }
                 else if (isWknd) cssText += 'opacity:0.2;color:var(--text3);';
                 else cssText += 'opacity:0.28;color:var(--text3);';
                 el.style.cssText = cssText;
                 el.textContent = d;
                 grid.appendChild(el);
             }
+            const activeCount = originalDays.filter(day => !(isCurrentMonthApril && day < currentDay)).length;
+            const deadlineSpan = document.getElementById(`${key}-deadline-info`);
+            if(deadlineSpan) deadlineSpan.innerText = `Bu ay ${activeCount} dərs ərzində verilə bilər (keçmiş günlər çıxarılıb)`;
+        }
+    }
+    
+    function buildSahCalendar(grid, today, isCurrentMonthApril, currentDay) {
+        const offsetApril = 2;
+        for (let i = 0; i < offsetApril; i++) {
+            const el = document.createElement('div');
+            el.className = 'subj-mini-cal-day';
+            el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
+            el.textContent = 29 + i;
+            grid.appendChild(el);
+        }
+        for (let d = 1; d <= 30; d++) {
+            const isLesson = (d === 28);
+            const isPastLesson = isLesson && isCurrentMonthApril && d < currentDay;
+            const isToday = isCurrentMonthApril && d === currentDay;
+            const col = (offsetApril + d - 1) % 7;
+            const isWknd = (col === 5 || col === 6);
+            const el = document.createElement('div');
+            let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
+            if (isToday) cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
+            else if (isLesson && !isPastLesson) { cssText += `background:${SUBJ_COLOR.sah}30;border:1px solid ${SUBJ_COLOR.sah}70;color:var(--text);font-weight:700;cursor:pointer;`; el.addEventListener('click', (function(day) { return function() { showSahDayDetail(day, 3); }; })(d)); }
+            else if (isLesson && isPastLesson) { cssText += 'opacity:0.2;background:#333;color:gray;text-decoration:line-through;'; }
+            else if (isWknd) cssText += 'opacity:0.2;color:var(--text3);';
+            else cssText += 'opacity:0.28;color:var(--text3);';
+            el.style.cssText = cssText;
+            el.textContent = d;
+            grid.appendChild(el);
+        }
+        // May əlavə
+        const sepDiv = document.createElement('div');
+        sepDiv.style.gridColumn = 'span 7'; sepDiv.style.marginTop = '12px'; sepDiv.style.marginBottom = '6px';
+        sepDiv.style.fontSize = '0.7rem'; sepDiv.style.fontWeight = '600'; sepDiv.style.color = SUBJ_COLOR.sah;
+        sepDiv.style.borderTop = `1px solid ${SUBJ_COLOR.sah}40`; sepDiv.style.paddingTop = '8px';
+        sepDiv.textContent = '📅 MAY 2026 (əlavə dərslər)';
+        grid.appendChild(sepDiv);
+        const offsetMay = 5;
+        for (let i = 0; i < offsetMay; i++) {
+            const el = document.createElement('div');
+            el.className = 'subj-mini-cal-day';
+            el.style.cssText = 'text-align:center;font-size:0.72rem;opacity:0.18;padding:5px 2px;color:var(--text3);';
+            el.textContent = 31 - (offsetMay - i);
+            grid.appendChild(el);
+        }
+        const isCurrentMonthMay = (today.getFullYear() === 2026 && today.getMonth() === 4);
+        for (let d = 1; d <= 31; d++) {
+            const isLesson = (d === 12 || d === 26);
+            const isPastLesson = isLesson && isCurrentMonthMay && d < currentDay;
+            const isToday = isCurrentMonthMay && d === currentDay;
+            const col = (offsetMay + d - 1) % 7;
+            const isWknd = (col === 5 || col === 6);
+            const el = document.createElement('div');
+            let cssText = 'text-align:center;font-size:0.72rem;padding:5px 2px;border-radius:7px;';
+            if (isToday) cssText += 'background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;font-weight:700;';
+            else if (isLesson && !isPastLesson) { cssText += `background:${SUBJ_COLOR.sah}30;border:1px solid ${SUBJ_COLOR.sah}70;color:var(--text);font-weight:700;cursor:pointer;`; el.addEventListener('click', (function(day) { return function() { showSahDayDetail(day, 4); }; })(d)); }
+            else if (isLesson && isPastLesson) { cssText += 'opacity:0.2;background:#333;color:gray;text-decoration:line-through;'; }
+            else if (isWknd) cssText += 'opacity:0.2;color:var(--text3);';
+            else cssText += 'opacity:0.28;color:var(--text3);';
+            el.style.cssText = cssText;
+            el.textContent = d;
+            grid.appendChild(el);
         }
     }
     
@@ -559,7 +510,7 @@
         const color = SUBJ_COLOR[key];
         const name = SUBJ_NAME[key];
         const time = SUBJ_TIME[key];
-        const dayName = getDayNameFull(day, 3, 2026);
+        const dayName = DAY_NAMES_FULL[new Date(2026, 3, day).getDay()];
         const det = document.getElementById('detail-' + key);
         det.innerHTML = `<div style="background:${color}18;border:1px solid ${color}45;border-radius:10px;padding:9px 12px;margin-top:4px;"><div style="font-size:0.78rem;font-weight:600;color:var(--text);">📅 ${day} Aprel — ${dayName}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:4px;">🕒 ${time}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:2px;">📚 ${name} dərsi var</div></div>`;
     }
@@ -569,8 +520,7 @@
         const name = SUBJ_NAME.sah;
         const time = SUBJ_TIME.sah;
         const monthName = month === 3 ? 'Aprel' : 'May';
-        const year = 2026;
-        const dayName = getDayNameFull(day, month, year);
+        const dayName = DAY_NAMES_FULL[new Date(2026, month, day).getDay()];
         const det = document.getElementById('detail-sah');
         det.innerHTML = `<div style="background:${color}18;border:1px solid ${color}45;border-radius:10px;padding:9px 12px;margin-top:4px;"><div style="font-size:0.78rem;font-weight:600;color:var(--text);">📅 ${day} ${monthName} — ${dayName}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:4px;">🕒 ${time}</div><div style="font-size:0.7rem;color:var(--text2);margin-top:2px;">📚 ${name} dərsi (tapşırıq təqdimatı üçün)</div></div>`;
     }
@@ -583,22 +533,32 @@
         if (!isOpen) buildSubjCal(key);
     }
     
+    function toggleDetails(idx) {
+        const cards = document.querySelectorAll('.subj-card:not(.locked)');
+        if (cards[idx]) cards[idx].classList.toggle('open');
+    }
+    
     function toggleTheme() {
         const isLight = document.body.classList.toggle('light');
         document.getElementById('themeToggle').textContent = isLight ? '🌑' : '🌙';
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
-    
-    (function() {
-        if (localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light');
-            document.getElementById('themeToggle').textContent = '🌑';
-        }
-    })();
-    
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('themeToggle').textContent = '🌑';
+    }
     document.getElementById('themeToggle').addEventListener('click', toggleTheme);
     window.toggleDetails = toggleDetails;
     window.toggleSubjCal = toggleSubjCal;
+    window.showSubjDayDetail = showSubjDayDetail;
+    window.showSahDayDetail = showSahDayDetail;
+    
+    // XDIAK üçün əlavə toggleDetails indeksi 3
+    // openCards işləsin
+    setTimeout(() => {
+        if(document.querySelectorAll('.subj-card:not(.locked)').length > 3)
+            window.toggleDetails = function(idx) { document.querySelectorAll('.subj-card:not(.locked)')[idx]?.classList.toggle('open'); };
+    }, 100);
 </script>
 </body>
 </html>
