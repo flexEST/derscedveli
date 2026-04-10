@@ -85,11 +85,21 @@
         .subject-row { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:background .18s,border-color .18s,transform .15s; }
         .subject-row:hover { background:rgba(59,130,246,0.08); border-color:rgba(59,130,246,0.25); }
         .subject-row:active { transform:scale(0.985); }
+
+        /* ── Unavailable subject row ── */
+        .subject-row.unavailable {
+            cursor: not-allowed;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        body.light .subject-row.unavailable { opacity: 0.45; }
+
         .subject-num { width:30px; height:30px; border-radius:10px; background:rgba(255,255,255,0.06); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:var(--text3); flex-shrink:0; }
         .subject-info { flex:1; min-width:0; }
         .subject-name { font-size:0.92rem; font-weight:600; color:var(--text); line-height:1.3; }
         .subject-hint { font-size:0.75rem; color:var(--text3); margin-top:2px; }
         .pdf-badge { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
+        .soon-badge { background:rgba(99,102,241,0.13); border:1px solid rgba(99,102,241,0.25); color:#a5b4fc; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
         .est-ai-badge { background:linear-gradient(135deg,#6d28d9,#8b5cf6); color:white; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; cursor:pointer; transition:transform .15s,filter .15s; }
         .est-ai-badge:hover { filter:brightness(1.1); transform:scale(1.02); }
         .footer-back { text-align:center; margin-top:30px; }
@@ -527,6 +537,9 @@
 const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
 document.getElementById('dateNow').textContent = new Date().getDate()+' '+months[new Date().getMonth()]+' '+new Date().getFullYear();
 
+// Keys that are unavailable (not yet ready)
+const UNAVAILABLE_KEYS = new Set(['proqramlasdirma', 'proqramlasdirma_2']);
+
 const subjectsData = {
     'I': [
         {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat.pdf', key:'diskret_riyaziyyat'},
@@ -553,9 +566,28 @@ function buildSubjects() {
         container.innerHTML = '';
         subjectsData[koll].forEach((sub, idx) => {
             const row = document.createElement('div');
-            row.className = 'subject-row';
-            row.setAttribute('onclick', `openSubject('${sub.name}','${koll}','${sub.pdf}','${sub.key}')`);
-            row.innerHTML = `<div class="subject-num">${idx+1}</div><div class="subject-info"><div class="subject-name">${sub.name}</div><div class="subject-hint">${koll === 'I' ? 'Mövzu sualları' : 'II kollokvium mövzuları'}</div></div><span class="pdf-badge">PDF</span>`;
+            const isUnavailable = UNAVAILABLE_KEYS.has(sub.key);
+
+            if(isUnavailable) {
+                row.className = 'subject-row unavailable';
+                row.innerHTML = `
+                    <div class="subject-num">${idx+1}</div>
+                    <div class="subject-info">
+                        <div class="subject-name">${sub.name}</div>
+                        <div class="subject-hint">Materiallar hazırlanır...</div>
+                    </div>
+                    <span class="soon-badge"> Əlçatmaz</span>`;
+            } else {
+                row.className = 'subject-row';
+                row.setAttribute('onclick', `openSubject('${sub.name}','${koll}','${sub.pdf}','${sub.key}')`);
+                row.innerHTML = `
+                    <div class="subject-num">${idx+1}</div>
+                    <div class="subject-info">
+                        <div class="subject-name">${sub.name}</div>
+                        <div class="subject-hint">${koll === 'I' ? 'Mövzu sualları' : 'II kollokvium mövzuları'}</div>
+                    </div>
+                    <span class="pdf-badge">PDF</span>`;
+            }
             container.appendChild(row);
         });
     }
@@ -590,19 +622,13 @@ function openESTAI() {
     navigateToAI(null);
 }
 
-// ── FIX: Reliable navigation to AI page ──
-// Android WebView sometimes doesn't flush localStorage before navigation.
-// We use a small delay + fallback to ensure data is written before leaving.
 function navigateToAI(ctx) {
     function doNavigate() { window.location.href = 'ai.html'; }
     if(ctx) {
         var ctxStr = JSON.stringify(ctx);
-        // Try localStorage first (needed for ai.html to read it)
         var saved = false;
         try { localStorage.setItem('aiContext', ctxStr); saved = true; } catch(e) {}
-        // Also write to sessionStorage as backup
         try { sessionStorage.setItem('aiContext', ctxStr); } catch(e) {}
-        // Also pass via URL hash as ultimate fallback for Android WebView
         try {
             var encoded = encodeURIComponent(ctxStr);
             if(encoded.length < 4000) {
@@ -610,7 +636,6 @@ function navigateToAI(ctx) {
                 return;
             }
         } catch(e) {}
-        // Fallback: small delay to ensure storage flush, then navigate
         if(saved) { setTimeout(doNavigate, 80); } else { doNavigate(); }
     } else {
         doNavigate();
@@ -697,6 +722,7 @@ let examQuestionGrades = {};
 
 // ==================== SUBJECT POPUP ====================
 function openSubject(name, knum, pdf, key) {
+    if(UNAVAILABLE_KEYS.has(key)) return;
     curSubjectName = name; curKoll = knum; curPdf = pdf; curKey = key;
     document.getElementById('popTitle').textContent = name;
     document.getElementById('popKbadge').textContent = 'Kollokvium ' + knum;
@@ -756,14 +782,12 @@ function getUserAnswerText(q, ans) {
     return 'Cavab verilməyib';
 }
 
-// ── FIX: Build full AI context with ALL question details ──
 function buildSingleQuestionContext(key, ei, qi, status) {
     const exam = QUIZ_DATA[key][ei];
     if(!exam) return null;
     const q = exam.questions[qi];
     const ans = quizAnswers[ei] ? quizAnswers[ei][qi] : null;
 
-    // Build full options/statements text for AI context
     let optionsDetail = null;
     if(q.type === 'STD') {
         optionsDetail = q.options.map((o,i) => String.fromCharCode(65+i)+') '+o).join('\n');
@@ -885,11 +909,9 @@ function openQuiz() {
 function buildAIBtn(ei, qi, status) {
     const cls = status === 'wrong' ? 'submitted-wrong' : status === 'correct' ? 'submitted-correct' : '';
     const icon = status === 'wrong' ? '❌' : status === 'correct' ? '✅' : '🤖';
-    // Use button + onclick instead of <a href> — more reliable on Android WebView
     return `<button class="est-ai-btn ${cls}" onclick="openAIForQuestion('${curKey}',${ei},${qi},'${status}')">${icon} AI-dan soruş</button>`;
 }
 
-// ── Build image wrap with expand button ──
 function buildImgWrap(src) {
     return `<div class="q-img-wrap">
         <img class="q-img" src="${src}" alt="Sual şəkli" onclick="openLightbox('${src}')">
@@ -922,7 +944,7 @@ function buildPanel(ei) {
             html += `</div></div>`;
         } else if(q.type === 'B' || q.type === 'IMG_B') {
             html += `<div class="q-card"><div class="q-num">Sual ${qi+1} / ${exam.questions.length}</div><div class="q-header-row"><span class="q-type-badge match">↔ Uyğunlaşdırma</span>${aiBtn}</div>`;
-            if(q.img) html += buildImgWrap(q.img);  // ← FIX: image with expand button
+            if(q.img) html += buildImgWrap(q.img);
             html += `<div class="q-text">${q.text || ''}</div><div class="match-wrap" id="match-${ei}-${qi}">`;
             q.items.forEach((item, ii) => {
                 html += `<div class="match-item" id="mi-${ei}-${qi}-${ii}"><div class="match-q">${ii+1}. ${item}</div><div class="match-variants">`;
@@ -1098,7 +1120,6 @@ function submitExam(ei) {
         totalScore += pts; maxScore += max;
     });
 
-    // ── Update AI buttons after submit ──
     exam.questions.forEach((q, qi) => {
         const grade = examQuestionGrades[ei][qi];
         const status = grade === 'correct' ? 'correct' : 'wrong';
@@ -1110,7 +1131,6 @@ function submitExam(ei) {
                 if(btn) {
                     btn.className = 'est-ai-btn ' + (status === 'correct' ? 'submitted-correct' : 'submitted-wrong');
                     btn.textContent = (status === 'correct' ? '✅' : '❌') + ' AI-dan soruş';
-                    // Update onclick with new status
                     btn.setAttribute('onclick', `openAIForQuestion('${curKey}',${ei},${qi},'${status}')`);
                 }
             }
@@ -1256,7 +1276,6 @@ const SUBJECT_GROUPS = [
 function getHistory() { try { return JSON.parse(localStorage.getItem('testHistory')||'[]'); } catch(e) { return []; } }
 function setHistory(h) { try { localStorage.setItem('testHistory', JSON.stringify(h)); } catch(e) {} }
 
-// ── FIX: Save full question snapshot with result ──
 function saveResult(key, ei, score, max, pass, subjectName, koll, grades, questions) {
     const h = getHistory();
     const now = new Date();
@@ -1264,8 +1283,6 @@ function saveResult(key, ei, score, max, pass, subjectName, koll, grades, questi
     const dateStr = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
     const kollLabel = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
 
-    // Serialize question results for review
-    // Store only what we need (text + correct/wrong status + correct answer)
     const qSnapshot = questions ? questions.map((q, qi) => {
         const grade = grades ? (grades[qi] || 'wrong') : 'unknown';
         return {
@@ -1303,7 +1320,6 @@ function deleteSingleResult(id, e) {
     if(document.getElementById('resultsOverlay').classList.contains('show')) renderResults();
 }
 
-// ── FIX: Build review HTML from saved snapshot ──
 function buildReviewHTML(record) {
     if(!record.qSnapshot || record.qSnapshot.length === 0) {
         return '<div style="text-align:center;color:var(--text3);padding:30px 0;">Bu nəticə üçün sual məlumatı yoxdur. Yeni test eləyin.</div>';
@@ -1335,7 +1351,6 @@ function buildReviewHTML(record) {
     return html;
 }
 
-// ── FIX: Tap history item → open review overlay ──
 function openReviewForRecord(record) {
     document.getElementById('reviewTitle').textContent = record.subjectName || record.subj;
     document.getElementById('reviewSubtitle').textContent = record.koll + ' · ' + record.score + '/' + record.max + ' bal';
@@ -1368,7 +1383,6 @@ function renderResults() {
     });
     const histList = document.getElementById('histList');
     if(h.length === 0) { histList.innerHTML = '<div class="hist-empty">Hələ heç bir test edilməyib</div>'; return; }
-    // ── FIX: history items are now tappable to open review ──
     histList.innerHTML = h.map(r => 
         `<div class="hist-item" onclick="openReviewForRecord(${JSON.stringify(r).replace(/"/g,'&quot;')})">` +
         `<div class="hist-dot ${r.pass?'pass':'fail'}"></div>` +
