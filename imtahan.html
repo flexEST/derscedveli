@@ -76,6 +76,7 @@
         .exam-name { font-size:1rem; font-weight:700; color:var(--text); margin-bottom:4px; }
         .exam-date-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
         .exam-date { font-size:0.78rem; font-weight:600; color:var(--amber); background:rgba(245,166,35,0.12); padding:2px 10px; border-radius:20px; }
+        .exam-date.unknown { color:#a78bfa; background:rgba(139,92,246,0.12); }
         .exam-type { font-size:0.75rem; color:var(--text3); background:rgba(255,255,255,0.05); border:1px solid var(--border); padding:2px 10px; border-radius:20px; }
         .chevron { font-size:18px; color:var(--text3); transition:transform .3s cubic-bezier(.16,1,.3,1); flex-shrink:0; }
         .exam-card.open .chevron { transform:rotate(180deg); }
@@ -442,6 +443,20 @@
         </div>
         <div class="subjects-panel"><div class="subjects-inner" id="subjects2"></div></div>
     </div>
+
+    <!-- İMTAHAN -->
+    <div class="exam-card" data-index="2">
+        <div class="exam-header" onclick="toggle(2)">
+            <div class="exam-icon" style="background:rgba(139,92,246,0.15);">🎓</div>
+            <div class="exam-meta">
+                <div class="exam-name">İmtahan</div>
+                <div class="exam-date-row"><span class="exam-date unknown">Tarix naməlum</span><span class="exam-type">Son imtahan</span></div>
+            </div>
+            <span class="chevron">⌄</span>
+        </div>
+        <div class="subjects-panel"><div class="subjects-inner" id="subjects3"></div></div>
+    </div>
+
     <div class="footer-back"><a href="index.html">← Əsas səhifəyə qayıt</a></div>
 </div>
 
@@ -538,7 +553,7 @@ const months=['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','S
 document.getElementById('dateNow').textContent = new Date().getDate()+' '+months[new Date().getMonth()]+' '+new Date().getFullYear();
 
 // Keys that are unavailable (not yet ready)
-const UNAVAILABLE_KEYS = new Set(['proqramlasdirma', 'proqramlasdirma_2']);
+const UNAVAILABLE_KEYS = new Set(['proqramlasdirma', 'proqramlasdirma_2', 'proqramlasdirma_imtahan']);
 
 const subjectsData = {
     'I': [
@@ -556,25 +571,39 @@ const subjectsData = {
         {name:'XDIAK', pdf:'xdiak_2.pdf', key:'xdiak_2'},
         {name:'Diferensial tənliklər', pdf:'diferensial_tenlikler_2.pdf', key:'diferensial_tenlikler_2'},
         {name:'Sahibkarlığın əsasları və biznesə giriş', pdf:'sahibkarlik_2.pdf', key:'sahibkarlik_2'}
+    ],
+    'IMTAHAN': [
+        {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat_imtahan.pdf', key:'diskret_riyaziyyat_imtahan'},
+        {name:'Proqramlaşdırmanın əsasları', pdf:'proqramlasdirma_imtahan.pdf', key:'proqramlasdirma_imtahan'},
+        {name:'İnformasiya texnologiyalarının əsasları', pdf:'informasiya_texnologiyalari_imtahan.pdf', key:'informasiya_texnologiyalari_imtahan'},
+        {name:'XDIAK', pdf:'xdiak_imtahan.pdf', key:'xdiak_imtahan'},
+        {name:'Diferensial tənliklər', pdf:'diferensial_tenlikler_imtahan.pdf', key:'diferensial_tenlikler_imtahan'},
+        {name:'Sahibkarlığın əsasları və biznesə giriş', pdf:'sahibkarlik_imtahan.pdf', key:'sahibkarlik_imtahan'}
     ]
 };
 
 function buildSubjects() {
-    for(let koll of ['I','II']) {
-        const container = document.getElementById(`subjects${koll==='I'?'1':'2'}`);
-        if(!container) continue;
+    const kollMap = [
+        { id: 'subjects1', koll: 'I',        label: 'Mövzu sualları' },
+        { id: 'subjects2', koll: 'II',       label: 'II kollokvium mövzuları' },
+        { id: 'subjects3', koll: 'IMTAHAN',  label: 'İmtahan mövzuları' }
+    ];
+
+    kollMap.forEach(({ id, koll, label }) => {
+        const container = document.getElementById(id);
+        if (!container) return;
         container.innerHTML = '';
         subjectsData[koll].forEach((sub, idx) => {
             const row = document.createElement('div');
             const isUnavailable = UNAVAILABLE_KEYS.has(sub.key);
 
-            if(isUnavailable) {
+            if (isUnavailable) {
                 row.className = 'subject-row unavailable';
                 row.innerHTML = `
                     <div class="subject-num">${idx+1}</div>
                     <div class="subject-info">
                         <div class="subject-name">${sub.name}</div>
-                        <div class="subject-hint">Mövzu sualları</div>
+                        <div class="subject-hint">${label}</div>
                     </div>
                     <span class="soon-badge"> Əlçatmaz</span>`;
             } else {
@@ -584,20 +613,21 @@ function buildSubjects() {
                     <div class="subject-num">${idx+1}</div>
                     <div class="subject-info">
                         <div class="subject-name">${sub.name}</div>
-                        <div class="subject-hint">${koll === 'I' ? 'Mövzu sualları' : 'II kollokvium mövzuları'}</div>
+                        <div class="subject-hint">${label}</div>
                     </div>
                     <span class="pdf-badge">PDF</span>`;
             }
             container.appendChild(row);
         });
-    }
+    });
 }
 buildSubjects();
 
 function toggle(idx) {
     document.querySelectorAll('.exam-card').forEach((c,i) => { i===idx ? c.classList.toggle('open') : c.classList.remove('open'); });
 }
-document.querySelectorAll('.exam-card')[0].classList.add('open');
+// Auto-open Kollokvium II (index 1) on page load
+document.querySelectorAll('.exam-card')[1].classList.add('open');
 
 // ==================== LIGHTBOX ====================
 function openLightbox(src) {
@@ -675,7 +705,7 @@ const QUIZ_DATA = {
     'informasiya_texnologiyalari': [{title:'İmtahan 1', questions:[
         {type:'A', text:'1. Aşağıdakılardan hansı alqoritmin xassələrinə aiddir?', statements:['Müəyyənlik','Kütləvilik','Nəticəvilik','İctimailik','Sonsuzluq'], correct:[0,1,2]},
         {type:'ORDER', text:'2. Aşağıda Exceldə verilən funksiyaların hesablamalarını artma sirasina görə düzün:', statements:['z=2x+5 haradakı x=6','y=ax+b haradakı a=3; b=2; x=2','s=5y+10x haradakı y=3; x=2'], correct:[1,0,2]},
-        {type:'ORDER', text:'3. Aşağıda verilən variantlardan budaqlanan alqoritmin həll ardıcılığını göstərin:', statements:['Daxil etmə','Hesablama','Şərt bloku'], correct:[0,1,2]},
+        {type:'ORDER', text:'3. Aşağıda verilən variantlardan budaqlanan alqoritmin həll ardıcıllığını göstərin:', statements:['Daxil etmə','Hesablama','Şərt bloku'], correct:[0,1,2]},
         {type:'B', text:'4. Uyğunluğu müəyyən edin:', items:['MS EXCEL(2013) Görünüş (View-Вид)','MS EXCEL(2013) Data(Data-Данные)','MS EXCEL(2013) Daxil et( İnsert –Вставить)'], variants:['Formula sətri','Çeşidləmə','Diaqram','Orfoqrafiya','Proqressiya'], correctMap:[[0],[1],[2]]},
         {type:'B', text:'5.Uyğunluğu müəyyən edin:', items:['Antivirus proqramları','Arxivləşdirmə proqramları','Tətbiqi proqramlar'], variants:['Dilmanc, Simulyasiya','Forex c – Kasperski','Linux','WinRar','Dr Web'], correctMap:[[4],[3],[0]]}
     ]}],
@@ -702,11 +732,16 @@ const QUIZ_DATA = {
     ]}]
 };
 
-const additionalKeys = ['informasiya_texnologiyalari_2', 'xdiak_2', 'diferensial_tenlikler_2', 'sahibkarlik_2'];
-additionalKeys.forEach(key => {
+// Auto-generate placeholder data for _2, imtahan and other missing keys
+const autoGenKeys = [
+    'informasiya_texnologiyalari_2', 'xdiak_2', 'diferensial_tenlikler_2', 'sahibkarlik_2',
+    'diskret_riyaziyyat_imtahan', 'informasiya_texnologiyalari_imtahan',
+    'xdiak_imtahan', 'diferensial_tenlikler_imtahan', 'sahibkarlik_imtahan'
+];
+autoGenKeys.forEach(key => {
     if(!QUIZ_DATA[key]) {
         QUIZ_DATA[key] = [{title:'İmtahan 1', questions: Array(5).fill().map((_,i) => ({
-            type:'STD', text:`Sual ${i+1} — ${key.replace('_2','')} (II kollokvium)`, 
+            type:'STD', text:`Sual ${i+1} — ${key.replace(/_2$|_imtahan$/,'')} (${key.endsWith('_imtahan') ? 'İmtahan' : 'II kollokvium'})`, 
             options:['Variant A','Variant B','Variant C','Variant D','Variant E'], correct:i
         }))}];
     }
@@ -725,7 +760,8 @@ function openSubject(name, knum, pdf, key) {
     if(UNAVAILABLE_KEYS.has(key)) return;
     curSubjectName = name; curKoll = knum; curPdf = pdf; curKey = key;
     document.getElementById('popTitle').textContent = name;
-    document.getElementById('popKbadge').textContent = 'Kollokvium ' + knum;
+    const kollLabel = knum === 'IMTAHAN' ? 'İmtahan' : 'Kollokvium ' + knum;
+    document.getElementById('popKbadge').textContent = kollLabel;
     document.getElementById('subjectPopup').classList.add('show');
     document.body.style.overflow = 'hidden';
 }
@@ -736,7 +772,8 @@ function closeSubject() {
 function overlayClick(e) { if(e.target === document.getElementById('subjectPopup')) closeSubject(); }
 function openPDFChoice() {
     document.getElementById('pdfChoiceTitle').textContent = curSubjectName;
-    document.getElementById('pdfChoiceKbadge').textContent = 'Kollokvium ' + curKoll;
+    const kollLabel = curKoll === 'IMTAHAN' ? 'İmtahan' : 'Kollokvium ' + curKoll;
+    document.getElementById('pdfChoiceKbadge').textContent = kollLabel;
     const isXdiak = curKey.startsWith('xdiak');
     document.getElementById('pdfWordsBtn').style.display = isXdiak ? 'flex' : 'none';
     document.getElementById('subjectPopup').classList.remove('show');
@@ -803,7 +840,7 @@ function buildSingleQuestionContext(key, ei, qi, status) {
     return {
         type: 'single_question',
         subject: curSubjectName || key,
-        kollokvium: curKoll || (key.endsWith('_2') ? 'II' : 'I'),
+        kollokvium: curKoll || (key.endsWith('_imtahan') ? 'İmtahan' : key.endsWith('_2') ? 'II' : 'I'),
         questionNumber: qi + 1,
         questionType: q.type,
         questionText: getQuestionText(q, qi),
@@ -1150,7 +1187,8 @@ function submitExam(ei) {
     res.innerHTML = `<div class="result-score ${pass?'pass':'fail'}">${totalScore}/${maxScore} bal</div><div class="result-label">${pass?'✅ Uğurlu nəticə!':'❌ Daha çox çalışın'}</div>${analyzeBtn}<button class="btn-retry" style="margin-top:8px;" onclick="retryExam(${ei})">🔄 Yenidən cəhd et</button>`;
     res.classList.add('show');
     
-    saveResult(curKey, ei, totalScore, maxScore, pass, curSubjectName, curKoll, examQuestionGrades[ei], exam.questions);
+    const kollLabel = curKoll === 'IMTAHAN' ? 'İmtahan' : curKoll;
+    saveResult(curKey, ei, totalScore, maxScore, pass, curSubjectName, kollLabel, examQuestionGrades[ei], exam.questions);
     const allDone = QUIZ_DATA[curKey].every((_,i) => { const b = document.getElementById('sub-'+i); return b && b.disabled; });
     if(allDone) stopTimer();
 }
@@ -1256,21 +1294,21 @@ function autoSubmitAll() {
 
 // ==================== RESULTS SYSTEM ====================
 const SUBJECT_NAMES = {
-    'diskret_riyaziyyat':'Diskret riyaz.','diskret_riyaziyyat_2':'Diskret riyaz.',
-    'proqramlasdirma':'Proqramlaşd.','proqramlasdirma_2':'Proqramlaşd.',
-    'informasiya_texnologiyalari':'İnf. tex.','informasiya_texnologiyalari_2':'İnf. tex.',
-    'xdiak':'XDIAK','xdiak_2':'XDIAK',
-    'diferensial_tenlikler':'Dif. tənliklər','diferensial_tenlikler_2':'Dif. tənliklər',
-    'sahibkarlik':'Sahibkarlıq','sahibkarlik_2':'Sahibkarlıq'
+    'diskret_riyaziyyat':'Diskret riyaz.','diskret_riyaziyyat_2':'Diskret riyaz.','diskret_riyaziyyat_imtahan':'Diskret riyaz.',
+    'proqramlasdirma':'Proqramlaşd.','proqramlasdirma_2':'Proqramlaşd.','proqramlasdirma_imtahan':'Proqramlaşd.',
+    'informasiya_texnologiyalari':'İnf. tex.','informasiya_texnologiyalari_2':'İnf. tex.','informasiya_texnologiyalari_imtahan':'İnf. tex.',
+    'xdiak':'XDIAK','xdiak_2':'XDIAK','xdiak_imtahan':'XDIAK',
+    'diferensial_tenlikler':'Dif. tənliklər','diferensial_tenlikler_2':'Dif. tənliklər','diferensial_tenlikler_imtahan':'Dif. tənliklər',
+    'sahibkarlik':'Sahibkarlıq','sahibkarlik_2':'Sahibkarlıq','sahibkarlik_imtahan':'Sahibkarlıq'
 };
 
 const SUBJECT_GROUPS = [
-    {name:'Diskret riyaziyyat',keys:['diskret_riyaziyyat','diskret_riyaziyyat_2']},
-    {name:'Proqramlaşdırma',keys:['proqramlasdirma','proqramlasdirma_2']},
-    {name:'İnf. texnologiyaları',keys:['informasiya_texnologiyalari','informasiya_texnologiyalari_2']},
-    {name:'XDIAK',keys:['xdiak','xdiak_2']},
-    {name:'Diferensial tənliklər',keys:['diferensial_tenlikler','diferensial_tenlikler_2']},
-    {name:'Sahibkarlıq',keys:['sahibkarlik','sahibkarlik_2']}
+    {name:'Diskret riyaziyyat',keys:['diskret_riyaziyyat','diskret_riyaziyyat_2','diskret_riyaziyyat_imtahan']},
+    {name:'Proqramlaşdırma',keys:['proqramlasdirma','proqramlasdirma_2','proqramlasdirma_imtahan']},
+    {name:'İnf. texnologiyaları',keys:['informasiya_texnologiyalari','informasiya_texnologiyalari_2','informasiya_texnologiyalari_imtahan']},
+    {name:'XDIAK',keys:['xdiak','xdiak_2','xdiak_imtahan']},
+    {name:'Diferensial tənliklər',keys:['diferensial_tenlikler','diferensial_tenlikler_2','diferensial_tenlikler_imtahan']},
+    {name:'Sahibkarlıq',keys:['sahibkarlik','sahibkarlik_2','sahibkarlik_imtahan']}
 ];
 
 function getHistory() { try { return JSON.parse(localStorage.getItem('testHistory')||'[]'); } catch(e) { return []; } }
@@ -1281,7 +1319,7 @@ function saveResult(key, ei, score, max, pass, subjectName, koll, grades, questi
     const now = new Date();
     const pad = n => String(n).padStart(2,'0');
     const dateStr = `${pad(now.getDate())}.${pad(now.getMonth()+1)}.${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-    const kollLabel = key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
+    const kollLabel = key.endsWith('_imtahan') ? 'İmtahan' : key.endsWith('_2') ? 'II Kollokvium' : 'I Kollokvium';
 
     const qSnapshot = questions ? questions.map((q, qi) => {
         const grade = grades ? (grades[qi] || 'wrong') : 'unknown';
