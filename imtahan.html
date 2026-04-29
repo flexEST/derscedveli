@@ -101,6 +101,12 @@
         .subject-hint { font-size:0.75rem; color:var(--text3); margin-top:2px; }
         .pdf-badge { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
         .soon-badge { background:rgba(99,102,241,0.13); border:1px solid rgba(99,102,241,0.25); color:#a5b4fc; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
+
+        /* ── Exam type badges ── */
+        .type-badge-test   { background:rgba(20,184,166,0.12); border:1px solid rgba(20,184,166,0.25); color:#5eead4; font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:20px; letter-spacing:.4px; flex-shrink:0; }
+        .type-badge-yazili { background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.25); color:#fbbf24; font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:20px; letter-spacing:.4px; flex-shrink:0; }
+        .type-badge-fakul  { background:rgba(139,92,246,0.13); border:1px solid rgba(139,92,246,0.28); color:#c084fc; font-size:0.68rem; font-weight:700; padding:2px 8px; border-radius:20px; letter-spacing:.4px; flex-shrink:0; }
+
         .est-ai-badge { background:linear-gradient(135deg,#6d28d9,#8b5cf6); color:white; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; cursor:pointer; transition:transform .15s,filter .15s; }
         .est-ai-badge:hover { filter:brightness(1.1); transform:scale(1.02); }
         .footer-back { text-align:center; margin-top:30px; }
@@ -450,7 +456,7 @@
             <div class="exam-icon" style="background:rgba(139,92,246,0.15);">🎓</div>
             <div class="exam-meta">
                 <div class="exam-name">İmtahan</div>
-                <div class="exam-date-row"><span class="exam-date unknown">Tarix naməlum</span><span class="exam-type">Test - Yazılı</span></div>
+                <div class="exam-date-row"><span class="exam-date">01 İyun – 25 İyun 2026</span><span class="exam-type">Test · Yazılı · Fakültə</span></div>
             </div>
             <span class="chevron">⌄</span>
         </div>
@@ -555,6 +561,7 @@ document.getElementById('dateNow').textContent = new Date().getDate()+' '+months
 // Keys that are unavailable (not yet ready)
 const UNAVAILABLE_KEYS = new Set(['proqramlasdirma', 'proqramlasdirma_2', 'proqramlasdirma_imtahan']);
 
+// examType: 'test' | 'yazili' | 'fakul'
 const subjectsData = {
     'I': [
         {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat.pdf', key:'diskret_riyaziyyat'},
@@ -573,14 +580,22 @@ const subjectsData = {
         {name:'Sahibkarlığın əsasları və biznesə giriş', pdf:'sahibkarlik_2.pdf', key:'sahibkarlik_2'}
     ],
     'IMTAHAN': [
-        {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat_imtahan.pdf', key:'diskret_riyaziyyat_imtahan'},
-        {name:'Proqramlaşdırmanın əsasları', pdf:'proqramlasdirma_imtahan.pdf', key:'proqramlasdirma_imtahan'},
-        {name:'İnformasiya texnologiyalarının əsasları', pdf:'informasiya_texnologiyalari_imtahan.pdf', key:'informasiya_texnologiyalari_imtahan'},
-        {name:'XDIAK', pdf:'xdiak_imtahan.pdf', key:'xdiak_imtahan'},
-        {name:'Diferensial tənliklər', pdf:'diferensial_tenlikler_imtahan.pdf', key:'diferensial_tenlikler_imtahan'},
-        {name:'Sahibkarlığın əsasları və biznesə giriş', pdf:'sahibkarlik_imtahan.pdf', key:'sahibkarlik_imtahan'}
+        {name:'İnformasiya texnologiyalarının əsasları', pdf:'informasiya_texnologiyalari_imtahan.pdf', key:'informasiya_texnologiyalari_imtahan', date:'01 İyun 2026', time:'10:00', examType:'test'},
+        {name:'Proqramlaşdırmanın əsasları', pdf:'proqramlasdirma_imtahan.pdf', key:'proqramlasdirma_imtahan', date:'05 İyun 2026', time:'11:00', examType:'fakul'},
+        {name:'Xarici dildə işgüzar kommunikasiya', pdf:'xdiak_imtahan.pdf', key:'xdiak_imtahan', date:'10 İyun 2026', time:'09:00', examType:'test'},
+        {name:'Diskret riyaziyyat', pdf:'diskret_riyaziyyat_imtahan.pdf', key:'diskret_riyaziyyat_imtahan', date:'16 İyun 2026', time:'12:00', examType:'yazili'},
+        {name:'Diferensial tənliklər', pdf:'diferensial_tenlikler_imtahan.pdf', key:'diferensial_tenlikler_imtahan', date:'22 İyun 2026', time:'12:00', examType:'yazili'},
+        {name:'Sahibkarlığın əsasları və biznesə giriş', pdf:'sahibkarlik_imtahan.pdf', key:'sahibkarlik_imtahan', date:'25 İyun 2026', time:'10:00', examType:'test'}
     ]
 };
+
+function getExamTypeBadge(examType) {
+    if (!examType) return '';
+    if (examType === 'test')   return '<span class="type-badge-test">Test</span>';
+    if (examType === 'yazili') return '<span class="type-badge-yazili">Yazılı</span>';
+    if (examType === 'fakul')  return '<span class="type-badge-fakul">Fakültə</span>';
+    return '';
+}
 
 function buildSubjects() {
     const kollMap = [
@@ -597,24 +612,33 @@ function buildSubjects() {
             const row = document.createElement('div');
             const isUnavailable = UNAVAILABLE_KEYS.has(sub.key);
 
+            // Build hint: for IMTAHAN rows show date+time if available
+            let hint = label;
+            if (koll === 'IMTAHAN' && sub.date) {
+                hint = sub.date + (sub.time ? ' · ' + sub.time : '');
+            }
+
             if (isUnavailable) {
                 row.className = 'subject-row unavailable';
                 row.innerHTML = `
                     <div class="subject-num">${idx+1}</div>
                     <div class="subject-info">
                         <div class="subject-name">${sub.name}</div>
-                        <div class="subject-hint">${label}</div>
+                        <div class="subject-hint">${hint}</div>
                     </div>
-                    <span class="soon-badge"> Əlçatmaz</span>`;
+                    ${koll === 'IMTAHAN' && sub.examType ? getExamTypeBadge(sub.examType) : ''}
+                    <span class="soon-badge">Əlçatmaz</span>`;
             } else {
                 row.className = 'subject-row';
                 row.setAttribute('onclick', `openSubject('${sub.name}','${koll}','${sub.pdf}','${sub.key}')`);
+                const typeBadge = (koll === 'IMTAHAN' && sub.examType) ? getExamTypeBadge(sub.examType) : '';
                 row.innerHTML = `
                     <div class="subject-num">${idx+1}</div>
                     <div class="subject-info">
                         <div class="subject-name">${sub.name}</div>
-                        <div class="subject-hint">${label}</div>
+                        <div class="subject-hint">${hint}</div>
                     </div>
+                    ${typeBadge}
                     <span class="pdf-badge">PDF</span>`;
             }
             container.appendChild(row);
