@@ -94,6 +94,27 @@
         .cal-day.other-month{color:var(--text-3);opacity:0.35;}
         .cal-day.weekend{color:var(--text-3);}
         .cal-day-dot{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:3px;height:3px;border-radius:50%;background:var(--amber);}
+        /* ── NEW: Kollokvium & İmtahan day styles ── */
+        .cal-day.is-kollok{background:rgba(245,166,35,0.18);border:1px solid rgba(245,166,35,0.4);color:#fcd34d;font-weight:700;}
+        .cal-day.is-imtahan{background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;font-weight:700;}
+        [data-theme="light"] .cal-day.is-kollok{background:rgba(217,119,6,0.12);border-color:rgba(217,119,6,0.35);color:#b45309;}
+        [data-theme="light"] .cal-day.is-imtahan{background:rgba(220,38,38,0.1);border-color:rgba(220,38,38,0.35);color:#dc2626;}
+        .cal-day.is-today.is-kollok,.cal-day.is-today.is-imtahan{background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;color:white!important;border:none!important;box-shadow:0 4px 12px -2px rgba(59,130,246,0.5);}
+        .cal-day-dot.kollok{background:var(--amber);}
+        .cal-day-dot.imtahan{background:var(--red);}
+        /* ── Calendar legend ── */
+        .cal-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+        .cal-leg-item{display:flex;align-items:center;gap:5px;font-size:0.62rem;color:var(--text-2);}
+        .cal-leg-dot{width:8px;height:8px;border-radius:3px;flex-shrink:0;}
+        .cal-leg-dot.lesson{background:rgba(59,130,246,0.5);border:1px solid rgba(59,130,246,0.6);}
+        .cal-leg-dot.kollok{background:rgba(245,166,35,0.5);border:1px solid rgba(245,166,35,0.6);}
+        .cal-leg-dot.imtahan{background:rgba(239,68,68,0.5);border:1px solid rgba(239,68,68,0.6);}
+        /* ── Kollokvium/İmtahan rows in day panel ── */
+        .cal-lesson-row.is-kollok{background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.25);}
+        .cal-lesson-row.is-imtahan{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);}
+        .cal-l-dot.kollok{background:var(--amber);}
+        .cal-l-dot.imtahan{background:var(--red);}
+        /* ── end NEW ── */
         .cal-day.is-holiday{color:var(--text-3);}
         .cal-day.is-today.is-holiday{background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;color:white!important;}
         .cal-day.clickable{cursor:pointer;}
@@ -420,6 +441,12 @@
                 <span class="cal-month-label" id="calMonthLabel">—</span>
                 <button class="cal-nav" id="calNext">›</button>
             </div>
+            <!-- ── NEW: Calendar legend ── -->
+            <div class="cal-legend">
+                <div class="cal-leg-item"><div class="cal-leg-dot lesson"></div>Dərs günü</div>
+                <div class="cal-leg-item"><div class="cal-leg-dot kollok"></div>Kollokvium</div>
+                <div class="cal-leg-item"><div class="cal-leg-dot imtahan"></div>İmtahan</div>
+            </div>
             <div class="cal-grid" id="calGrid"></div>
             <div class="cal-lessons-panel" id="calLessonsPanel">
                 <div class="cal-lessons-date" id="calLessonsDate"></div>
@@ -721,14 +748,11 @@
         {name:'Proqramlaşdırmanın əsasları',type:'Mühazirə',teacher:'Talıbzadə Sərxan',teacherEmoji:'👨‍🏫',start:720,end:800,weeks:'lower',room:'1319',day:4}
     ];
 
-    // Kollokviumlar — start/end in minutes from midnight
-    // Kollokvium 1: 10 Apr 2026 09:30, Kollokvium 2: 08 May 2026 09:30
     var KOLLOKVIUMLAR = [
         {name:'Kollokvium (Mart)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,3,10)},
         {name:'Kollokvium (Aprel)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,4,8)}
     ];
 
-    // Full exam schedule — after semester ends (26 May 2026)
     var IMTAHANLAR = [
         {name:'İnformasiya texnologiyalarının əsasları',type:'Test',teacherEmoji:'📝',start:600,end:680,room:'Auditoriya',date:new Date(2026,5,1)},
         {name:'Proqramlaşdırmanın əsasları',type:'Fakültə(Kafedra)',teacherEmoji:'📝',start:660,end:740,room:'Auditoriya',date:new Date(2026,5,5)},
@@ -738,7 +762,6 @@
         {name:'Sahibkarlığın əsasları və biznesə giriş',type:'Test',teacherEmoji:'📝',start:600,end:680,room:'Auditoriya',date:new Date(2026,5,25)}
     ];
 
-    // Semester ends: 26 May 2026
     var SEMESTER_END_DATE = new Date(2026,4,26);
 
     const MONTHS   = ['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
@@ -796,6 +819,24 @@
         return LESSONS.some(function(l){ return l.day===ld&&(l.weeks==='both'||l.weeks===wt); });
     }
 
+    // ── NEW: check if date has kollokvium ──
+    function getKollokviumOnDate(date){
+        var ds = date.toDateString();
+        for(var i=0;i<KOLLOKVIUMLAR.length;i++){
+            if(KOLLOKVIUMLAR[i].date.toDateString()===ds) return KOLLOKVIUMLAR[i];
+        }
+        return null;
+    }
+
+    // ── NEW: check if date has imtahan ──
+    function getImtahanOnDate(date){
+        var ds = date.toDateString();
+        for(var i=0;i<IMTAHANLAR.length;i++){
+            if(IMTAHANLAR[i].date.toDateString()===ds) return IMTAHANLAR[i];
+        }
+        return null;
+    }
+
     function getToday(){ var d=new Date().getDay(); return d===0?7:d; }
 
     function getLessonsForDay(day,wt){
@@ -828,9 +869,8 @@
 
     function isSemesterEnded(){
         var now = new Date();
-        // Strip time for comparison
         var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        var endDay = new Date(2026, 4, 26); // 26 May 2026
+        var endDay = new Date(2026, 4, 26);
         return today >= endDay;
     }
 
@@ -858,7 +898,6 @@
         return getLessonsForDay(t,wt).sort(function(a,b){return a.start-b.start;});
     }
 
-    // Get current kollokvium if today is kollokvium day
     function findTodayKollokvium(){
         var now = new Date();
         var nowMin = now.getHours()*60 + now.getMinutes();
@@ -868,7 +907,6 @@
             if(kl.date.toDateString()===todayStr){
                 if(nowMin < kl.start) return Object.assign({},kl,{status:'upcoming',isKollokvium:true});
                 if(nowMin>=kl.start&&nowMin<=kl.end) return Object.assign({},kl,{status:'ongoing',isKollokvium:true});
-                // Kollokvium ended today — still return it as done so we can show it
                 return Object.assign({},kl,{status:'done',isKollokvium:true});
             }
         }
@@ -878,22 +916,12 @@
     function findCurrentLesson(){
         var now=new Date();
         var nowMin=now.getHours()*60+now.getMinutes();
-
-        // If semester ended, show next exam
-        if(isSemesterEnded()){
-            return null; // handled separately in renderMain
-        }
-
-        // If today is a kollokvium day — only show kollokvium card (no regular classes)
+        if(isSemesterEnded()) return null;
         var todayKoll = findTodayKollokvium();
         if(todayKoll){
-            if(todayKoll.status === 'done'){
-                // Kollokvium ended, show nothing
-                return null;
-            }
+            if(todayKoll.status === 'done') return null;
             return todayKoll;
         }
-
         var list=getTodaysLessons();
         for(var i=0;i<list.length;i++){
             var l=list[i];
@@ -982,7 +1010,12 @@
         var daysInMonth=new Date(year,month+1,0).getDate();
         var daysInPrev=new Date(year,month,0).getDate();
         var today=new Date();
-        for(var i=0;i<startOffset;i++){var el=document.createElement('div');el.className='cal-day other-month';el.textContent=daysInPrev-startOffset+1+i;grid.appendChild(el);}
+
+        for(var i=0;i<startOffset;i++){
+            var el=document.createElement('div');el.className='cal-day other-month';
+            el.textContent=daysInPrev-startOffset+1+i;grid.appendChild(el);
+        }
+
         for(var d=1;d<=daysInMonth;d++){
             var date=new Date(year,month,d);
             var dow=date.getDay();
@@ -990,23 +1023,58 @@
             var isWknd=(dow===0||dow===6);
             var isHoliday=HOLIDAYS.indexOf(dateStr(date))>=0;
             var beforeSemester=date<new Date(2026,1,16);
-            var afterSemester=date>new Date(2026,4,29);
+            var afterSemester=date>new Date(2026,6,0); // after June 30 2026
             var outOfSemester=beforeSemester||afterSemester;
+
+            // ── NEW: check for special events ──
+            var kollok = getKollokviumOnDate(date);
+            var imtahan = getImtahanOnDate(date);
             var hasL=!isWknd&&!isHoliday&&!outOfSemester&&hasLessonsOnDate(date);
+
             var el=document.createElement('div');
             var cls='cal-day';
-            if(isWknd||outOfSemester) cls+=' other-month';
-            if(hasL)                  cls+=' has-lessons';
-            if(isToday)               cls+=' is-today';
-            if(isHoliday&&!outOfSemester) cls+=' is-holiday';
-            if(!isWknd&&!outOfSemester) cls+=' clickable';
-            el.className=cls; el.textContent=d;
-            if(hasL){var dot=document.createElement('div');dot.className='cal-day-dot';el.appendChild(dot);}
+
+            if(isWknd&&!kollok&&!imtahan) cls+=' other-month';
+            if(isHoliday&&!kollok&&!imtahan) cls+=' is-holiday';
+
+            // Priority: imtahan > kollokvium > regular lesson
+            if(imtahan)      cls+=' is-imtahan';
+            else if(kollok)  cls+=' is-kollok';
+            else if(hasL)    cls+=' has-lessons';
+
+            if(isToday) cls+=' is-today';
+
+            if(!isWknd||kollok||imtahan) cls+=' clickable';
+
+            el.className=cls;
+            el.textContent=d;
+
+            // Dot indicator
+            if(imtahan){
+                var dot=document.createElement('div');
+                dot.className='cal-day-dot imtahan';
+                el.appendChild(dot);
+            } else if(kollok){
+                var dot=document.createElement('div');
+                dot.className='cal-day-dot kollok';
+                el.appendChild(dot);
+            } else if(hasL){
+                var dot=document.createElement('div');
+                dot.className='cal-day-dot';
+                el.appendChild(dot);
+            }
+
             (function(clickDate){ el.addEventListener('click',function(){ showCalDayLessons(clickDate); }); })(new Date(date));
             grid.appendChild(el);
         }
+
         var rem=(startOffset+daysInMonth)%7;
-        if(rem!==0){for(var i=1;i<=7-rem;i++){var el=document.createElement('div');el.className='cal-day other-month';el.textContent=i;grid.appendChild(el);}}
+        if(rem!==0){
+            for(var i=1;i<=7-rem;i++){
+                var el=document.createElement('div');el.className='cal-day other-month';
+                el.textContent=i;grid.appendChild(el);
+            }
+        }
     }
 
     function showCalDayLessons(date) {
@@ -1023,36 +1091,80 @@
         var now = new Date();
         var nowMin = now.getHours()*60 + now.getMinutes();
         var isToday = date.toDateString() === now.toDateString();
-        var afterSem  = date > new Date(2026,4,29);
         var beforeSem = date < new Date(2026,1,16);
-        if(afterSem){
-            listEl.innerHTML = '<div class="cal-no-lesson">🎓 Semestr bitdi</div>';
-        } else if(beforeSem){
-            listEl.innerHTML = '<div class="cal-no-lesson">📅 Semestr başlamamışdı</div>';
-        } else if(isHoliday || !lessonDay || !wt) {
-            listEl.innerHTML = '<div class="cal-no-lesson">🎉 Tətil günüdür</div>';
-        } else {
-            var lessons = getLessonsForDay(lessonDay, wt).sort(function(a,b){return a.start-b.start;});
-            if(!lessons.length) {
-                listEl.innerHTML = '<div class="cal-no-lesson">Bu gün dərs yoxdur</div>';
-            } else {
-                var isPastDay = date < now && !isToday;
-                listEl.innerHTML = lessons.map(function(l) {
-                    var rowCls = 'cal-lesson-row';
-                    if(isPastDay) rowCls += ' is-done';
-                    else if(isToday){
-                        if(nowMin >= l.start && nowMin <= l.end) rowCls += ' is-current';
-                        else if(nowMin > l.end) rowCls += ' is-done';
-                    }
-                    var typeStr = l.type ? ' · '+l.type : '';
-                    return '<div class="'+rowCls+'">'
-                        +'<div class="cal-l-time"><span class="cal-l-time-s">'+fmt(l.start)+'</span><span class="cal-l-time-e">'+fmt(l.end)+'</span></div>'
-                        +'<div class="cal-l-dot"></div>'
-                        +'<div class="cal-l-info"><div class="cal-l-name">'+l.name+'</div><div class="cal-l-sub">🚪 '+l.room+typeStr+'</div></div>'
-                        +'</div>';
-                }).join('');
-            }
+        var afterSem  = date > new Date(2026,6,0);
+
+        // ── NEW: check for kollokvium/imtahan on this date ──
+        var kollok  = getKollokviumOnDate(date);
+        var imtahan = getImtahanOnDate(date);
+
+        var html = '';
+
+        // Kollokvium row
+        if(kollok){
+            var isPast = date < now && !isToday;
+            var isOngoing = isToday && nowMin>=kollok.start && nowMin<=kollok.end;
+            var rowCls = 'cal-lesson-row is-kollok';
+            if(isPast||(isToday&&nowMin>kollok.end)) rowCls+=' is-done';
+            if(isOngoing) rowCls+=' is-current';
+            html += '<div class="'+rowCls+'">'
+                +'<div class="cal-l-time"><span class="cal-l-time-s">'+fmt(kollok.start)+'</span><span class="cal-l-time-e">'+fmt(kollok.end)+'</span></div>'
+                +'<div class="cal-l-dot kollok"></div>'
+                +'<div class="cal-l-info"><div class="cal-l-name">📝 '+kollok.name+'</div><div class="cal-l-sub">'+kollok.type+' · '+kollok.room+'</div></div>'
+                +'</div>';
         }
+
+        // İmtahan row
+        if(imtahan){
+            var isPastEx = date < now && !isToday;
+            var isOngoingEx = isToday && nowMin>=imtahan.start && nowMin<=imtahan.end;
+            var rowClsEx = 'cal-lesson-row is-imtahan';
+            if(isPastEx||(isToday&&nowMin>imtahan.end)) rowClsEx+=' is-done';
+            if(isOngoingEx) rowClsEx+=' is-current';
+            html += '<div class="'+rowClsEx+'">'
+                +'<div class="cal-l-time"><span class="cal-l-time-s">'+fmt(imtahan.start)+'</span><span class="cal-l-time-e">'+fmt(imtahan.end)+'</span></div>'
+                +'<div class="cal-l-dot imtahan"></div>'
+                +'<div class="cal-l-info"><div class="cal-l-name">🎓 '+imtahan.name+'</div><div class="cal-l-sub">'+imtahan.type+' · '+imtahan.room+'</div></div>'
+                +'</div>';
+        }
+
+        // Regular lessons (only during semester, only if no kollokvium)
+        if(!kollok && !imtahan){
+            if(afterSem){
+                html = '<div class="cal-no-lesson">🎓 Semestr bitdi</div>';
+            } else if(beforeSem){
+                html = '<div class="cal-no-lesson">📅 Semestr başlamamışdı</div>';
+            } else if(isHoliday || !lessonDay || !wt) {
+                html = '<div class="cal-no-lesson">🎉 Tətil günüdür</div>';
+            } else {
+                var lessons = getLessonsForDay(lessonDay, wt).sort(function(a,b){return a.start-b.start;});
+                if(!lessons.length) {
+                    html = '<div class="cal-no-lesson">Bu gün dərs yoxdur</div>';
+                } else {
+                    var isPastDay = date < now && !isToday;
+                    lessons.forEach(function(l) {
+                        var rowCls = 'cal-lesson-row';
+                        if(isPastDay) rowCls += ' is-done';
+                        else if(isToday){
+                            if(nowMin >= l.start && nowMin <= l.end) rowCls += ' is-current';
+                            else if(nowMin > l.end) rowCls += ' is-done';
+                        }
+                        var typeStr = l.type ? ' · '+l.type : '';
+                        html += '<div class="'+rowCls+'">'
+                            +'<div class="cal-l-time"><span class="cal-l-time-s">'+fmt(l.start)+'</span><span class="cal-l-time-e">'+fmt(l.end)+'</span></div>'
+                            +'<div class="cal-l-dot"></div>'
+                            +'<div class="cal-l-info"><div class="cal-l-name">'+l.name+'</div><div class="cal-l-sub">🚪 '+l.room+typeStr+'</div></div>'
+                            +'</div>';
+                    });
+                }
+            }
+        } else if(kollok || imtahan){
+            // If kollokvium/imtahan day also has no regular class that's fine, already handled above
+            // But if somehow also has regular lessons, we skip them (kollokvium/imtahan takes priority in display)
+            if(!html) html = '<div class="cal-no-lesson">Bu gün məlumat yoxdur</div>';
+        }
+
+        listEl.innerHTML = html;
         panel.classList.add('open');
     }
 
@@ -1125,7 +1237,6 @@
         container.onclick = null;
         container.style.cursor = '';
 
-        // ── CASE 1: Semester ended → show nearest upcoming exam ──
         if(isSemesterEnded()){
             var nextExam = getNextExam();
             if(!nextExam){
@@ -1152,7 +1263,6 @@
                     statusCls='ongoing';
                     progressHTML='<div class="progress-wrap"><div class="progress-header"><span class="progress-label">İrəliləyiş</span><span class="progress-pct">'+pct+'%</span></div><div class="progress-track"><div class="progress-fill near-end" style="width:'+pct+'%"></div></div></div>';
                 } else {
-                    // exam ended today, find next
                     var nextExam2 = null;
                     var todayDate = new Date(now.getFullYear(),now.getMonth(),now.getDate());
                     for(var i=0;i<IMTAHANLAR.length;i++){
@@ -1183,7 +1293,6 @@
             return;
         }
 
-        // ── CASE 2: Today is a kollokvium day ──
         var todayKoll = findTodayKollokvium();
         if(todayKoll && todayKoll.status !== 'done'){
             var nowMin2 = new Date().getHours()*60+new Date().getMinutes();
@@ -1213,10 +1322,8 @@
             return;
         }
 
-        // ── CASE 3: Regular lesson logic ──
         var lesson = null;
         var nowMin3 = new Date().getHours()*60+new Date().getMinutes();
-        // Skip kollokvium days for regular lessons
         if(!todayKoll){
             var list=getTodaysLessons();
             for(var i=0;i<list.length;i++){
@@ -1268,7 +1375,6 @@
         container.onclick = function(){ openSubjectPopup(lessonName); };
     }
 
-    // DATE BAR
     function updateDateTime(){
         var n=new Date();
         document.getElementById('todayDate').innerHTML=n.getDate()+' '+MONTHS[n.getMonth()]+' '+n.getFullYear()+' <span class="date-caret'+(datePanelOpen?' open':'')+'" id="dateCaret">▼</span>';
