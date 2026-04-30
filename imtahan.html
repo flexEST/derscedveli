@@ -118,6 +118,7 @@
         .next-exam-actions {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
         .next-exam-btn {
             flex: 1;
@@ -226,6 +227,7 @@
             display: inline-block;
         }
 
+        .pdf-badge { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.2); color:#fca5a5; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
         .soon-badge { background:rgba(99,102,241,0.13); border:1px solid rgba(99,102,241,0.25); color:#a5b4fc; font-size:0.7rem; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:.5px; flex-shrink:0; }
 
         /* ── Exam type badges ── */
@@ -621,6 +623,15 @@
             </div>
             <span class="pb-arr">›</span>
         </button>
+        <!-- Diskret kitab button (only for diskret riyaziyyat) -->
+        <button class="popup-btn" id="popDiskretKitabBtn" onclick="openDiskretKitab()" style="display:none;background:linear-gradient(135deg,#0369a1,#0ea5e9);box-shadow:0 8px 20px -4px rgba(14,165,233,0.35);">
+            <div class="pb-icon">📘</div>
+            <div class="pb-text">
+                <span class="pb-title">Kitab</span>
+                <span class="pb-sub">Diskret riyaziyyat kitabı</span>
+            </div>
+            <span class="pb-arr">›</span>
+        </button>
     </div>
 </div>
 
@@ -635,6 +646,7 @@
         <button class="popup-btn pdf" onclick="openPDF('cavabli')"><div class="pb-icon">✅</div><div class="pb-text"><span class="pb-title">Cavablı variant</span><span class="pb-sub">Düzgün cavablarla PDF</span></div><span class="pb-arr">›</span></button>
         <button class="popup-btn" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);" onclick="openPDF('cavabsiz')"><div class="pb-icon">📝</div><div class="pb-text"><span class="pb-title">Cavabsız variant</span><span class="pb-sub">Özün həll etmək üçün</span></div><span class="pb-arr">›</span></button>
         <button class="popup-btn words" id="pdfWordsBtn" onclick="openWords()" style="display:none;"><div class="pb-icon">📚</div><div class="pb-text"><span class="pb-title">Sözlər və Qaydalar</span><span class="pb-sub">Imtahana aid materiallar</span></div><span class="pb-arr">›</span></button>
+        <button class="popup-btn" id="pdfDiskretKitabBtn" onclick="openDiskretKitab()" style="display:none;background:linear-gradient(135deg,#0369a1,#0ea5e9);box-shadow:0 8px 20px -4px rgba(14,165,233,0.35);"><div class="pb-icon">📘</div><div class="pb-text"><span class="pb-title">Kitab</span><span class="pb-sub">diskret_kitab.pdf faylını aç</span></div><span class="pb-arr">›</span></button>
     </div>
 </div>
 
@@ -660,6 +672,9 @@ document.getElementById('dateNow').textContent = new Date().getDate()+' '+months
 const PDF_UNAVAILABLE_KEYS = new Set(['proqramlasdirma', 'proqramlasdirma_2', 'proqramlasdirma_imtahan']);
 // Keys with Python book button
 const PYTHON_BOOK_KEYS = new Set(['proqramlasdirma', 'proqramlasdirma_2', 'proqramlasdirma_imtahan']);
+// Keys with Diskret kitab button
+const DISKRET_BOOK_KEYS = new Set(['diskret_riyaziyyat', 'diskret_riyaziyyat_2', 'diskret_riyaziyyat_imtahan']);
+const DISKRET_KITAB_KEYS = DISKRET_BOOK_KEYS;
 
 // All exam events (for next-exam logic) — date as YYYY-MM-DD for comparison
 const ALL_EXAM_EVENTS = [
@@ -776,12 +791,11 @@ function renderNextExamCard() {
     actionsEl.innerHTML = '';
 
     if (exams.length > 1) {
-        // Kollokvium: no single subject to open, just show label
+        // Kollokvium: multiple subjects same day — simple note
         actionsEl.innerHTML = `<div style="font-size:0.78rem;color:var(--text3);padding:4px 0;">Hər fənni aşağıdan seçin</div>`;
     } else {
-        // Single subject
+        // Single subject (imtahan)
         const isPdfUnavail = PDF_UNAVAILABLE_KEYS.has(subKey);
-        const hasPython = PYTHON_BOOK_KEYS.has(subKey);
 
         const pdfBtn = document.createElement('button');
         if (isPdfUnavail) {
@@ -812,13 +826,22 @@ function renderNextExamCard() {
         };
         actionsEl.appendChild(quizBtn);
 
-        if (hasPython) {
+        if (PYTHON_BOOK_KEYS.has(subKey)) {
             const pyBtn = document.createElement('button');
             pyBtn.className = 'next-exam-btn';
-            pyBtn.style.cssText = 'background:linear-gradient(135deg,#6d28d9,#8b5cf6);color:white;box-shadow:0 4px 14px -2px rgba(139,92,246,0.3);flex:none;padding:10px 14px;';
+            pyBtn.style.cssText = 'background:linear-gradient(135deg,#6d28d9,#8b5cf6);color:white;box-shadow:0 4px 14px -2px rgba(139,92,246,0.3);flex:none;padding:10px 14px;font-size:0.75rem;';
             pyBtn.innerHTML = '🐍 Python kitabı';
             pyBtn.onclick = openPythonBook;
             actionsEl.appendChild(pyBtn);
+        }
+
+        if (DISKRET_KITAB_KEYS.has(subKey)) {
+            const kitabBtn = document.createElement('button');
+            kitabBtn.className = 'next-exam-btn';
+            kitabBtn.style.cssText = 'background:linear-gradient(135deg,#0369a1,#0ea5e9);color:white;box-shadow:0 4px 14px -2px rgba(14,165,233,0.3);flex:none;padding:10px 14px;font-size:0.75rem;';
+            kitabBtn.innerHTML = '📘 Kitab';
+            kitabBtn.onclick = openDiskretKitab;
+            actionsEl.appendChild(kitabBtn);
         }
     }
 
@@ -836,9 +859,9 @@ function getExamTypeBadge(examType) {
 
 function buildSubjects() {
     const kollMap = [
-        { id:'subjects1', koll:'I',       label:'I Kollokvium' },
-        { id:'subjects2', koll:'II',      label:'II Kollokvium' },
-        { id:'subjects3', koll:'IMTAHAN', label:'İmtahan' }
+        { id:'subjects1', koll:'I',       label:'Mövzu sualları' },
+        { id:'subjects2', koll:'II',      label:'II kollokvium mövzuları' },
+        { id:'subjects3', koll:'IMTAHAN', label:'İmtahan mövzuları' }
     ];
 
     kollMap.forEach(({ id, koll, label }) => {
@@ -851,20 +874,31 @@ function buildSubjects() {
             row.className = 'subject-row';
             row.setAttribute('onclick', `openSubject('${sub.name}','${koll}','${sub.pdf}','${sub.key}')`);
 
-            // Date pill (only for IMTAHAN rows)
-            const datePillHtml = (koll === 'IMTAHAN' && sub.date)
-                ? `<div class="subject-date-pill">📅 ${sub.date}${sub.time ? ' · ' + sub.time : ''}</div>`
-                : '';
-
+            // For IMTAHAN: show green date pill under name instead of hint text
+            // For I and II: show plain hint text + PDF badge on the right
             const typeBadge = (koll === 'IMTAHAN' && sub.examType) ? getExamTypeBadge(sub.examType) : '';
 
-            row.innerHTML = `
-                <div class="subject-num">${idx+1}</div>
-                <div class="subject-info">
-                    <div class="subject-name">${sub.name}</div>
-                    ${datePillHtml}
-                </div>
-                ${typeBadge}`;
+            if (koll === 'IMTAHAN') {
+                const datePillHtml = sub.date
+                    ? `<div class="subject-date-pill">📅 ${sub.date}${sub.time ? ' · ' + sub.time : ''}</div>`
+                    : `<div class="subject-hint">${label}</div>`;
+                row.innerHTML = `
+                    <div class="subject-num">${idx+1}</div>
+                    <div class="subject-info">
+                        <div class="subject-name">${sub.name}</div>
+                        ${datePillHtml}
+                    </div>
+                    ${typeBadge}`;
+            } else {
+                // Kollokvium I and II: hint text + PDF badge for all subjects
+                row.innerHTML = `
+                    <div class="subject-num">${idx+1}</div>
+                    <div class="subject-info">
+                        <div class="subject-name">${sub.name}</div>
+                        <div class="subject-hint">${label}</div>
+                    </div>
+                    <span class="pdf-badge">PDF</span>`;
+            }
 
             container.appendChild(row);
         });
@@ -957,6 +991,8 @@ function openSubject(name, knum, pdf, key) {
 
     // Python book button
     document.getElementById('popPythonBtn').style.display = PYTHON_BOOK_KEYS.has(key) ? 'flex' : 'none';
+    // Diskret kitab button
+    document.getElementById('popDiskretKitabBtn').style.display = DISKRET_BOOK_KEYS.has(key) ? 'flex' : 'none';
 
     document.getElementById('subjectPopup').classList.add('show');
     document.body.style.overflow = 'hidden';
@@ -973,7 +1009,9 @@ function openPDFChoice() {
     const kollLabel = curKoll === 'IMTAHAN' ? 'İmtahan' : 'Kollokvium ' + curKoll;
     document.getElementById('pdfChoiceKbadge').textContent = kollLabel;
     const isXdiak = curKey.startsWith('xdiak');
+    const isDiskret = DISKRET_KITAB_KEYS.has(curKey);
     document.getElementById('pdfWordsBtn').style.display = isXdiak ? 'flex' : 'none';
+    document.getElementById('pdfDiskretKitabBtn').style.display = isDiskret ? 'flex' : 'none';
     document.getElementById('subjectPopup').classList.remove('show');
     document.getElementById('pdfChoicePopup').classList.add('show');
 }
@@ -985,6 +1023,7 @@ function pdfChoiceOverlayClick(e) { if(e.target === document.getElementById('pdf
 function openPDF(type) { const base = curPdf.replace(/\.pdf$/i,''); window.open(base+'_'+type+'.pdf','_blank'); }
 function openWords() { window.open('englishwords.pdf','_blank'); }
 function openPythonBook() { window.open('python_kitab.pdf','_blank'); }
+function openDiskretKitab() { window.open('diskret_kitab.pdf','_blank'); }
 
 // ==================== QUIZ DATA ====================
 const QUIZ_DATA = {
