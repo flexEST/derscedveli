@@ -357,88 +357,22 @@
 
         /* ── AI FLOATING BUTTON ── */
         .ai-fab{
-            position:fixed;
-            bottom:28px;
-            right:20px;
-            z-index:999;
-            width:58px;
-            height:58px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);
-            border:none;
-            cursor:pointer;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+            position:fixed;bottom:28px;right:20px;z-index:999;width:58px;height:58px;border-radius:50%;
+            background:linear-gradient(135deg,#6366f1,#8b5cf6,#a78bfa);border:none;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;
             box-shadow:0 8px 32px rgba(99,102,241,0.55),0 2px 8px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.1) inset;
-            text-decoration:none;
-            transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;
+            text-decoration:none;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.2s;
             animation:fabIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
         }
-        @keyframes fabIn{
-            from{opacity:0;transform:scale(0) rotate(-180deg);}
-            to{opacity:1;transform:scale(1) rotate(0deg);}
-        }
-        .ai-fab:hover{
-            transform:scale(1.1);
-            box-shadow:0 12px 40px rgba(99,102,241,0.7),0 2px 12px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.15) inset;
-        }
-        .ai-fab:active{
-            transform:scale(0.95);
-        }
-        /* Pulsing ring */
-        .ai-fab::before{
-            content:'';
-            position:absolute;
-            inset:-4px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#6366f1,#8b5cf6);
-            opacity:0;
-            animation:fabRing 2.5s ease-in-out infinite;
-            z-index:-1;
-        }
-        @keyframes fabRing{
-            0%{opacity:0;transform:scale(1);}
-            50%{opacity:0.35;transform:scale(1.18);}
-            100%{opacity:0;transform:scale(1.35);}
-        }
-        /* AI icon image inside FAB — covers full button */
-        .ai-fab-icon{
-            position:absolute;
-            inset:0;
-            width:100%;
-            height:100%;
-            object-fit:cover;
-            border-radius:50%;
-            pointer-events:none;
-        }
-        /* Tooltip label */
-        .ai-fab-label{
-            position:absolute;
-            right:68px;
-            background:var(--bg2);
-            border:1px solid var(--glass-border);
-            color:var(--text);
-            font-size:0.75rem;
-            font-weight:700;
-            padding:6px 12px;
-            border-radius:20px;
-            white-space:nowrap;
-            opacity:0;
-            pointer-events:none;
-            transform:translateX(8px);
-            transition:opacity 0.25s,transform 0.25s;
-            box-shadow:0 4px 16px rgba(0,0,0,0.3);
-        }
-        .ai-fab:hover .ai-fab-label{
-            opacity:1;
-            transform:translateX(0);
-        }
-        /* Force-show tooltip via JS class */
-        .ai-fab.fab-label-show .ai-fab-label{
-            opacity:1 !important;
-            transform:translateX(0) !important;
-        }
+        @keyframes fabIn{from{opacity:0;transform:scale(0) rotate(-180deg);}to{opacity:1;transform:scale(1) rotate(0deg);}}
+        .ai-fab:hover{transform:scale(1.1);box-shadow:0 12px 40px rgba(99,102,241,0.7),0 2px 12px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.15) inset;}
+        .ai-fab:active{transform:scale(0.95);}
+        .ai-fab::before{content:'';position:absolute;inset:-4px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);opacity:0;animation:fabRing 2.5s ease-in-out infinite;z-index:-1;}
+        @keyframes fabRing{0%{opacity:0;transform:scale(1);}50%{opacity:0.35;transform:scale(1.18);}100%{opacity:0;transform:scale(1.35);}}
+        .ai-fab-icon{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;pointer-events:none;}
+        .ai-fab-label{position:absolute;right:68px;background:var(--bg2);border:1px solid var(--glass-border);color:var(--text);font-size:0.75rem;font-weight:700;padding:6px 12px;border-radius:20px;white-space:nowrap;opacity:0;pointer-events:none;transform:translateX(8px);transition:opacity 0.25s,transform 0.25s;box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+        .ai-fab:hover .ai-fab-label{opacity:1;transform:translateX(0);}
+        .ai-fab.fab-label-show .ai-fab-label{opacity:1 !important;transform:translateX(0) !important;}
 
         ::-webkit-scrollbar{width:4px;}
         ::-webkit-scrollbar-track{background:transparent;}
@@ -543,22 +477,8 @@
 <!-- ── AI FLOATING ACTION BUTTON ── -->
 <a href="ai.html" id="aiFab" class="ai-fab" aria-label="AI Köməkçi">
     <span class="ai-fab-label" id="aiFabLabel">✨ AI Köməkçi</span>
-    <img
-            src="ai-icon.png"
-            class="ai-fab-icon"
-            alt="AI"
-            id="aiFabImg"
-            onerror="
-            this.style.display='none';
-            this.insertAdjacentHTML('afterend',
-                '<svg class=\'ai-fab-icon\' viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'>' +
-                '<path d=\'M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z\' fill=\'white\' opacity=\'0.95\'/>' +
-                '<path d=\'M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z\' fill=\'white\' opacity=\'0.8\'/>' +
-                '<path d=\'M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z\' fill=\'white\' opacity=\'0.65\'/>' +
-                '</svg>'
-            );
-        "
-    >
+    <img src="ai-icon.png" class="ai-fab-icon" alt="AI" id="aiFabImg"
+        onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<svg class=\'ai-fab-icon\' viewBox=\'0 0 28 28\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z\' fill=\'white\' opacity=\'0.95\'/><path d=\'M21 17L21.9 19.6L24.5 20.5L21.9 21.4L21 24L20.1 21.4L17.5 20.5L20.1 19.6L21 17Z\' fill=\'white\' opacity=\'0.8\'/><path d=\'M7.5 17L8.2 19.1L10.3 19.8L8.2 20.5L7.5 22.6L6.8 20.5L4.7 19.8L6.8 19.1L7.5 17Z\' fill=\'white\' opacity=\'0.65\'/></svg>');">
 </a>
 
 <!-- MODAL: CƏDVƏL -->
@@ -593,6 +513,30 @@
                 <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
                     <div><div class="exam-name">Kollokvium (Aprel)</div><div class="exam-type">Test · Klikla aç 📄</div></div>
                     <div><div class="exam-date">08-05-2026</div><div class="exam-time">09:30</div></div>
+                </div>
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">İnformasiya texnologiyalarının əsasları</div><div class="exam-type">Test · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">01-06-2026</div><div class="exam-time">10:00</div></div>
+                </div>
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">Proqramlaşdırmanın əsasları</div><div class="exam-type">Fakültə(Kafedra) · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">05-06-2026</div><div class="exam-time">11:00</div></div>
+                </div>
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">XDIAK-2</div><div class="exam-type">Test · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">10-06-2026</div><div class="exam-time">09:00</div></div>
+                </div>
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">Diskret riyaziyyat</div><div class="exam-type">Yazılı · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">16-06-2026</div><div class="exam-time">12:00</div></div>
+                </div>
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">Diferensial tənliklər</div><div class="exam-type">Yazılı · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">22-06-2026</div><div class="exam-time">12:00</div></div>
+                </div>
+                <div class="exam-row" onclick="window.location.href='imtahan.html'" style="cursor:pointer;">
+                    <div><div class="exam-name">Sahibkarlığın əsasları</div><div class="exam-type">Test · Klikla aç 📄</div></div>
+                    <div><div class="exam-date">25-06-2026</div><div class="exam-time">10:00</div></div>
                 </div>
             </div>
         </div>
@@ -777,10 +721,25 @@
         {name:'Proqramlaşdırmanın əsasları',type:'Mühazirə',teacher:'Talıbzadə Sərxan',teacherEmoji:'👨‍🏫',start:720,end:800,weeks:'lower',room:'1319',day:4}
     ];
 
+    // Kollokviumlar — start/end in minutes from midnight
+    // Kollokvium 1: 10 Apr 2026 09:30, Kollokvium 2: 08 May 2026 09:30
     var KOLLOKVIUMLAR = [
         {name:'Kollokvium (Mart)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,3,10)},
         {name:'Kollokvium (Aprel)',type:'Kollokvium',teacher:'Bütün müəllimlər',teacherEmoji:'📝',start:570,end:650,room:'Auditoriya',date:new Date(2026,4,8)}
     ];
+
+    // Full exam schedule — after semester ends (26 May 2026)
+    var IMTAHANLAR = [
+        {name:'İnformasiya texnologiyalarının əsasları',type:'Test',teacherEmoji:'📝',start:600,end:680,room:'Auditoriya',date:new Date(2026,5,1)},
+        {name:'Proqramlaşdırmanın əsasları',type:'Fakültə(Kafedra)',teacherEmoji:'📝',start:660,end:740,room:'Auditoriya',date:new Date(2026,5,5)},
+        {name:'Xarici dildə işgüzar və akademik kommunikasiya-2',type:'Test',teacherEmoji:'📝',start:540,end:620,room:'Auditoriya',date:new Date(2026,5,10)},
+        {name:'Diskret riyaziyyat',type:'Yazılı',teacherEmoji:'📝',start:720,end:800,room:'Auditoriya',date:new Date(2026,5,16)},
+        {name:'Diferensial tənliklər',type:'Yazılı',teacherEmoji:'📝',start:720,end:800,room:'Auditoriya',date:new Date(2026,5,22)},
+        {name:'Sahibkarlığın əsasları və biznesə giriş',type:'Test',teacherEmoji:'📝',start:600,end:680,room:'Auditoriya',date:new Date(2026,5,25)}
+    ];
+
+    // Semester ends: 26 May 2026
+    var SEMESTER_END_DATE = new Date(2026,4,26);
 
     const MONTHS   = ['Yanvar','Fevral','Mart','Aprel','May','İyun','İyul','Avqust','Sentyabr','Oktyabr','Noyabr','Dekabr'];
     const DOWS     = ['B.e','Ç.a','Çər','C.a','Cüm','Şnb','Bzr'];
@@ -858,6 +817,39 @@
         return HOLIDAYS.indexOf(dateStr(now))>=0;
     }
 
+    function isKollokviumDay(){
+        var now = new Date();
+        var todayStr = now.toDateString();
+        for(var i=0;i<KOLLOKVIUMLAR.length;i++){
+            if(KOLLOKVIUMLAR[i].date.toDateString() === todayStr) return true;
+        }
+        return false;
+    }
+
+    function isSemesterEnded(){
+        var now = new Date();
+        // Strip time for comparison
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var endDay = new Date(2026, 4, 26); // 26 May 2026
+        return today >= endDay;
+    }
+
+    function getNextExam(){
+        var now = new Date();
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var upcoming = null;
+        for(var i=0;i<IMTAHANLAR.length;i++){
+            var ex = IMTAHANLAR[i];
+            var exDay = new Date(ex.date.getFullYear(), ex.date.getMonth(), ex.date.getDate());
+            if(exDay >= today){
+                if(!upcoming || exDay < new Date(upcoming.date.getFullYear(), upcoming.date.getMonth(), upcoming.date.getDate())){
+                    upcoming = ex;
+                }
+            }
+        }
+        return upcoming;
+    }
+
     function getTodaysLessons(){
         var t=getToday(); if(t>4) return [];
         if(isTodayHoliday()) return [];
@@ -866,17 +858,40 @@
         return getLessonsForDay(t,wt).sort(function(a,b){return a.start-b.start;});
     }
 
+    // Get current kollokvium if today is kollokvium day
+    function findTodayKollokvium(){
+        var now = new Date();
+        var nowMin = now.getHours()*60 + now.getMinutes();
+        var todayStr = now.toDateString();
+        for(var k=0;k<KOLLOKVIUMLAR.length;k++){
+            var kl=KOLLOKVIUMLAR[k];
+            if(kl.date.toDateString()===todayStr){
+                if(nowMin < kl.start) return Object.assign({},kl,{status:'upcoming',isKollokvium:true});
+                if(nowMin>=kl.start&&nowMin<=kl.end) return Object.assign({},kl,{status:'ongoing',isKollokvium:true});
+                // Kollokvium ended today — still return it as done so we can show it
+                return Object.assign({},kl,{status:'done',isKollokvium:true});
+            }
+        }
+        return null;
+    }
+
     function findCurrentLesson(){
         var now=new Date();
         var nowMin=now.getHours()*60+now.getMinutes();
-        var today=now.toDateString();
 
-        for(var k=0;k<KOLLOKVIUMLAR.length;k++){
-            var kl=KOLLOKVIUMLAR[k];
-            if(kl.date.toDateString()===today){
-                if(nowMin<kl.start) return Object.assign({},kl,{status:'upcoming',isKollokvium:true});
-                if(nowMin>=kl.start&&nowMin<=kl.end) return Object.assign({},kl,{status:'ongoing',isKollokvium:true});
+        // If semester ended, show next exam
+        if(isSemesterEnded()){
+            return null; // handled separately in renderMain
+        }
+
+        // If today is a kollokvium day — only show kollokvium card (no regular classes)
+        var todayKoll = findTodayKollokvium();
+        if(todayKoll){
+            if(todayKoll.status === 'done'){
+                // Kollokvium ended, show nothing
+                return null;
             }
+            return todayKoll;
         }
 
         var list=getTodaysLessons();
@@ -889,6 +904,10 @@
     }
 
     function fmt(m){ return Math.floor(m/60)+':'+(m%60<10?'0':'')+(m%60); }
+
+    function fmtDate(d){
+        return (d.getDate()<10?'0':'')+d.getDate()+'-'+(d.getMonth()<9?'0':'')+(d.getMonth()+1)+'-'+d.getFullYear();
+    }
 
     function typeBadgeClass(type){
         if(!type||type==='Mühazirə') return 'muh';
@@ -1102,17 +1121,116 @@
     function renderMain(){
         var container=document.getElementById('lessonCard');
         var today=getToday();
-        var lesson=findCurrentLesson();
-        var semesterEnded = new Date() > new Date(2026,4,29);
 
         container.onclick = null;
         container.style.cursor = '';
 
+        // ── CASE 1: Semester ended → show nearest upcoming exam ──
+        if(isSemesterEnded()){
+            var nextExam = getNextExam();
+            if(!nextExam){
+                container.innerHTML='<div class="no-lesson"><div class="no-lesson-emoji">🎓</div><div class="no-lesson-text">Bütün imtahanlar bitdi!</div></div>';
+                container.style.cursor='default';
+                return;
+            }
+            var now = new Date();
+            var nowMin = now.getHours()*60 + now.getMinutes();
+            var examToday = nextExam.date.toDateString() === now.toDateString();
+            var daysLeft = Math.ceil((new Date(nextExam.date.getFullYear(),nextExam.date.getMonth(),nextExam.date.getDate()) - new Date(now.getFullYear(),now.getMonth(),now.getDate())) / (1000*60*60*24));
+
+            var cdText, cdSub, statusCls='', progressHTML='';
+            if(examToday){
+                if(nowMin < nextExam.start){
+                    var diff = nextExam.start - nowMin;
+                    cdText = 'Başlamasına '+(Math.floor(diff/60)>0?Math.floor(diff/60)+' saat ':'')+diff%60+' dəqiqə';
+                    cdSub = fmt(nextExam.start)+'-da başlayır';
+                } else if(nowMin >= nextExam.start && nowMin <= nextExam.end){
+                    var pct = Math.min(100,Math.round(((nowMin-nextExam.start)/(nextExam.end-nextExam.start))*100));
+                    var diff2 = nextExam.end - nowMin;
+                    cdText = 'Bitməsinə '+(Math.floor(diff2/60)>0?Math.floor(diff2/60)+' saat ':'')+diff2%60+' dəqiqə';
+                    cdSub = fmt(nextExam.end)+'-da bitir';
+                    statusCls='ongoing';
+                    progressHTML='<div class="progress-wrap"><div class="progress-header"><span class="progress-label">İrəliləyiş</span><span class="progress-pct">'+pct+'%</span></div><div class="progress-track"><div class="progress-fill near-end" style="width:'+pct+'%"></div></div></div>';
+                } else {
+                    // exam ended today, find next
+                    var nextExam2 = null;
+                    var todayDate = new Date(now.getFullYear(),now.getMonth(),now.getDate());
+                    for(var i=0;i<IMTAHANLAR.length;i++){
+                        var ex = IMTAHANLAR[i];
+                        var exD = new Date(ex.date.getFullYear(),ex.date.getMonth(),ex.date.getDate());
+                        if(exD > todayDate){
+                            if(!nextExam2 || exD < new Date(nextExam2.date.getFullYear(),nextExam2.date.getMonth(),nextExam2.date.getDate())) nextExam2=ex;
+                        }
+                    }
+                    if(nextExam2){ nextExam=nextExam2; daysLeft=Math.ceil((new Date(nextExam.date.getFullYear(),nextExam.date.getMonth(),nextExam.date.getDate())-todayDate)/(1000*60*60*24)); examToday=false; }
+                    cdText = daysLeft === 0 ? 'Bu gün' : daysLeft+' gün sonra';
+                    cdSub = fmtDate(nextExam.date)+' saat '+fmt(nextExam.start);
+                }
+            } else {
+                cdText = daysLeft+' gün sonra';
+                cdSub = fmtDate(nextExam.date)+' saat '+fmt(nextExam.start);
+            }
+
+            container.innerHTML =
+                '<div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#f59e0b;font-weight:700;margin-bottom:8px;">📝 NÖVBƏTİ İMTAHAN</div>'+
+                '<div class="lesson-name">'+nextExam.name+'</div>'+
+                '<div class="teacher-name"><span style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);color:#fca5a5;padding:2px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;">'+nextExam.type+'</span></div>'+
+                '<div class="meta-row"><span class="meta-chip">🗓️ '+fmtDate(nextExam.date)+'</span><span class="meta-chip">🕒 '+fmt(nextExam.start)+'</span></div>'+
+                '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
+                progressHTML+
+                '<a href="imtahan.html" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:11px;background:linear-gradient(135deg,#b45309,#f59e0b);border-radius:12px;color:white;font-weight:700;font-size:0.9rem;text-align:center;text-decoration:none;">📄 Suallar bax</a>';
+            container.style.cursor='default';
+            return;
+        }
+
+        // ── CASE 2: Today is a kollokvium day ──
+        var todayKoll = findTodayKollokvium();
+        if(todayKoll && todayKoll.status !== 'done'){
+            var nowMin2 = new Date().getHours()*60+new Date().getMinutes();
+            var cdText2, cdSub2, statusCls2='', progressHTML2='';
+            if(todayKoll.status==='upcoming'){
+                var diff3=todayKoll.start-nowMin2;
+                cdText2='Başlamasına '+(Math.floor(diff3/60)>0?Math.floor(diff3/60)+' saat ':'')+diff3%60+' dəqiqə';
+                cdSub2=fmt(todayKoll.start)+'-da başlayır';
+            } else {
+                var pct2=Math.min(100,Math.round(((nowMin2-todayKoll.start)/(todayKoll.end-todayKoll.start))*100));
+                var diff4=todayKoll.end-nowMin2;
+                cdText2='Bitməsinə '+(Math.floor(diff4/60)>0?Math.floor(diff4/60)+' saat ':'')+diff4%60+' dəqiqə';
+                cdSub2=fmt(todayKoll.end)+'-da bitir';
+                statusCls2='ongoing';
+                progressHTML2='<div class="progress-wrap"><div class="progress-header"><span class="progress-label">İrəliləyiş</span><span class="progress-pct">'+pct2+'%</span></div><div class="progress-track"><div class="progress-fill near-end" style="width:'+pct2+'%"></div></div></div>';
+            }
+            container.innerHTML=
+                '<div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#f59e0b;font-weight:700;margin-bottom:8px;">📝 KOLLOKVİUM GÜN</div>'+
+                '<div class="lesson-name">'+todayKoll.name+'</div>'+
+                '<div class="teacher-name">'+todayKoll.teacherEmoji+' '+todayKoll.teacher+'</div>'+
+                '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(todayKoll.start)+'–'+fmt(todayKoll.end)+'</span><span class="meta-chip room">🏛️ '+todayKoll.room+'</span></div>'+
+                '<div class="countdown-block '+statusCls2+'"><div class="countdown-text">'+cdText2+'</div><div class="countdown-sub">'+cdSub2+'</div></div>'+
+                progressHTML2+
+                '<a href="imtahan.html" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;padding:11px;background:linear-gradient(135deg,#b45309,#f59e0b);border-radius:12px;color:white;font-weight:700;font-size:0.9rem;text-align:center;text-decoration:none;" onclick="event.stopPropagation();">📄 Suallar bax</a>';
+            container.onclick = null;
+            container.style.cursor = 'default';
+            return;
+        }
+
+        // ── CASE 3: Regular lesson logic ──
+        var lesson = null;
+        var nowMin3 = new Date().getHours()*60+new Date().getMinutes();
+        // Skip kollokvium days for regular lessons
+        if(!todayKoll){
+            var list=getTodaysLessons();
+            for(var i=0;i<list.length;i++){
+                var l=list[i];
+                if(nowMin3<l.start){ lesson=Object.assign({},l,{status:'upcoming'}); break; }
+                if(nowMin3>=l.start&&nowMin3<=l.end){ lesson=Object.assign({},l,{status:'ongoing'}); break; }
+            }
+        }
+
         if(!lesson){
             var msg;
-            if(semesterEnded) msg='<div class="no-lesson"><div class="no-lesson-emoji">🎓</div><div class="no-lesson-text">Semestr bitdi</div></div>';
-            else if(isTodayHoliday()) msg='<div class="no-lesson"><div class="no-lesson-emoji">🎉</div><div class="no-lesson-text">Bu gün tətildir</div></div>';
+            if(isTodayHoliday()) msg='<div class="no-lesson"><div class="no-lesson-emoji">🎉</div><div class="no-lesson-text">Bu gün tətildir</div></div>';
             else if(today>4) msg='<div class="no-lesson"><div class="no-lesson-emoji">📭</div><div class="no-lesson-text">Bu gün dərs yoxdur</div></div>';
+            else if(todayKoll && todayKoll.status==='done') msg='<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Kollokvium bitdi</div></div>';
             else msg='<div class="no-lesson"><div class="no-lesson-emoji">✅</div><div class="no-lesson-text">Bugünki dərslər bitdi</div></div>';
             container.innerHTML=msg;
             container.style.cursor='default';
@@ -1135,33 +1253,19 @@
             progressHTML='<div class="progress-wrap"><div class="progress-header"><span class="progress-label">İrəliləyiş</span><span class="progress-pct">'+pct+'%</span></div><div class="progress-track"><div class="progress-fill'+(nearEnd?' near-end':'')+'" style="width:'+pct+'%"></div></div></div>';
         }
 
-        if(lesson.isKollokvium){
-            container.innerHTML=
-                '<div class="tap-hint">👆 Klik et</div>'+
-                '<div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:#f59e0b;font-weight:700;margin-bottom:8px;">📝 KOLLOKVİUM GÜN</div>'+
-                '<div class="lesson-name">'+lesson.name+'</div>'+
-                '<div class="teacher-name">'+lesson.teacherEmoji+' '+lesson.teacher+'</div>'+
-                '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(lesson.start)+'–'+fmt(lesson.end)+'</span><span class="meta-chip room">🏛️ '+lesson.room+'</span></div>'+
-                '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
-                progressHTML+
-                '<a href="imtahan.html" style="display:block;margin-top:12px;padding:11px;background:linear-gradient(135deg,#b45309,#f59e0b);border-radius:12px;color:white;font-weight:700;font-size:0.9rem;text-align:center;text-decoration:none;" onclick="event.stopPropagation();">📄 İmtahan suallarını aç</a>';
-            container.onclick = null;
-            container.style.cursor = 'default';
-        } else {
-            var tc=typeBadgeClass(lesson.type);
-            var typeHTML=lesson.type?'<span class="lesson-type-chip '+tc+'">'+lesson.type+'</span>':'';
-            container.innerHTML=
-                '<div class="tap-hint">👆 Klik et</div>'+
-                '<div class="lesson-name">'+lesson.name+typeHTML+'</div>'+
-                '<div class="teacher-name">'+lesson.teacherEmoji+' '+lesson.teacher+'</div>'+
-                '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(lesson.start)+'–'+fmt(lesson.end)+'</span><span class="meta-chip room">🚪 '+lesson.room+'</span></div>'+
-                '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
-                progressHTML;
+        var tc=typeBadgeClass(lesson.type);
+        var typeHTML=lesson.type?'<span class="lesson-type-chip '+tc+'">'+lesson.type+'</span>':'';
+        container.innerHTML=
+            '<div class="tap-hint">👆 Klik et</div>'+
+            '<div class="lesson-name">'+lesson.name+typeHTML+'</div>'+
+            '<div class="teacher-name">'+lesson.teacherEmoji+' '+lesson.teacher+'</div>'+
+            '<div class="meta-row"><span class="meta-chip">🕒 '+fmt(lesson.start)+'–'+fmt(lesson.end)+'</span><span class="meta-chip room">🚪 '+lesson.room+'</span></div>'+
+            '<div class="countdown-block '+statusCls+'"><div class="countdown-text">'+cdText+'</div><div class="countdown-sub">'+cdSub+'</div></div>'+
+            progressHTML;
 
-            var lessonName = lesson.name;
-            container.style.cursor = 'pointer';
-            container.onclick = function(){ openSubjectPopup(lessonName); };
-        }
+        var lessonName = lesson.name;
+        container.style.cursor = 'pointer';
+        container.onclick = function(){ openSubjectPopup(lessonName); };
     }
 
     // DATE BAR
@@ -1411,7 +1515,6 @@
 
         subjModal.classList.add('open');
         document.getElementById('subjSheet').scrollTop=0;
-        // Scroll the modal itself to bottom so sheet is visible in Android WebView
         setTimeout(function(){
             subjModal.scrollTop = subjModal.scrollHeight;
         }, 10);
@@ -1456,21 +1559,17 @@
     refresh();
     setInterval(refresh,1000);
 
-    // ── AI FAB: Save page HTML context (no CSS/scripts) to sessionStorage ──
+    // ── AI FAB ──
     document.getElementById('aiFab').addEventListener('click', function(e){
         e.preventDefault();
         try {
             var clone = document.documentElement.cloneNode(true);
-            // Remove style tags
             var styles = clone.querySelectorAll('style, link[rel="stylesheet"]');
             styles.forEach(function(s){ s.remove(); });
-            // Remove script tags
             var scripts = clone.querySelectorAll('script');
             scripts.forEach(function(s){ s.remove(); });
-            // Remove inline styles
             var allEls = clone.querySelectorAll('[style]');
             allEls.forEach(function(el){ el.removeAttribute('style'); });
-            // Store a trimmed version (max ~12000 chars to stay token-friendly)
             var html = clone.outerHTML;
             if(html.length > 12000) html = html.substring(0, 12000) + '...[truncated]';
             sessionStorage.setItem('pageContext', html);
@@ -1479,7 +1578,6 @@
         window.location.href = 'ai.html';
     });
 
-    // ── AI FAB: Auto-show "EST AI" tooltip after 10s, then loop 5s on / 5s off ──
     (function(){
         var fab   = document.getElementById('aiFab');
         var label = document.getElementById('aiFabLabel');
@@ -1495,21 +1593,18 @@
             }, 5000);
         }
 
-        // Mouse hover — pause loop, show normal label
         fab.addEventListener('mouseenter', function(){
             if(loopTimer){ clearTimeout(loopTimer); loopTimer = null; }
-            fab.classList.remove('fab-label-show'); // let CSS :hover handle it
+            fab.classList.remove('fab-label-show');
             label.textContent = '✨ AI Köməkçi';
         });
 
-        // Mouse leave — restore EST AI loop after a short delay
         fab.addEventListener('mouseleave', function(){
             if(inLoop){
                 loopTimer = setTimeout(showEstAI, 3000);
             }
         });
 
-        // Start loop after 10s on page
         setTimeout(function(){
             inLoop = true;
             showEstAI();
